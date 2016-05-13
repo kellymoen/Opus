@@ -4,7 +4,7 @@ public class AIRoamingScript : MonoBehaviour
 {
   private Vector3 currentGoal;
   private Vector3 originLocation;
-  private float minDistance = 1;
+  private float minDistance = 3;
   private NavMeshAgent agent;
   private Animator animator;
   private float idleStartTime = 0;
