@@ -4,12 +4,12 @@ public class AIRoamingScript : MonoBehaviour
 {
   private Vector3 currentGoal;
   private Vector3 originLocation;
-  private float minDistance = 3;
   private NavMeshAgent agent;
   private Animator animator;
   private float idleStartTime = 0;
   private float idleTime;
 
+  public float minDistance = 3;
   public float radius = 20;
   public float maxIdleTime = 15;
 
@@ -27,8 +27,8 @@ public class AIRoamingScript : MonoBehaviour
   void Update(){
     //Debug.Log("Current position: " + transform.position);
     //If at the next patrol point
-    Debug.Log("Distance " + Vector3.Distance(transform.position, currentGoal));
-    Debug.Log("Current: " + transform.position + " Goal: " + currentGoal);
+    //Debug.Log("Distance " + Vector3.Distance(transform.position, currentGoal));
+    //Debug.Log("Current: " + transform.position + " Goal: " + currentGoal);
       if(Vector3.Distance(transform.position, currentGoal) < minDistance){
         //If just arrived, set timer
         if(idleStartTime ==0){
@@ -48,9 +48,9 @@ public class AIRoamingScript : MonoBehaviour
            idleStartTime = 0;
          }
          else{
-           Debug.Log("Waiting:");
-           Debug.Log("Wait time: " + (Time.time - idleStartTime));
-           Debug.Log("Target time: " + idleTime);
+           //Debug.Log("Waiting:");
+           //Debug.Log("Wait time: " + (Time.time - idleStartTime));
+           //Debug.Log("Target time: " + idleTime);
          }
 
        }
