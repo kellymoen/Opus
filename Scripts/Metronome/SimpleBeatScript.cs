@@ -8,7 +8,11 @@ public class SimpleBeatScript : MonoBehaviour {
 	[Range(1,4)]
 	public int onBeat = 2; // every onBeat beats, play a note
 	public bool isPlayingFully = false;
+	[Range(0f,1f)]
+	public float loopTransitionTime; // if a beat occurs this many seconds before the end
+										// of the clip, don't wait for the clip to end--restart it
 	int beatCount = 0; // how many beats have we listened to?
+	int measureCount = 0;
 	bool pause = false;
 	AudioSource source;
 
@@ -31,8 +35,10 @@ public class SimpleBeatScript : MonoBehaviour {
 
 	void Play(int beat) {
 		if (isPlayingFully && source.isPlaying) {
+			if (source.time > source.clip.length - loopTransitionTime)
+				source.Play ();
 		} else {
-			if (beatCount % onBeat == 0) {
+			if (beat % onBeat == 0) {
 				if (source.isPlaying) { // we'll be a little more sophisticated than this, I promise.
 					source.Stop ();
 				}
@@ -41,7 +47,11 @@ public class SimpleBeatScript : MonoBehaviour {
 					colourise ();
 				}
 			}
-			beatCount++;
+			beat++;
+		}
+		beatCount++;
+		if (beatCount > 4) {
+			measureCount++;
 		}
 	}
 
