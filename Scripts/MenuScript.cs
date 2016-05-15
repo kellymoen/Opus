@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour {
+
+	//Name of the main scene to load on start
+	public string gameScene;
 
 	//Fields to store the UI text labels
 	public Text btnStart;
@@ -29,6 +33,19 @@ public class MenuScript : MonoBehaviour {
 	}
 	
 	void FixedUpdate(){
+		if (Input.GetButton ("Fire1") || Input.GetKeyDown(KeyCode.Return)) {
+			switch (selectedOption) {
+			case 0:
+				StartGame ();
+				return;
+			case 1:
+				LoadOptions ();
+				return;
+			case 2:
+				Application.Quit ();
+				return;
+			}
+		}
 		//If option hasn't changed in last 10 ticks
 		if (timeout == 0) {
 			//Check if up or down movement
@@ -51,11 +68,11 @@ public class MenuScript : MonoBehaviour {
 		// Prevent some unnecessary color changes
 		// Can't guaruntee that update will be run before FixedUpdate runs again so don't use timeout == maxTimeout
 		if (timeout > 0) {
-			//reset colours on the text
+			// Reset colours on the text
 			btnStart.color = colorText;
 			btnOptions.color = colorText;
 			btnExit.color = colorText;
-			//Update selected option.
+			// Update selected option.
 			switch (selectedOption) {
 			case 0:
 				btnStart.color = colorSelectedText;
@@ -68,5 +85,15 @@ public class MenuScript : MonoBehaviour {
 				break;
 			}
 		}
+	}
+
+	void StartGame(){
+		// Load the game world scene
+		// Scene must be added to build settings or else this does not work
+		SceneManager.LoadScene(gameScene);
+	}
+
+	void LoadOptions(){
+		//TODO
 	}
 }
