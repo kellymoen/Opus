@@ -43,7 +43,4 @@ public class Movement : MonoBehaviour {
 
 	}
 
-	public void Tether(GameObject sprite){
-	}
-
 }
