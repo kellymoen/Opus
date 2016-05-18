@@ -16,10 +16,10 @@ public class CameraLook : MonoBehaviour {
 		Vector3 desiredPosition = target.transform.position + offset;
 		Vector3 position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * damping);
 		transform.position = position;
+		float mouseX = Input.GetAxis("Mouse X");
+		float mouseY = -Input.GetAxis("Mouse Y");
 
 		transform.LookAt(target.transform.position);
-		//Vector3 desiredPosition = target.transform.position + offset;
-		//gameObject.transform.position = desiredPosition;
 	}
 
 }
