@@ -4,42 +4,30 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 
 	public float speed = 6.0F;
-	public float jumpSpeed = 8.0F;
-	public float gravity = 20.0F;
-	public Transform spawnPoint;
+	public float turningSpeed = 500;
 
 	private CharacterController controller;
 	private Animator animator;
 	private Vector3 moveDirection = Vector3.zero;
-	private Camera camera;
 
 	void Start(){
 		controller = GetComponent<CharacterController>();
-		  camera = Camera.main;
 		animator = GetComponent<Animator>();
 	}
 
 	void Update() {
-		if (controller.isGrounded) {
 			if(Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Vertical") > 0){
 				animator.SetBool("isWalking", true);
 			}
 			else{
 				animator.SetBool("isWalking", false);
 			}
-			moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-			moveDirection = transform.TransformDirection(moveDirection);
-			moveDirection *= speed;
-			if (Input.GetButton("Jump"))
-				moveDirection.y = jumpSpeed;
+			float horizontal = Input.GetAxis("Horizontal") * turningSpeed * Time.deltaTime;
+			transform.Rotate(0, horizontal, 0);
+			float vertical = Input.GetAxis("Vertical") * speed * Time.deltaTime;
+			transform.Translate(0, 0, vertical);
 		}
-		moveDirection.y -= gravity * Time.deltaTime;
-		controller.Move(moveDirection * Time.deltaTime);
-	}
 
-	public void respawn(){
-		transform.position = spawnPoint.position;
-	}
 
 
 }
