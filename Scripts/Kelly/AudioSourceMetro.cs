@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class AudioSourceMetro : MonoBehaviour {
-
 	public AudioSource sound;
 	private int beat;
 	private double beatStartTime;
