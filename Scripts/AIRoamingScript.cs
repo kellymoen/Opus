@@ -9,23 +9,33 @@ public class AIRoamingScript : MonoBehaviour
   private float idleStartTime = 0;
   private float idleTime;
   private bool roaming = true;
+	private GameObject player;
 
+public float maxPlayerDetectDistance = 0.5f;
   public float minDistance = 3;
   public float radius = 20;
   public float maxIdleTime = 15;
 
   void Start(){
+		player = GameObject.FindWithTag ("Player");
     agent = GetComponent<NavMeshAgent>();
     //animator = GetComponent<Animator>();
     originLocation = transform.position;
     currentGoal = randomPosition();
     bool successfullyAssigned = agent.SetDestination(currentGoal);
-    while(!successfullyAssigned){
+    int count = 0;
+    while(!successfullyAssigned && count < 100){
       agent.SetDestination(currentGoal);
+      count++;
     }
   }
 
   void Update(){
+		if(playerNearby()){
+			setRoaming (false);
+      agent.SetDestination(transform.position);
+			player.GetComponent<Movement>().Tether(gameObject);
+		}
     if(roaming){
       //Debug.Log("Current position: " + transform.position);
       //Debug.Log("Distance " + Vector3.Distance(transform.position, currentGoal));
@@ -64,7 +74,7 @@ public class AIRoamingScript : MonoBehaviour
     float z = Random.Range(originLocation.z - radius, originLocation.z + radius);
     return new Vector3(x, originLocation.y, z);
   }
-  
+
   public void setRoaming(bool isRoaming){
     roaming = isRoaming;
     //if stopped reset wait time
@@ -72,4 +82,8 @@ public class AIRoamingScript : MonoBehaviour
       idleStartTime = 0;
     }
   }
+
+	bool playerNearby(){
+		return Vector3.Distance (transform.position, player.transform.position) < maxPlayerDetectDistance;
+	}
 }

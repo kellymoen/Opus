@@ -1,33 +1,35 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
 public class Movement : MonoBehaviour {
 
 	public float speed = 6.0F;
-	public float jumpSpeed = 8.0F;
-	public float gravity = 20.0F;
-	public Transform spawnPoint;
 
-	private CharacterController controller;
 	private Animator animator;
 	private Vector3 moveDirection = Vector3.zero;
-	private Camera camera;
+	public float lookSpeed = 10;
+	private Vector3 curLoc;
+	private Vector3 prevLoc;
+	private bool tethered = false;
 
 	void Start(){
-		controller = GetComponent<CharacterController>();
-		  camera = Camera.main;
 		animator = GetComponent<Animator>();
 	}
 
 	void Update() {
-		if (controller.isGrounded) {
-			if(Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Vertical") > 0){
-				animator.SetBool("isWalking", true);
-			}
-			else{
-				animator.SetBool("isWalking", false);
+		if(!tethered){
+				InputCheck();
+				if(CrossPlatformInputManager.GetAxis("Horizontal") != 0 || CrossPlatformInputManager.GetAxis("Vertical") != 0){
+					animator.SetBool("isWalking", true);
+					transform.position = curLoc;
+					transform.rotation = Quaternion.Lerp (transform.rotation,  Quaternion.LookRotation(transform.position - prevLoc), Time.fixedDeltaTime * lookSpeed);
+				}
+				else{
+					animator.SetBool("isWalking", false);
+				}
+
 			}
 			moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 			moveDirection = transform.TransformDirection(moveDirection);
@@ -37,13 +39,22 @@ public class Movement : MonoBehaviour {
 				moveDirection.y = jumpSpeed;
 			}
 		}
-		moveDirection.y -= gravity * Time.deltaTime;
-		controller.Move(moveDirection * Time.deltaTime);
+
+
+	private void InputCheck()
+	{
+		prevLoc = curLoc;
+		curLoc = transform.position;
+
+		if(CrossPlatformInputManager.GetAxis("Horizontal") != 0)
+			curLoc.x += CrossPlatformInputManager.GetAxis("Horizontal") * speed * Time.deltaTime;
+		if(CrossPlatformInputManager.GetAxis("Vertical") != 0)
+			curLoc.z += CrossPlatformInputManager.GetAxis("Vertical") * speed * Time.deltaTime;
 	}
 
-	public void respawn(){
-		transform.position = spawnPoint.position;
+	public void Tether(GameObject sprite){
+		tethered = true;
+		animator.SetBool("isWalking", false);
 	}
-
 
 }
