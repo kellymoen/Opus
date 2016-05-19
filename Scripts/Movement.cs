@@ -10,22 +10,26 @@ public class Movement : MonoBehaviour {
 	public float lookSpeed = 10;
 	private Vector3 curLoc;
 	private Vector3 prevLoc;
+	private bool tethered = false;
 
 	void Start(){
 		animator = GetComponent<Animator>();
 	}
 
 	void Update() {
-			InputCheck();
-			if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0){
-				animator.SetBool("isWalking", true);
+		if(!tethered){
+				InputCheck();
+				if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0){
+					animator.SetBool("isWalking", true);
+					transform.position = curLoc;
+					transform.rotation = Quaternion.Lerp (transform.rotation,  Quaternion.LookRotation(transform.position - prevLoc), Time.fixedDeltaTime * lookSpeed);
+				}
+				else{
+					animator.SetBool("isWalking", false);
+				}
+
 			}
-			else{
-				animator.SetBool("isWalking", false);
-			}
-			transform.rotation = Quaternion.Lerp (transform.rotation,  Quaternion.LookRotation(transform.position - prevLoc), Time.fixedDeltaTime * lookSpeed);
-			
-	
+
 		}
 
 
@@ -38,12 +42,11 @@ public class Movement : MonoBehaviour {
 			curLoc.x += Input.GetAxis("Horizontal") * speed * Time.deltaTime;
 		if(Input.GetAxis("Vertical") != 0)
 			curLoc.z += Input.GetAxis("Vertical") * speed * Time.deltaTime;
-
-		transform.position = curLoc;
-
 	}
 
 	public void Tether(GameObject sprite){
+		tethered = true;
+		animator.SetBool("isWalking", false);
 	}
 
 }
