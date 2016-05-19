@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Movement : MonoBehaviour {
 
@@ -19,7 +19,7 @@ public class Movement : MonoBehaviour {
 	void Update() {
 		if(!tethered){
 				InputCheck();
-				if(Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0){
+				if(CrossPlatformInputManager.GetAxis("Horizontal") != 0 || CrossPlatformInputManager.GetAxis("Vertical") != 0){
 					animator.SetBool("isWalking", true);
 					transform.position = curLoc;
 					transform.rotation = Quaternion.Lerp (transform.rotation,  Quaternion.LookRotation(transform.position - prevLoc), Time.fixedDeltaTime * lookSpeed);
@@ -38,10 +38,10 @@ public class Movement : MonoBehaviour {
 		prevLoc = curLoc;
 		curLoc = transform.position;
 
-		if(Input.GetAxis("Horizontal") != 0)
-			curLoc.x += Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-		if(Input.GetAxis("Vertical") != 0)
-			curLoc.z += Input.GetAxis("Vertical") * speed * Time.deltaTime;
+		if(CrossPlatformInputManager.GetAxis("Horizontal") != 0)
+			curLoc.x += CrossPlatformInputManager.GetAxis("Horizontal") * speed * Time.deltaTime;
+		if(CrossPlatformInputManager.GetAxis("Vertical") != 0)
+			curLoc.z += CrossPlatformInputManager.GetAxis("Vertical") * speed * Time.deltaTime;
 	}
 
 	public void Tether(GameObject sprite){
