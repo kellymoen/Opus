@@ -10,8 +10,10 @@ public class AIRoamingScript : MonoBehaviour
   private float idleTime;
   private bool roaming = true;
 	private GameObject player;
+  private Rigidbody rBody;
 
-public float maxPlayerDetectDistance = 0.5f;
+  public float height = 1f;
+  public float maxPlayerDetectDistance = 0.5f;
   public float minDistance = 3;
   public float radius = 20;
   public float maxIdleTime = 15;
@@ -19,6 +21,7 @@ public float maxPlayerDetectDistance = 0.5f;
   void Start(){
 		player = GameObject.FindWithTag ("Player");
     agent = GetComponent<NavMeshAgent>();
+    rBody = GetComponent<Rigidbody> ();
     //animator = GetComponent<Animator>();
     originLocation = transform.position;
     currentGoal = randomPosition();
@@ -31,10 +34,12 @@ public float maxPlayerDetectDistance = 0.5f;
   }
 
   void Update(){
+    //makeFloat();
+    if(!roaming && Input.GetButtonDown("Fire3")){
+      endBattle();
+    }
 		if(playerNearby()){
-			setRoaming (false);
-      agent.SetDestination(transform.position);
-			player.GetComponent<Movement>().Tether(gameObject);
+			startBattle();
 		}
     if(roaming){
       //Debug.Log("Current position: " + transform.position);
@@ -67,12 +72,47 @@ public float maxPlayerDetectDistance = 0.5f;
            }
          }
        }
+
   }
 
   Vector3 randomPosition(){
     float x = Random.Range(originLocation.x - radius, originLocation.x + radius);
     float z = Random.Range(originLocation.z - radius, originLocation.z + radius);
     return new Vector3(x, originLocation.y, z);
+  }
+
+  void makeFloat(){
+    //Make the object hover above the ground
+    Ray ray = new Ray (transform.position, -transform.up);
+    RaycastHit downCast;
+
+    if (Physics.Raycast (ray, out downCast, height)) {
+      if (downCast.distance < height) {
+        rBody.useGravity = false;
+        rBody.AddForce(0, (height - downCast.distance)/downCast.distance, 0);
+      }
+    } else {
+      rBody.useGravity = true;
+    }
+  }
+
+  private void startBattle(){
+    setRoaming (false);
+    agent.SetDestination(transform.position);
+    player.GetComponent<Movement>().Tether(gameObject);
+    GameObject.Find("MainCamera").GetComponent<Camera>().enabled = false;
+    GameObject.Find("BattleCamera").GetComponent<Camera>().enabled = true;
+    GameObject.Find("MainCamera").GetComponent<AudioListener>().enabled = false;
+    GameObject.Find("BattleCamera").GetComponent<AudioListener>().enabled = true;
+  }
+
+  private void endBattle(){
+    setRoaming (true);
+    player.GetComponent<Movement>().Untether(gameObject);
+    GameObject.Find("MainCamera").GetComponent<Camera>().enabled = true;
+    GameObject.Find("BattleCamera").GetComponent<Camera>().enabled = false;
+    GameObject.Find("MainCamera").GetComponent<AudioListener>().enabled = true;
+    GameObject.Find("BattleCamera").GetComponent<AudioListener>().enabled = false;
   }
 
   public void setRoaming(bool isRoaming){

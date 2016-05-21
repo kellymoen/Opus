@@ -10,7 +10,7 @@ public class CameraLook : MonoBehaviour {
 
 	public float MinimumY = 0F;
 	public float MaximumY = 180F;
-	public float damping = 1;
+	public float damping = .5f;
 
 
 	void Start(){
