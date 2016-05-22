@@ -54,6 +54,7 @@ public class Movement : MonoBehaviour {
 
 	public void Tether(GameObject sprite){
 		tethered = true;
+		gameObject.transform.LookAt(sprite.transform.position);
 		animator.SetBool("isWalking", false);
 	}
 	public void Untether(GameObject sprite){

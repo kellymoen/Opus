@@ -11,7 +11,9 @@ public class AIRoamingScript : MonoBehaviour
   private bool roaming = true;
 	private GameObject player;
   private Rigidbody rBody;
+  private GameObject tether;
 
+  public GameObject tetherPrefab;
   public float height = 1f;
   public float maxPlayerDetectDistance = 0.5f;
   public float minDistance = 3;
@@ -34,11 +36,11 @@ public class AIRoamingScript : MonoBehaviour
   }
 
   void Update(){
-    //makeFloat();
+    makeFloat();
     if(!roaming && Input.GetButtonDown("Fire3")){
       endBattle();
     }
-		if(playerNearby()){
+		if(roaming && playerNearby()){
 			startBattle();
 		}
     if(roaming){
@@ -99,11 +101,18 @@ public class AIRoamingScript : MonoBehaviour
   private void startBattle(){
     setRoaming (false);
     agent.SetDestination(transform.position);
+    gameObject.transform.LookAt(player.transform.position);
     player.GetComponent<Movement>().Tether(gameObject);
+    //camera switch
     GameObject.Find("MainCamera").GetComponent<Camera>().enabled = false;
     GameObject.Find("BattleCamera").GetComponent<Camera>().enabled = true;
     GameObject.Find("MainCamera").GetComponent<AudioListener>().enabled = false;
     GameObject.Find("BattleCamera").GetComponent<AudioListener>().enabled = true;
+    //create tether
+    tether = (GameObject) Instantiate(tetherPrefab, gameObject.transform.position, gameObject.transform.rotation);
+    tether.transform.LookAt(player.transform.position);
+    float scale = Vector3.Distance (transform.position, player.transform.position);
+    tether.transform.GetChild(0).localScale = new Vector3(tether.transform.GetChild(0).localScale.x, tether.transform.GetChild(0).localScale.y, scale);
   }
 
   private void endBattle(){
@@ -113,6 +122,7 @@ public class AIRoamingScript : MonoBehaviour
     GameObject.Find("BattleCamera").GetComponent<Camera>().enabled = false;
     GameObject.Find("MainCamera").GetComponent<AudioListener>().enabled = true;
     GameObject.Find("BattleCamera").GetComponent<AudioListener>().enabled = false;
+    Destroy(tether);
   }
 
   public void setRoaming(bool isRoaming){
