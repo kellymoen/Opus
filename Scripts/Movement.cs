@@ -6,10 +6,11 @@ using UnityStandardAssets.CrossPlatformInput;
 public class Movement : MonoBehaviour {
 
 	public float speed = 6.0F;
+	public float jumpSpeed = 6;
+	public float lookSpeed = 10;
 
 	private Animator animator;
 	private Vector3 moveDirection = Vector3.zero;
-	public float lookSpeed = 10;
 	private Vector3 curLoc;
 	private Vector3 prevLoc;
 	private bool tethered = false;
@@ -54,7 +55,13 @@ public class Movement : MonoBehaviour {
 
 	public void Tether(GameObject sprite){
 		tethered = true;
-		animator.SetBool("isWalking", false);
+		if (animator == null) { // this shouldn't happen, but it's been throwing nulls
+			animator = GetComponent<Animator>(); 
+		}
+		animator.SetBool ("isWalking", false);
 	}
 
+	public void Untether() {
+		tethered = false;
+	}
 }
