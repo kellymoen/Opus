@@ -47,6 +47,9 @@ public class AIRoamingScript : MonoBehaviour
     if(roaming){
       updateMovement();
     }
+    if(following){
+      agent.SetDestination(player.transform.position);
+    }
 
   }
 
@@ -90,6 +93,10 @@ public class AIRoamingScript : MonoBehaviour
     player.GetComponent<Movement>().Untether(gameObject);
     switchToExploreCamera();
     Destroy(tether);
+    transform.parent = player.transform.parent;
+    Destroy(gameObject);
+    //agent.SetDestination(new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z-.05f));
+    //transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 0.05f, player.transform.position.z);
   }
 
   public void setRoaming(bool isRoaming){
