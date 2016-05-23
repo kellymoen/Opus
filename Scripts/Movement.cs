@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-[RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
 public class Movement : MonoBehaviour {
 
 	public float speed = 6.0F;
-	public float jumpSpeed = 6;
-	public float lookSpeed = 10;
-
+	public float jumpSpeed = 2f;
 	private Animator animator;
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 curLoc;
@@ -55,10 +52,11 @@ public class Movement : MonoBehaviour {
 
 	public void Tether(GameObject sprite){
 		tethered = true;
-		if (animator == null) { // this shouldn't happen, but it's been throwing nulls
-			animator = GetComponent<Animator>(); 
-		}
-		animator.SetBool ("isWalking", false);
+		gameObject.transform.LookAt(sprite.transform.position);
+		animator.SetBool("isWalking", false);
+	}
+	public void Untether(GameObject sprite){
+		tethered = false;
 	}
 
 	public void Untether() {
