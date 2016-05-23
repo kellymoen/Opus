@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-[RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
 public class Movement : MonoBehaviour {
 
