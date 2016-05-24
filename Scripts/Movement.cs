@@ -6,6 +6,7 @@ public class Movement : MonoBehaviour {
 
 	public float speed = 6.0F;
 	public float jumpSpeed = 2f;
+	public float lookSpeed = 2f;
 	private Animator animator;
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 curLoc;
@@ -51,6 +52,7 @@ public class Movement : MonoBehaviour {
 	}
 
 	public void Tether(GameObject sprite){
+		animator = GetComponent<Animator>();
 		tethered = true;
 		gameObject.transform.LookAt(sprite.transform.position);
 		animator.SetBool("isWalking", false);
