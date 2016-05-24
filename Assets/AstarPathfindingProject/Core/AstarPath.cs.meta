@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 78396926cbbfc4ac3b48fc5fc34a87d1
+guid: 4f61cce758ec8b24b87cf3982fea574e
 labels:
 - Pathfinder
 MonoImporter:
@@ -7,3 +7,6 @@ MonoImporter:
   defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
