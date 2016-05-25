@@ -17,6 +17,8 @@ public class NoteBattleScript : MonoBehaviour {
 	[Range(0.0f,16f)]
 	public int maxActiveNotes = 4; // helpful but not essential!
 
+	public Track track;
+
 	// fields for calculating where we are in the rhythm
 	private int currentSuccesses = 0;
 	private int currentFailures = 0;
@@ -46,6 +48,15 @@ public class NoteBattleScript : MonoBehaviour {
 		}
 		if (noteOrigin == null) {
 			Debug.LogError ("NoteBattleScript must have a place for notes to spawn from!");
+		}
+	}
+
+	void Update(){
+		if (Time.time - track.GetTrackStartTime >= track.GetNextTime ()) {
+			int noteType = track.GetNextNote ();
+			track.NextNote ();
+			//EmitNote ();
+			Debug.Log("NOTE");
 		}
 	}
 
