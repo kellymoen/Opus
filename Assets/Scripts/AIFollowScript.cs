@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(AIRoamingScript))]
+[RequireComponent(typeof(AIManagerScript))]
 public class AIFollowScript : MonoBehaviour
 {
   private NavMeshAgent agent;

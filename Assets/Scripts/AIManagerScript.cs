@@ -24,7 +24,7 @@ public class AIManagerScript : MonoBehaviour
   void Update(){
     //if roaming check for player
     if(currentState == State.Roam && Vector3.Distance(player.transform.position, transform.position) < maxPlayerDetectDistance){
-      setBattle();
+      readyBattle();
     }
   }
 
@@ -45,17 +45,20 @@ public class AIManagerScript : MonoBehaviour
     return Vector3.Distance (transform.position, player.transform.position) < maxPlayerDetectDistance;
   }
 
-  void setBattle(){
+  void readyBattle(){
     roamingScript.setMovementLock(true);
     player.GetComponent<PlayerManagerScript>().startBattle(gameObject);
     currentState = State.Battle;
+    //TODO enable NoteBattleScript on critter
   }
 
   public void capture(){
+    //TODO create playerCritterManager script
     Destroy(gameObject);
   }
 
   public void escape(){
-
+    Destroy(gameObject);
+    //TODO respawn critter
   }
 }

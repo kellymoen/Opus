@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(AIFollowScript))]
+[RequireComponent(typeof(AIManagerScript))]
 public class AIRoamingScript : MonoBehaviour
 {
   private Vector3 currentGoal;

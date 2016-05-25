@@ -32,8 +32,8 @@ public class PlayerManagerScript : MonoBehaviour {
     tether.transform.localScale = new Vector3(tether.transform.localScale.x, tether.transform.localScale.y, scale);
   }
 
-
   public void startBattle(GameObject critter){
+    //TODO make sure only one battle at a time is active
     if(critter != null){
       currentCritterBattle = critter;
       gameObject.transform.LookAt(critter.transform.position);
@@ -41,7 +41,6 @@ public class PlayerManagerScript : MonoBehaviour {
       //camera switch
       switchToBattleCamera();
       createTether();
-      //TODO enable NoteBattleScript on critter
     }
     else{
       Debug.Log("Can't start battle with critter value Null");
