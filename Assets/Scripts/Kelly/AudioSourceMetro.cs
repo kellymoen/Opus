@@ -15,15 +15,15 @@ public class AudioSourceMetro : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		beat = (int)(sound.time / 0.5455);
+		beat = (int)(sound.time / BEAT_TIME);
 		lastBeat = beat;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		double time = sound.time;
-		beat = (int)(time / 0.5455);
-		beatStartTime = Time.time - time + (beat * 0.5455);
+		beat = (int)(time / BEAT_TIME);
+		beatStartTime = Time.time - time + (beat * BEAT_TIME);
 
 		if (beat != lastBeat) {
 			lastBeat = beat;

@@ -12,8 +12,8 @@ public class PlayerHit : MonoBehaviour {
 //	public static event OnHit OnGood;
 //	public static event OnHit OnGreat;
 
-	public static double BAD = 0.1;
-	public static double GOOD = 0.03;
+	public static double BAD = 0.15;
+	public static double GOOD = 0.06;
 	public static double GREAT = 0;
 	public static double HalfBeat = 0.2728;
 	private int nextBeat = 0;
@@ -28,7 +28,7 @@ public class PlayerHit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.X)) {
+		if (Input.GetButtonDown ("X Button")) {
 			double diff = Time.time - metronome.GetBeatStartTime ();
 			if (nextBeat < metronome.GetBeat ()) {
 				nextBeat = metronome.GetBeat ();
@@ -36,40 +36,40 @@ public class PlayerHit : MonoBehaviour {
 			} else if (nextBeat == metronome.GetBeat ()) {
 				nextBeat++;
 			}
-			diff -= 0.03; // 30ms delay, 
+			diff -= 0.080; // 30ms delay, 
 			if (diff > 0.2728) //greater than a half beat means the player is likely early
 				diff -= 0.5455;
-			//Debug.Log (diff);
+			Debug.Log (diff);
 			if (diff < -BAD) {
 				display.text = "BAD: EARLY";
 				//	OnBad ();
-				if (OnButtonPress != null)
-					OnButtonPress(-BAD);
+				//if (OnButtonPress != null)
+				//	OnButtonPress(-BAD);
 			} else if (diff < -GOOD) {
 				display.text = "GOOD: EARLY";
 				//	OnGood ();
-				if (OnButtonPress != null)
-					OnButtonPress (-GOOD);
+				//if (OnButtonPress != null)
+				//	OnButtonPress (-GOOD);
 			} else if (diff < GREAT) {
 				display.text = "GREAT: EARLY";
 				//	OnGreat ();
-				if (OnButtonPress != null)
-					OnButtonPress (-GREAT);
+				//if (OnButtonPress != null)
+				//	OnButtonPress (-GREAT);
 			} else if (diff > BAD) {
 				display.text = "BAD: LATE";
 				//	OnBad ();
-				if (OnButtonPress != null)
-					OnButtonPress (BAD);
+				//if (OnButtonPress != null)
+				//	OnButtonPress (BAD);
 			} else if (diff > GOOD) {
 				display.text = "GOOD: LATE";
 				//	OnGood ();
-				if (OnButtonPress != null)
-					OnButtonPress (GOOD);
+				//if (OnButtonPress != null)
+				//	OnButtonPress (GOOD);
 			} else if (diff > GREAT) {
 				display.text = "GREAT: LATE";
 				//	OnGreat ();
-				if (OnButtonPress != null)
-					OnButtonPress (GREAT);
+				//if (OnButtonPress != null)
+				//	OnButtonPress (GREAT);
 			}
 		}
 	}
