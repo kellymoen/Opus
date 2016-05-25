@@ -2,7 +2,7 @@
 using System.Collections;
 
 /** NoteBattleScripts are (will be) created/enabled when the player enters combat with a notesprite,
- * and destroyed/disabled once the combat is over (whether successful or failed). 
+ * and destroyed/disabled once the combat is over (whether successful or failed).
  */
 public class NoteBattleScript : MonoBehaviour {
 	public AudioSourceMetro metro;
@@ -52,7 +52,7 @@ public class NoteBattleScript : MonoBehaviour {
 	}
 
 	void Update(){
-		if (Time.time - track.GetTrackStartTime >= track.GetNextTime ()) {
+		if (Time.time - track.GetTrackStartTime() >= track.GetNextTime ()) {
 			int noteType = track.GetNextNote ();
 			track.NextNote ();
 			//EmitNote ();
@@ -168,7 +168,7 @@ public class NoteBattleScript : MonoBehaviour {
 	}
 
 
-	// 
+	//
 	public void OnDestroy() {
 		player.GetComponent<Movement>().Untether();
 		for (int i = 0; i < activeNotes.Length; i++) {

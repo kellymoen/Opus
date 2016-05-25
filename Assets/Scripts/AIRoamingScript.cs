@@ -11,11 +11,10 @@ public class AIRoamingScript : MonoBehaviour
   private bool roaming = true;
   private bool following = false;
 	private GameObject player;
-  private Rigidbody rBody;
+
   private GameObject tether;
 
   public GameObject tetherPrefab;
-  public float height = 1f;
   public float maxPlayerDetectDistance = 0.5f;
   public float minDistance = 3;
   public float radius = 20;
@@ -24,7 +23,6 @@ public class AIRoamingScript : MonoBehaviour
   void Start(){
 		player = GameObject.FindWithTag ("Player");
     agent = GetComponent<NavMeshAgent>();
-    rBody = GetComponent<Rigidbody> ();
     //animator = GetComponent<Animator>();
     originLocation = transform.position;
     currentGoal = randomPosition();
@@ -37,7 +35,6 @@ public class AIRoamingScript : MonoBehaviour
   }
 
   void Update(){
-    makeFloat();
     if(!roaming && Input.GetButtonDown("Fire3")){
       endBattle();
     }
@@ -50,7 +47,6 @@ public class AIRoamingScript : MonoBehaviour
     if(following){
       agent.SetDestination(player.transform.position);
     }
-
   }
 
   Vector3 randomPosition(){
@@ -60,18 +56,7 @@ public class AIRoamingScript : MonoBehaviour
   }
 
   void makeFloat(){
-    //Make the object hover above the ground
-    Ray ray = new Ray (transform.position, -transform.up);
-    RaycastHit downCast;
 
-    if (Physics.Raycast (ray, out downCast, height)) {
-      if (downCast.distance < height) {
-        rBody.useGravity = false;
-        rBody.AddForce(0, (height - downCast.distance)/downCast.distance, 0);
-      }
-    } else {
-      rBody.useGravity = true;
-    }
   }
 
   private void startBattle(){
@@ -96,7 +81,7 @@ public class AIRoamingScript : MonoBehaviour
     transform.parent = player.transform.parent;
     Destroy(gameObject);
     //agent.SetDestination(new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z-.05f));
-    //transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 0.05f, player.transform.position.z);
+
   }
 
   public void setRoaming(bool isRoaming){
