@@ -10,7 +10,12 @@ public class AudioSourceMetro : MonoBehaviour {
 	public AudioSource sound;
 	private int beat;
 	private int lastBeat;
+
+
 	private int beatCounter;
+
+	private double lastTime;
+
 	private double beatStartTime;
 	private double nextBarStartTime;
 
@@ -19,6 +24,7 @@ public class AudioSourceMetro : MonoBehaviour {
 	void Start () {
 		beat = (int)(sound.time / BEAT_TIME);
 		lastBeat = beat;
+		lastTime = sound.time;
 	}
 	
 	// Update is called once per frame
@@ -33,6 +39,7 @@ public class AudioSourceMetro : MonoBehaviour {
 			beatCounter++;
 //			OnBeat ();
 		}
+		lastTime = time;
 	}
 
 	public int GetBeat(){
@@ -53,5 +60,16 @@ public class AudioSourceMetro : MonoBehaviour {
 
 	public double GetNextBarStartTime(){
 		return nextBarStartTime;
+	}
+
+	public double GetMetroTime(){
+		return sound.time;
+	}
+
+	public double GetDeltaTime(){
+		if (lastTime > sound.time) {
+			lastTime -= 2.182;
+		}
+			return sound.time - lastTime;
 	}
 }
