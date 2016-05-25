@@ -61,8 +61,8 @@ public class NoteBattleScript : MonoBehaviour {
 	}
 
 	void OnEnable() {
-		player = GameObject.FindGameObjectWithTag ("Player");
-		player.GetComponent<Movement> ().Tether (gameObject); // TODO is this right? we'll find out soon!
+		//player = GameObject.FindGameObjectWithTag ("Player");
+		//player.GetComponent<Movement> ().Tether (gameObject); // TODO is this right? we'll find out soon!
 		if (metro == null) {
 			Debug.Log ("NoteBattleScript needs a metro to count time with!");
 		}
@@ -170,7 +170,7 @@ public class NoteBattleScript : MonoBehaviour {
 
 	//
 	public void OnDestroy() {
-		player.GetComponent<Movement>().Untether();
+		player.GetComponent<PlayerManagerScript>().endBattle(true);
 		for (int i = 0; i < activeNotes.Length; i++) {
 			Destroy(activeNotes[i]);
 		}
@@ -178,11 +178,11 @@ public class NoteBattleScript : MonoBehaviour {
 
 	/* Once we have things to do when the player loses to the sprite, put them here. */
 	private void OnLose () {
-		player.GetComponent<Movement>().Untether();
+		player.GetComponent<PlayerManagerScript>().endBattle(false);
 	}
 
 	/* Once we have things to do when the player wins against the sprite, put them here. */
 	private void OnWin () {
-		player.GetComponent<Movement>().Untether();
+		player.GetComponent<PlayerManagerScript>().endBattle(true);
 	}
 }

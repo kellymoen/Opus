@@ -1,5 +1,7 @@
 using UnityEngine;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(AIFollowScript))]
 public class AIRoamingScript : MonoBehaviour
 {
   private Vector3 currentGoal;
@@ -8,14 +10,9 @@ public class AIRoamingScript : MonoBehaviour
   private Animator animator;
   private float idleStartTime = 0;
   private float idleTime;
-  private bool roaming = true;
-  private bool following = false;
 	private GameObject player;
+  private bool movementLocked = false;
 
-  private GameObject tether;
-
-  public GameObject tetherPrefab;
-  public float maxPlayerDetectDistance = 0.5f;
   public float minDistance = 3;
   public float radius = 20;
   public float maxIdleTime = 15;
@@ -25,99 +22,16 @@ public class AIRoamingScript : MonoBehaviour
     agent = GetComponent<NavMeshAgent>();
     //animator = GetComponent<Animator>();
     originLocation = transform.position;
-    currentGoal = randomPosition();
-    bool successfullyAssigned = agent.SetDestination(currentGoal);
-    int count = 0;
-    while(!successfullyAssigned && count < 100){
-      agent.SetDestination(currentGoal);
-      count++;
-    }
+    assignNewGoal();
   }
 
   void Update(){
-    if(!roaming && Input.GetButtonDown("Fire3")){
-      endBattle();
-    }
-		if(roaming && playerNearby()){
-			startBattle();
-		}
-    if(roaming){
+    if(!movementLocked){
       updateMovement();
     }
-    if(following){
-      agent.SetDestination(player.transform.position);
-    }
-  }
-
-  Vector3 randomPosition(){
-    float x = Random.Range(originLocation.x - radius, originLocation.x + radius);
-    float z = Random.Range(originLocation.z - radius, originLocation.z + radius);
-    return new Vector3(x, originLocation.y, z);
-  }
-
-  void makeFloat(){
-
-  }
-
-  private void startBattle(){
-    setRoaming (false);
-    agent.SetDestination(transform.position);
-    gameObject.transform.LookAt(player.transform.position);
-    player.GetComponent<Movement>().Tether(gameObject);
-    //camera switch
-    switchToBattleCamera();
-    //create tether
-    tether = (GameObject) Instantiate(tetherPrefab, gameObject.transform.position, gameObject.transform.rotation);
-    tether.transform.LookAt(player.transform.position);
-    float scale = Vector3.Distance (transform.position, player.transform.position);
-    tether.transform.localScale = new Vector3(tether.transform.localScale.x, tether.transform.localScale.y, scale);
-  }
-
-  private void endBattle(){
-    setFollowing(true);
-    player.GetComponent<Movement>().Untether(gameObject);
-    switchToExploreCamera();
-    Destroy(tether);
-    transform.parent = player.transform.parent;
-    Destroy(gameObject);
-    //agent.SetDestination(new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z-.05f));
-
-  }
-
-  public void setRoaming(bool isRoaming){
-    roaming = isRoaming;
-    //if stopped reset wait time
-    if(!roaming){
-      idleStartTime = 0;
-    }
-  }
-
-  public void setFollowing(bool follow){
-    following = follow;
-    //must be roaming xor following
-    roaming = !follow;
-  }
-
-
-  void switchToExploreCamera(){
-    GameObject.Find("MainCamera").GetComponent<Camera>().enabled = true;
-    GameObject.Find("BattleCamera").GetComponent<Camera>().enabled = false;
-    GameObject.Find("MainCamera").GetComponent<AudioListener>().enabled = true;
-    GameObject.Find("BattleCamera").GetComponent<AudioListener>().enabled = false;
-  }
-
-  void switchToBattleCamera(){
-    GameObject.Find("MainCamera").GetComponent<Camera>().enabled = false;
-    GameObject.Find("BattleCamera").GetComponent<Camera>().enabled = true;
-    GameObject.Find("MainCamera").GetComponent<AudioListener>().enabled = false;
-    GameObject.Find("BattleCamera").GetComponent<AudioListener>().enabled = true;
   }
 
   void updateMovement(){
-    //Debug.Log("Current position: " + transform.position);
-    //Debug.Log("Distance " + Vector3.Distance(transform.position, currentGoal));
-    //Debug.Log("Current: " + transform.position + " Goal: " + currentGoal);
-
     //If at the next patrol point
       if(Vector3.Distance(transform.position, currentGoal) < minDistance){
         //If just arrived, set timer
@@ -129,17 +43,36 @@ public class AIRoamingScript : MonoBehaviour
         //if timer has ended set next goal and move again
         if(Time.time - idleStartTime >= idleTime){
           //animator.SetBool("isWalking", true);
-          currentGoal = randomPosition();
-          bool successfullyAssigned = agent.SetDestination(currentGoal);
-          while(!successfullyAssigned){
-            agent.SetDestination(currentGoal);
-          }
-           //set wait time to zero
+          assignNewGoal();
+          //set wait time to zero
            idleStartTime = 0;
          }
-       }
+      }
   }
-	bool playerNearby(){
-		return Vector3.Distance (transform.position, player.transform.position) < maxPlayerDetectDistance;
-	}
+
+  void assignNewGoal(){
+    currentGoal = randomPosition();
+    bool successfullyAssigned = agent.SetDestination(currentGoal);
+    int count = 0;
+    while(!successfullyAssigned && count < 10000){
+      successfullyAssigned = agent.SetDestination(currentGoal);
+      count++;
+    }
+  }
+
+  Vector3 randomPosition(){
+    float x = Random.Range(originLocation.x - radius, originLocation.x + radius);
+    float z = Random.Range(originLocation.z - radius, originLocation.z + radius);
+    return new Vector3(x, originLocation.y, z);
+  }
+
+  public void setMovementLock(bool locked){
+    movementLocked = locked;
+    if(locked){
+      agent.SetDestination(transform.position);
+      gameObject.transform.LookAt(player.transform.position);
+      //animator.SetBool("isWalking", false);
+    }
+  }
+
 }
