@@ -52,7 +52,7 @@ public class NoteBattleScript : MonoBehaviour {
 	}
 
 	void Update(){
-		if (Time.time - track.GetTrackStartTime >= track.GetNextTime ()) {
+		if (Time.time - track.GetTrackStartTime() >= track.GetNextTime ()) {
 			int noteType = track.GetNextNote ();
 			track.NextNote ();
 			//EmitNote ();
