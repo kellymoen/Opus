@@ -1587,10 +1587,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18dd23e351c831e4586c3ff863c6eddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 100
+  target: {fileID: 0}
+  offset: {x: 0, y: 0, z: 0}
+  mouseSensitivity: 70
+  xOffset: 0
+  yOffset: 0
   MinimumY: 0
   MaximumY: 180
-  damping: 0.5
+  damping: 1
 --- !u!114 &11453678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1604,7 +1608,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1
   jumpSpeed: 2
-  lookSpeed: 2
+  lookSpeed: 1000
+  controller: {fileID: 0}
+  animator: {fileID: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  curLoc: {x: 0, y: 0, z: 0}
+  prevLoc: {x: 0, y: 0, z: 0}
+  tethered: 0
 --- !u!124 &12431138
 Behaviour:
   m_ObjectHideFlags: 1

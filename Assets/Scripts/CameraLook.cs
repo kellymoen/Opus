@@ -4,7 +4,7 @@ using UnityStandardAssets.CrossPlatformInput;
 public class CameraLook : MonoBehaviour {
 	private GameObject target;
 	Vector3 offset;
-	public float mouseSensitivity = 100f;
+	public float mouseSensitivity = 70f;
 	private float xOffset = 0;
 	private float yOffset = 0;
 
@@ -28,10 +28,10 @@ public class CameraLook : MonoBehaviour {
 		Vector3 position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * damping);
 		transform.position = position;
 		//Rotate according to mouse position
-		//updateMouseRotation();
+		updateMouseRotation();
 		//float y = clampFloat(transform.position.y + yOffset, MinimumY, MaximumY);
-	//	Vector3 desiredRotPosition = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, transform.position.z);
-		//transform.RotateAround(target.transform.position, desiredRotPosition, mouseSensitivity * Time.deltaTime);
+		Vector3 desiredRotPosition = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, transform.position.z);
+		transform.RotateAround(target.transform.position, desiredRotPosition, mouseSensitivity * Time.deltaTime);
 		transform.LookAt(target.transform.position);
 		checkEsc();
 	}
