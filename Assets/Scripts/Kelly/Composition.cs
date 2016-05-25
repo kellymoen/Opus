@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(AudioSource))]
 public class Composition : MonoBehaviour
 {
 	public AudioSource audioSource;

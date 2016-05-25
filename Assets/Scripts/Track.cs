@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(AudioSource))]
 public class Track : MonoBehaviour {
 
-	//This should probably be changed to retrieve the audio from the object it is attached to
-	public AudioSource music;
+	private AudioSource music;
 	//Represents the keys in a track
 	//Times stores the timing of the notes (we need to offset this by the travel time)
 	private double[] times;
@@ -17,15 +17,17 @@ public class Track : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		music = GetComponent<AudioSource> ();
 		currentNote = 0;
 		//Should load track here
 		times = new double[]{0.5455,1.0910,1.6365};
 		notes = new int[]{0,1,0};
-		trackLength = music.GetComponent<AudioClip>().length;
+		trackLength = music.clip.length;
 	}
 
-	public void NextNote(){
+	public double NextNote(){
 		currentNote = (currentNote + 1) % Mathf.Max (times.Length, notes.Length);
+		return times [currentNote];
 	}
 		
 	public double[] GetTimes(){
@@ -50,5 +52,16 @@ public class Track : MonoBehaviour {
 
 	public double GetTrackStartTime(){
 		return Time.time - music.time;
+	}
+
+	/** Gets the time from currentNote until note n */
+	public float GetFutureTime(int n){
+		float timeCount = 0;
+		int timeIdx = currentNote;
+		for (int i = 0; i < n; i++) {
+			timeCount += (float)times [timeIdx];
+			timeIdx = (timeIdx + 1) % times.Length;
+		}
+		return timeCount;
 	}
 }

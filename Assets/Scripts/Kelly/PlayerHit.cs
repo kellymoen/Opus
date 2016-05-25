@@ -43,33 +43,33 @@ public class PlayerHit : MonoBehaviour {
 			if (diff < -BAD) {
 				display.text = "BAD: EARLY";
 				//	OnBad ();
-				//if (OnButtonPress != null)
-				//	OnButtonPress(-BAD);
+				if (OnButtonPress != null)
+					OnButtonPress(-BAD);
 			} else if (diff < -GOOD) {
 				display.text = "GOOD: EARLY";
 				//	OnGood ();
-				//if (OnButtonPress != null)
-				//	OnButtonPress (-GOOD);
+				if (OnButtonPress != null)
+					OnButtonPress (-GOOD);
 			} else if (diff < GREAT) {
 				display.text = "GREAT: EARLY";
 				//	OnGreat ();
-				//if (OnButtonPress != null)
-				//	OnButtonPress (-GREAT);
+				if (OnButtonPress != null)
+					OnButtonPress (-GREAT);
 			} else if (diff > BAD) {
 				display.text = "BAD: LATE";
 				//	OnBad ();
-				//if (OnButtonPress != null)
-				//	OnButtonPress (BAD);
+				if (OnButtonPress != null)
+					OnButtonPress (BAD);
 			} else if (diff > GOOD) {
 				display.text = "GOOD: LATE";
 				//	OnGood ();
-				//if (OnButtonPress != null)
-				//	OnButtonPress (GOOD);
+				if (OnButtonPress != null)
+					OnButtonPress (GOOD);
 			} else if (diff > GREAT) {
 				display.text = "GREAT: LATE";
 				//	OnGreat ();
-				//if (OnButtonPress != null)
-				//	OnButtonPress (GREAT);
+				if (OnButtonPress != null)
+					OnButtonPress (GREAT);
 			}
 		}
 	}

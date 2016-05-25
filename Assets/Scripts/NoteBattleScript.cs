@@ -5,33 +5,32 @@ using System.Collections;
  * and destroyed/disabled once the combat is over (whether successful or failed). 
  */
 public class NoteBattleScript : MonoBehaviour {
-	public AudioSourceMetro metro;
-	public Transform noteDestination;
-	public Transform noteOrigin;
-	public Canvas battleCanvas;
+	public AudioSourceMetro metro; // where we're counting from
+	public Transform noteDestination; // where the notes go
+	public Transform noteOrigin; // where they come from
+	public Canvas battleCanvas; // what we draw them on
+	public Track track;
+	private GameObject player;
+
 	public int successesToWin = 3; // number of notes to get correct in a row
 	public int missesToFail = 12; // number of notes to fail in a row before it escapes
-	public int delayStart = 4; // number of beats to wait before listening to input
+	public int delayStart = 4; // number of beats to wait before listening to input; defaults to 0 if less than beatsToReachPlayer
 	public int beatsToReachPlayer = 4; // number of beats each note takes to reach the player;
 									// essentially the speed
 	[Range(0.0f,16f)]
-	public int maxActiveNotes = 4; // helpful but not essential!
+	public int maxLoadedNotes = 4; // how many notes we can have LOADED (not necessarily active) at any time
+	// fields for managing our loaded notes
+	private GameObject[] loadedNotes;
+	private int playerInputIndex = 0;
+	private int activeNoteIndex = 0;
 
-	public Track track;
-
-	// fields for calculating where we are in the rhythm
 	private int currentSuccesses = 0;
 	private int currentFailures = 0;
 
 	private int beatOffset = 0; // counts down to start time
 	private int nextMetroBeat = 0; // metronome beat we expect
+	private double emitNextNoteAt = 0;
 
-	// fields for the notemovement scripts
-	private GameObject player;
-	// fields for managing our active notes
-	private GameObject[] activeNotes;
-	private int playerInputIndex = 0;
-	private int activeNoteIndex = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -52,46 +51,52 @@ public class NoteBattleScript : MonoBehaviour {
 	}
 
 	void Update(){
-		if (Time.time - track.GetTrackStartTime >= track.GetNextTime ()) {
+		if (emitNextNoteAt <= Time.time) {
 			int noteType = track.GetNextNote ();
 			track.NextNote ();
-			//EmitNote ();
-			Debug.Log("NOTE");
+			// emit one note every beat; each note takes 4 beats to arrive
+			EmitNote (track.GetFutureTime (4));
+			emitNextNoteAt = track.GetFutureTime (1);
 		}
 	}
 
 	void OnEnable() {
 		player = GameObject.FindGameObjectWithTag ("Player");
-		player.GetComponent<Movement> ().Tether (gameObject); // TODO is this right? we'll find out soon!
+		player.GetComponent<Movement> ().Tether (transform.gameObject);
 		if (metro == null) {
 			Debug.Log ("NoteBattleScript needs a metro to count time with!");
 		}
 		PlayerHit.OnButtonPress += OnPress;
 		AudioSourceMetro.OnBeat += OnBeat;
 		PlayerHit.OnMiss += OnMiss;
+
 		// some initialisation goes here
-		activeNotes = new GameObject[maxActiveNotes];
-		for (int i = 0; i < activeNotes.Length; i++) {
-			activeNotes [i] = CreateNote ();
+		loadedNotes = new GameObject[maxLoadedNotes];
+		for (int i = 0; i < loadedNotes.Length; i++) {
+			loadedNotes [i] = CreateNote ();
 		}
 	}
 
+	/** we should never disable NoteBattleScripts as they are currently, only create and destroy them.*/
 	void OnDisable() {
 		PlayerHit.OnButtonPress -= OnPress;
 		AudioSourceMetro.OnBeat -= OnBeat;
 	}
 
+	/** OnBeat is 'called' from AudioSourceMetro */
 	void OnBeat () {
-		Debug.Log ("new beat with " + nextMetroBeat);
+		Debug.Log ("new beat with " + nextMetroBeat +" and track number "+ track.GetNextTime());
 		// if we're resting, return
 		if (beatOffset > 0) {
 			beatOffset--;
 		} else {
-			EmitNote ();
+			track.NextNote ();
 		}
 		nextMetroBeat++;
 	}
 
+	/** When the player misses a beat, update failures accordingly. 
+	  * (OnMiss is 'called' from PlayerHit) */
 	void OnMiss() {
 		if (beatOffset <= 0) {
 			Debug.Log ("Missed a note!" + nextMetroBeat);
@@ -100,20 +105,23 @@ public class NoteBattleScript : MonoBehaviour {
 		CheckEnd ();
 	}
 
-	/** When the player hits a note. */
+	/** When the player successfully hits a note. */
 	void OnPress(double score) {
-		double beatStartTime = metro.GetBeatStartTime ();
-		if (beatOffset <= 0) {
+		Debug.Log ("press");
+		score = (double)Mathf.Abs ((float)score);
+		// if we have started listening
+		if (beatOffset <= 0) { 
 			// first make sure we didn't miss anything
 			int beat = metro.GetBeat ();
-			if (beat > nextMetroBeat) {
-				currentFailures += beat - nextMetroBeat; // FIXME not great
-			}
-			playerInputIndex = playerInputIndex + 1 % activeNotes.Length - 1;
-			if (activeNotes [activeNoteIndex].GetComponent<NoteMovement> ().IsInRangeOfDestination ()) {
-				activeNotes [activeNoteIndex].SetActive (false);
-				activeNoteIndex = (activeNoteIndex + 1 % activeNotes.Length - 1);
-				Debug.Log ("active: " + activeNoteIndex);
+			NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
+			if (note.IsInRangeOfDestination ()) {
+				if (score >= PlayerHit.BAD) {
+					note.BadHit ();
+				} else {
+					note.GoodHit ();
+				}
+				playerInputIndex = playerInputIndex + 1 % loadedNotes.Length - 1;
+				Debug.Log ("active: " + activeNoteIndex +", playerIndex: "+ playerInputIndex);
 			} else {
 				// button press when note is out of range
 			}
@@ -140,25 +148,22 @@ public class NoteBattleScript : MonoBehaviour {
 	}
 
 	/** When a new beat is detected (rough method for now, sorry!) a new
-	 * visual representation of the note is created. It (should)
+	 * visual representation of the note is enabled. It (should)
 	 * slowly move towards the player so that it arrives on another beat. */
-	private void EmitNote() {
-		NoteMovement currNote = activeNotes [activeNoteIndex].GetComponent<NoteMovement> ();
-		if (activeNotes [activeNoteIndex].activeSelf) {
-			if (currNote.IsInRangeOfDestination()) {
-				currNote.gameObject.SetActive (false);
-			}
+	private void EmitNote(float goalTime) {
+		NoteMovement currNote = loadedNotes [activeNoteIndex].GetComponent<NoteMovement> ();
+		if (loadedNotes [activeNoteIndex].activeSelf) {
 		}
 		else {
-			currNote.StartNote (Time.time + (float)(beatsToReachPlayer * PlayerHit.HalfBeat * 2));
-			activeNotes [activeNoteIndex].SetActive (true);
+			currNote.StartNote (goalTime);
 		}
+		activeNoteIndex = activeNoteIndex + 1 % loadedNotes.Length - 1;
 	}
 
 	/** Creates a note with fields initialised to metro, noteDestination, noteOrigin, and to listen
 	 * to button X */
 	private GameObject CreateNote() {
-		GameObject note = Instantiate (Resources.Load ("Notes/LeftNote")) as GameObject;
+		GameObject note = Instantiate (Resources.Load ("Notes/Note")) as GameObject;
 		NoteMovement noteScript = note.GetComponent<NoteMovement> ();
 		noteScript.Initialise (metro,noteDestination,noteOrigin,"X");
 		noteScript.ResetNote ((float)(beatsToReachPlayer * PlayerHit.HalfBeat * 2));
@@ -170,9 +175,13 @@ public class NoteBattleScript : MonoBehaviour {
 
 	// 
 	public void OnDestroy() {
-		player.GetComponent<Movement>().Untether();
-		for (int i = 0; i < activeNotes.Length; i++) {
-			Destroy(activeNotes[i]);
+		if (player != null) {
+			player.GetComponent<Movement> ().Untether ();
+		}
+		for (int i = 0; i < loadedNotes.Length; i++) {
+			if (loadedNotes [i] != null) {
+				Destroy (loadedNotes [i]);
+			}
 		}
 	}
 
