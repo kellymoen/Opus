@@ -5,18 +5,20 @@ using UnityStandardAssets.CrossPlatformInput;
 public class PlayerManagerScript : MonoBehaviour {
   private GameObject tether;
   private Movement moveScript;
+  private PlayerCritterManager critterManager;
   private GameObject mainCamera;
   private GameObject battleCamera;
   private GameObject critterSelectionCamera;
   private GameObject currentCritterBattle;
 
-
   public GameObject tetherPrefab;
+
   void Start(){
     moveScript = gameObject.GetComponent<Movement>();
+    critterManager = gameObject.GetComponent<PlayerCritterManager>();
     mainCamera = GameObject.Find("MainCamera");
     battleCamera = GameObject.Find("BattleCamera");
-    //critterSelectionCamera = GameObject.Find("critterSelectionCamera");
+    critterSelectionCamera = GameObject.Find("CritterSelectionCamera");
   }
 
   void Update(){
@@ -53,7 +55,10 @@ public class PlayerManagerScript : MonoBehaviour {
     Destroy(tether);
     //tell ai if it has been captured or if it should run away
     if(success){
-      currentCritterBattle.GetComponent<AIManagerScript>().capture();
+      Debug.Log("Before addCritter");
+      critterManager.addCritter(currentCritterBattle);
+      Debug.Log(currentCritterBattle);
+      //currentCritterBattle.GetComponent<AIManagerScript>().capture();
       currentCritterBattle = null;
     }
     else{
@@ -62,18 +67,38 @@ public class PlayerManagerScript : MonoBehaviour {
     }
   }
 
-  void switchToExploreCamera(){
-    mainCamera.GetComponent<Camera>().enabled = true;
+  void switchToCritterManagerCamera(){
+    //enable selection camera & audio listener
+    critterSelectionCamera.GetComponent<Camera>().enabled = true;
+    critterSelectionCamera.GetComponent<AudioListener>().enabled = true;
+    //disable all other cameras
+    mainCamera.GetComponent<Camera>().enabled = false;
+    mainCamera.GetComponent<AudioListener>().enabled = false;
     battleCamera.GetComponent<Camera>().enabled = false;
+    battleCamera.GetComponent<AudioListener>().enabled = false;
+  }
+
+  void switchToExploreCamera(){
+    //enable main camera & audio listener
+    mainCamera.GetComponent<Camera>().enabled = true;
     mainCamera.GetComponent<AudioListener>().enabled = true;
+    //disable all other cameras
+    critterSelectionCamera.GetComponent<Camera>().enabled = false;
+    critterSelectionCamera.GetComponent<AudioListener>().enabled = false;
+    battleCamera.GetComponent<Camera>().enabled = false;
     battleCamera.GetComponent<AudioListener>().enabled = false;
   }
 
   void switchToBattleCamera(){
-    mainCamera.GetComponent<Camera>().enabled = false;
-    battleCamera.GetComponent<Camera>().enabled = true;
-    mainCamera.GetComponent<AudioListener>().enabled = false;
+    //enable battle camera & audio listener
     battleCamera.GetComponent<AudioListener>().enabled = true;
+    battleCamera.GetComponent<Camera>().enabled = true;
+    //disable all other cameras
+    mainCamera.GetComponent<Camera>().enabled = false;
+    mainCamera.GetComponent<AudioListener>().enabled = false;
+    critterSelectionCamera.GetComponent<Camera>().enabled = false;
+    critterSelectionCamera.GetComponent<AudioListener>().enabled = false;
+
   }
 
 }

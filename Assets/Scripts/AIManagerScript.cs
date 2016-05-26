@@ -54,11 +54,11 @@ public class AIManagerScript : MonoBehaviour
 
   public void capture(){
     //TODO create playerCritterManager script
-    Destroy(gameObject);
+
   }
 
   public void escape(){
-    Destroy(gameObject);
+    //Destroy(gameObject);
     //TODO respawn critter
   }
 }
