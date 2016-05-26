@@ -24,9 +24,6 @@ public class Track : MonoBehaviour {
 		currentNote = 0;
 		//Should load track here
 		LoadFromFile();
-
-		times = new double[]{0.5455,1.0910,1.6365};
-		notes = new int[]{0,1,0};
 		trackLength = music.clip.length;
 	}
 
@@ -79,6 +76,14 @@ public class Track : MonoBehaviour {
 
 	/** Gets the time from currentNote until note n */
 	public float GetFutureTime(int n){
+		if (currentNote + n >= times.Length) {
+			int indOfN = (currentNote + n) % times.Length;
+			float timeToEnd = (float)(trackLength - times [currentNote]);
+			return (float)(timeToEnd + times [indOfN]);
+		} else {
+			return (float)(times [currentNote] - times [currentNote + n]);
+		}
+		/*
 		float timeCount = 0;
 		int timeIdx = currentNote;
 		for (int i = 0; i < n; i++) {
@@ -86,5 +91,6 @@ public class Track : MonoBehaviour {
 			timeIdx = (timeIdx + 1) % times.Length;
 		}
 		return timeCount;
+		*/
 	}
 }

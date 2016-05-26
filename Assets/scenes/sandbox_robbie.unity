@@ -1378,7 +1378,6 @@ GameObject:
   - 4: {fileID: 1932853396}
   - 114: {fileID: 1932853395}
   - 114: {fileID: 1932853397}
-  - 114: {fileID: 1932853398}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -1424,19 +1423,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   metronome: {fileID: 1932853395}
   display: {fileID: 1462989555}
---- !u!114 &1932853398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1932853394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50759f3be8278d243ad63a6e07af2663, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  music: {fileID: 2050958430}
-  filename: Bass2
 --- !u!1 &2050958428
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,6 +1432,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2050958429}
   - 82: {fileID: 2050958430}
+  - 114: {fileID: 2050958431}
   m_Layer: 0
   m_Name: Bass
   m_TagString: Untagged
@@ -1541,6 +1528,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &2050958431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2050958428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50759f3be8278d243ad63a6e07af2663, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  filename: Bass1
 --- !u!1 &2082732022
 GameObject:
   m_ObjectHideFlags: 0
