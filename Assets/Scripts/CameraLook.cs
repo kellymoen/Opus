@@ -6,6 +6,7 @@ public class CameraLook : MonoBehaviour {
 	Vector3 offset;
 	public float turnSpeed = 2.0f;
 	public float damping = 1f;
+	//TODO Use damping
 
 
 	void Start(){
