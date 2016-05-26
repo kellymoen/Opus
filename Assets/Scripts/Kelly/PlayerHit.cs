@@ -39,7 +39,7 @@ public class PlayerHit : MonoBehaviour {
 			diff -= 0.080; // 30ms delay, 
 			if (diff > 0.2728) //greater than a half beat means the player is likely early
 				diff -= 0.5455;
-			Debug.Log (diff);
+//			Debug.Log (diff);
 			if (diff < -BAD) {
 				display.text = "BAD: EARLY";
 				//	OnBad ();
@@ -71,6 +71,7 @@ public class PlayerHit : MonoBehaviour {
 				if (OnButtonPress != null)
 					OnButtonPress (GREAT);
 			}
+			OnMiss ();
 		}
 	}
 }

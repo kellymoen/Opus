@@ -24,23 +24,21 @@ public class Track : MonoBehaviour {
 		currentNote = 0;
 		//Should load track here
 		LoadFromFile();
-
-		times = new double[]{0.5455,1.0910,1.6365};
-		notes = new int[]{0,1,0};
 		trackLength = music.clip.length;
 	}
 
 	private void LoadFromFile(){
-		StreamReader input = new StreamReader ("Tracks/" + filename);
+		StreamReader input = new StreamReader ("Assets/Tracks/" + filename + ".txt");
 
 		ArrayList timesList = new ArrayList ();
 		ArrayList notesList = new ArrayList ();
 		while (!input.EndOfStream) {
 			string line = input.ReadLine ();
 			float time = float.Parse (line.Substring (0, 6));
-			int type = int.Parse (line.Substring (8, 1));
+			int type = int.Parse (line.Substring (7, 1));
 			timesList.Add (time);
 			notesList.Add (type);
+			Debug.Log ("Time= " + time + " Type= " + type);
 		}
 
 		times = (double[])timesList.ToArray (typeof(double));
@@ -78,12 +76,12 @@ public class Track : MonoBehaviour {
 
 	/** Gets the time from currentNote until note n */
 	public float GetFutureTime(int n){
-		float timeCount = 0;
-		int timeIdx = currentNote;
-		for (int i = 0; i < n; i++) {
-			timeCount += (float)times [timeIdx];
-			timeIdx = (timeIdx + 1) % times.Length;
+		if (currentNote + n >= times.Length) {
+			int indOfN = (currentNote + n) % times.Length;
+			float timeToEnd = (float)(trackLength - times [currentNote]);
+			return (float)(timeToEnd + times [indOfN]);
+		} else {
+			return (float)(times [currentNote + n] - times [currentNote]);
 		}
-		return timeCount;
 	}
 }
