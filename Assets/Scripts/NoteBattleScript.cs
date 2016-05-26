@@ -2,7 +2,7 @@
 using System.Collections;
 
 /** NoteBattleScripts are (will be) created/enabled when the player enters combat with a notesprite,
- * and destroyed/disabled once the combat is over (whether successful or failed). 
+ * and destroyed/disabled once the combat is over (whether successful or failed).
  */
 public class NoteBattleScript : MonoBehaviour {
 	public AudioSourceMetro metro; // where we're counting from
@@ -61,8 +61,8 @@ public class NoteBattleScript : MonoBehaviour {
 	}
 
 	void OnEnable() {
-		player = GameObject.FindGameObjectWithTag ("Player");
-		player.GetComponent<Movement> ().Tether (transform.gameObject);
+		//player = GameObject.FindGameObjectWithTag ("Player");
+		//player.GetComponent<Movement> ().Tether (gameObject); // TODO is this right? we'll find out soon!
 		if (metro == null) {
 			Debug.Log ("NoteBattleScript needs a metro to count time with!");
 		}
@@ -173,25 +173,21 @@ public class NoteBattleScript : MonoBehaviour {
 	}
 
 
-	// 
+	//
 	public void OnDestroy() {
-		if (player != null) {
-			player.GetComponent<Movement> ().Untether ();
-		}
+		player.GetComponent<PlayerManagerScript>().endBattle(true);
 		for (int i = 0; i < loadedNotes.Length; i++) {
-			if (loadedNotes [i] != null) {
-				Destroy (loadedNotes [i]);
-			}
+			Destroy(loadedNotes[i]);
 		}
 	}
 
 	/* Once we have things to do when the player loses to the sprite, put them here. */
 	private void OnLose () {
-		player.GetComponent<Movement>().Untether();
+		player.GetComponent<PlayerManagerScript>().endBattle(false);
 	}
 
 	/* Once we have things to do when the player wins against the sprite, put them here. */
 	private void OnWin () {
-		player.GetComponent<Movement>().Untether();
+		player.GetComponent<PlayerManagerScript>().endBattle(true);
 	}
 }

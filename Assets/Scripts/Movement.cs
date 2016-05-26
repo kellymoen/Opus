@@ -13,7 +13,7 @@ public class Movement : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 curLoc;
 	private Vector3 prevLoc;
-	private bool tethered = false;
+	private bool movementLocked = false;
 
 	void Start(){
 		controller = GetComponent<CharacterController>();
@@ -21,7 +21,7 @@ public class Movement : MonoBehaviour {
 	}
 
 	void Update() {
-		if(!tethered){
+		if(!movementLocked){
 				UpdateInput();
 				if(CrossPlatformInputManager.GetAxis("Horizontal") != 0 || CrossPlatformInputManager.GetAxis("Vertical") != 0){
 					animator.SetBool("isWalking", true);
@@ -31,10 +31,10 @@ public class Movement : MonoBehaviour {
 				else{
 					animator.SetBool("isWalking", false);
 				}
-			}
-			if (Input.GetButton ("Jump")) {
-				animator.SetTrigger ("jump");
-				moveDirection.y = jumpSpeed;
+				if (CrossPlatformInputManager.GetButton ("Jump")) {
+					animator.SetTrigger ("jump");
+					moveDirection.y = jumpSpeed;
+				}
 			}
 		}
 
@@ -69,17 +69,11 @@ public class Movement : MonoBehaviour {
      transform.rotation = Quaternion.Slerp(transform.rotation, constrained, Time.deltaTime * lookSpeed);
  }
 
-	public void Tether(GameObject sprite){
-		animator = GetComponent<Animator>();
-		tethered = true;
-		gameObject.transform.LookAt(sprite.transform.position);
-		animator.SetBool("isWalking", false);
-	}
-	public void Untether(GameObject sprite){
-		tethered = false;
+	public void setMovementLock(bool locked){
+		movementLocked = locked;
+		if(locked){
+			animator.SetBool("isWalking", false);
+		}
 	}
 
-	public void Untether() {
-		tethered = false;
-	}
 }
