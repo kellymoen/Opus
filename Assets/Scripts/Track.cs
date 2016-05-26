@@ -31,16 +31,17 @@ public class Track : MonoBehaviour {
 	}
 
 	private void LoadFromFile(){
-		StreamReader input = new StreamReader ("Tracks/" + filename);
+		StreamReader input = new StreamReader ("Assets/Tracks/" + filename + ".txt");
 
 		ArrayList timesList = new ArrayList ();
 		ArrayList notesList = new ArrayList ();
 		while (!input.EndOfStream) {
 			string line = input.ReadLine ();
 			float time = float.Parse (line.Substring (0, 6));
-			int type = int.Parse (line.Substring (8, 1));
+			int type = int.Parse (line.Substring (7, 1));
 			timesList.Add (time);
 			notesList.Add (type);
+			Debug.Log ("Time= " + time + " Type= " + type);
 		}
 
 		times = (double[])timesList.ToArray (typeof(double));
