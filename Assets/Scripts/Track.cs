@@ -81,16 +81,7 @@ public class Track : MonoBehaviour {
 			float timeToEnd = (float)(trackLength - times [currentNote]);
 			return (float)(timeToEnd + times [indOfN]);
 		} else {
-			return (float)(times [currentNote] - times [currentNote + n]);
+			return (float)(times [currentNote + n] - times [currentNote]);
 		}
-		/*
-		float timeCount = 0;
-		int timeIdx = currentNote;
-		for (int i = 0; i < n; i++) {
-			timeCount += (float)times [timeIdx];
-			timeIdx = (timeIdx + 1) % times.Length;
-		}
-		return timeCount;
-		*/
 	}
 }
