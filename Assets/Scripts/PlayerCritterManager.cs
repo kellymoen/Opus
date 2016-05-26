@@ -6,6 +6,7 @@ public class PlayerCritterManager : MonoBehaviour {
   private Dictionary<Transform, GameObject> activeCritters;
   //all available critters
   private List<GameObject> allCritters;
+  private bool open = false;
 
   void Start(){
     activeCritters = new Dictionary<Transform, GameObject>();
@@ -17,19 +18,20 @@ public class PlayerCritterManager : MonoBehaviour {
   }
 
   void Update(){
+    if(open){
 
+    }
   }
 
   public void addCritter(GameObject critter){
+    //if any spaces available add to current following
     addCritterToFirstSpaceAvailable(critter);
     //add to List of all critters
     allCritters.Add(critter);
   }
 
   private bool addCritterToFirstSpaceAvailable(GameObject critter){
-
     foreach(KeyValuePair<Transform, GameObject> pair in activeCritters){
-      //TODO deal with what ever bullshit this foreach is throwing
       if(pair.Value == null){
         activeCritters[pair.Key] = critter;
         critter.GetComponent<AIManagerScript>().startFollowing(pair.Key);
@@ -37,5 +39,20 @@ public class PlayerCritterManager : MonoBehaviour {
       }
     }
     return false;
+  }
+
+  private void displayAllCritters(){
+    foreach(GameObject critter in allCritters){
+      //TODO display
+    }
+  }
+
+  public void openSelection(){
+    open = true;
+    displayAllCritters();
+  }
+
+  public void closeSelection(){
+    open = false;
   }
 }

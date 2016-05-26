@@ -46,10 +46,12 @@ public class AIManagerScript : MonoBehaviour
   }
 
   void readyBattle(){
-    roamingScript.setMovementLock(true);
-    player.GetComponent<PlayerManagerScript>().startBattle(gameObject);
-    currentState = State.Battle;
-    //TODO enable NoteBattleScript on critter
+    if(player.GetComponent<PlayerManagerScript>().startBattle(gameObject)){
+      roamingScript.setMovementLock(true);
+      currentState = State.Battle;
+      //TODO enable NoteBattleScript on critter
+    }
+
   }
 
   public void capture(){
