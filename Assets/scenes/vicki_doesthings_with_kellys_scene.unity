@@ -1460,11 +1460,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1467263167}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9547a849033d3f34f87c4602ee2fd432, type: 3}
+  m_Script: {fileID: 11500000, guid: bd945621adfdec04cba372dbe9258a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tetherPrefab: {fileID: 0}
 --- !u!1 &1555339298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,7 +1544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   metro: {fileID: 170051363}
-  noteDestination: {fileID: 0}
+  noteDestination: {fileID: 1453431824}
   noteOrigin: {fileID: 1601195066}
   battleCanvas: {fileID: 781419417}
   track: {fileID: 1601195065}

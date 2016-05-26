@@ -48,7 +48,6 @@ public class NoteBattleScript : MonoBehaviour {
 		if (noteOrigin == null) {
 			Debug.LogError ("NoteBattleScript must have a place for notes to spawn from!");
 		}
-		OnEnable ();
 	}
 
 	void OnEnable() {
