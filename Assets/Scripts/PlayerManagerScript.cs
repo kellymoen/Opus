@@ -10,6 +10,7 @@ public class PlayerManagerScript : MonoBehaviour {
   private GameObject battleCamera;
   private GameObject critterSelectionCamera;
   private GameObject currentCritterBattle;
+  private bool inBattle = false;
 
   public GameObject tetherPrefab;
 
@@ -22,7 +23,7 @@ public class PlayerManagerScript : MonoBehaviour {
   }
 
   void Update(){
-    if(CrossPlatformInputManager.GetButton ("Fire3")){
+    if(CrossPlatformInputManager.GetButton ("Fire3") && inBattle){
       endBattle(true);
     }
   }
@@ -37,6 +38,7 @@ public class PlayerManagerScript : MonoBehaviour {
   public void startBattle(GameObject critter){
     //TODO make sure only one battle at a time is active
     if(critter != null){
+      inBattle = true;
       currentCritterBattle = critter;
       gameObject.transform.LookAt(critter.transform.position);
       moveScript.setMovementLock(true);
@@ -50,6 +52,7 @@ public class PlayerManagerScript : MonoBehaviour {
   }
 
   public void endBattle(bool success){
+    inBattle = false;
     switchToExploreCamera();
     moveScript.setMovementLock(false);
     Destroy(tether);
