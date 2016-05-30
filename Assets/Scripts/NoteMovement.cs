@@ -10,8 +10,8 @@ public class NoteMovement : MonoBehaviour {
 	// orange/yellow = too early
 	// green = good or better hit
 	// black = too late
-	private Transform destination;
-	private Transform origin;
+	private Vector3 destination;
+	private Vector3 origin;
 	private float relativeHeight = 0.1f;
 	private float startTime;
 	private float targetTime; // = the amount of time it should take to reach destination (startTime + targetTime = endTime)
@@ -33,16 +33,20 @@ public class NoteMovement : MonoBehaviour {
 	public void Initialise(Transform destination, Transform origin, string button) {
 		if (destination == null || origin == null)
 			Debug.LogError ("Cannot assign a null destination/origin.");
-		this.destination = destination;
+		this.destination = destination.position;
+		transform.LookAt (destination);
+		this.destination -= new Vector3(destination.forward.x, destination.forward.y, destination.forward.z);
+
 		transform.position = origin.position;
-		this.origin = origin;
+		this.origin = origin.position;
 		this.button = button;
 		totalDistance = Mathf.Abs(Vector3.Distance (destination.transform.position, origin.transform.position));
 	}
 
 	/* called to put note back at origin and start it moving again */
+	//public void StartNote (float newTargetTime, RawImage button) {
 	public void StartNote (float newTargetTime) {
-		transform.position = origin.transform.position;
+		transform.position = origin;
 		GetComponent<RawImage> ().color = new Color (255, 255, 255, 255);
 		gameObject.GetComponent<CanvasRenderer> ().SetColor (Color.white);
 		startTime = Time.time;
@@ -71,7 +75,7 @@ public class NoteMovement : MonoBehaviour {
 		}
 		transform.position += transform.forward * (totalDistance / targetTime) * Time.deltaTime;
 		transform.position = new Vector3 (transform.position.x, relativeHeight, transform.position.z);
-		transform.LookAt (2 * (transform.position - cam.transform.position));
+		transform.LookAt (cam.transform.position);
 
 		if (TimeFromDestination() < 0 + PlayerHit.BAD + PlayerHit.BAD*0.5) {
 			if (!colored)

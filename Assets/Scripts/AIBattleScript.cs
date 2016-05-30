@@ -19,6 +19,9 @@ public class AIBattleScript : MonoBehaviour {
 	public static event BattleEvent Win;
 	public static event BattleEvent Loss;
 
+	public Texture[] buttons;
+	public string[] buttonNames;
+
 	private bool started = false;
 
 	private string filename;
@@ -40,6 +43,7 @@ public class AIBattleScript : MonoBehaviour {
 	public int maxLoadedNotes = 4; // how many notes we can have LOADED (not necessarily active) at any time
 	// fields for managing our loaded notes
 	private GameObject[] loadedNotes;
+	private string[] activeButtons;
 	private int playerInputIndex = 0;
 	private int activeNoteIndex = 0;
 
@@ -188,7 +192,10 @@ public class AIBattleScript : MonoBehaviour {
 	 * slowly move towards the player so that it arrives on another beat. */
 	private void EmitNote(float targetTime) {
 		NoteMovement currNote = loadedNotes [activeNoteIndex].GetComponent<NoteMovement> ();
+		//int idx = buttons [Random.Range (0, buttons.Length - 1)];
 		currNote.StartNote (targetTime);
+		//currNote.StartNote (targetTime,buttons[idx]);
+		//activeButtons [idx] = buttonNames [idx];
 	}
 
 
