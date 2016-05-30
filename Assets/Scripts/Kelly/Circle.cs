@@ -13,13 +13,24 @@ public class Circle : MonoBehaviour
 	void Start ()
 	{
 		int[] elems = composition.bars;
-		renderers = new GameObject[elems.Length];
-		for (int i = 0; i < elems.Length; i++) {
-			int arcDegrees = 360 / elems.Length;
-			int segments = 100 / elems.Length;
+		renderers = new GameObject[16];
+		for (int i = 0; i < 16; i++) {
 			renderers [i] = Instantiate(line);
+			renderers [i].GetComponent<LineRenderer>().enabled = false;
+		}
+		for (int i = 0; i < composition.barsLength; i++) {
+			float arcDegrees = 360.0f / (float)composition.barsLength;
+			int segments = 100 / composition.barsLength;
 			LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
-			if (elems [i] == 1) {
+			renderer.enabled = true;
+			if (composition.selected) {
+				if (composition.selectedSegment == i) {
+					renderer.material.color = new Color (1.0f, 0.0f, 0.0f);
+				} else {
+					renderer.material.color = new Color (1.0f, 1.0f, 1.0f);
+				}
+			}
+			if (elems [i] == 0) {
 				renderer.SetWidth (0.1f, 0.1f);
 			} else {
 				renderer.SetWidth (0.5f, 0.5f);
@@ -27,6 +38,38 @@ public class Circle : MonoBehaviour
 			renderer.SetVertexCount (segments + 1);
 			renderer.useWorldSpace = false;
 			CreatePoints (renderer, arcDegrees*i, arcDegrees, segments);
+		}
+	}
+
+	void Update(){
+		int[] elems = composition.bars;
+		for (int i = 0; i < composition.barsLength; i++) {
+			float arcDegrees = 360.0f / (float)composition.barsLength;
+			int segments = 100 / composition.barsLength;
+			LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
+			renderer.enabled = true;
+			if (composition.selected) {
+				if (composition.selectedSegment == i) {
+					renderer.material.color = new Color (1.0f, 0.0f, 0.0f);
+				} else {
+					renderer.material.color = new Color (1.0f, 1.0f, 1.0f);
+				}
+			}
+			else
+				renderer.material.color = HexToColor ("3A00F3FF");;
+			if (elems [i] == 0) {
+				renderer.SetWidth (0.1f, 0.1f);
+			} else {
+				renderer.SetWidth (0.5f, 0.5f);
+			}
+			renderer.SetVertexCount (segments + 1);
+			renderer.useWorldSpace = false;
+			CreatePoints (renderer, arcDegrees*i, arcDegrees, segments);
+		}
+
+		for (int i = composition.barsLength; i < 16; i++) {
+			LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
+			renderer.enabled = false;
 		}
 	}
 
@@ -56,5 +99,21 @@ public class Circle : MonoBehaviour
 		float x = Mathf.Sin (Mathf.Deg2Rad * angle) * xradius;
 		float z = Mathf.Cos (Mathf.Deg2Rad * angle) * yradius;
 		return new Vector3 (x, 0.001f, z);
+	}
+
+	//Author: mvi
+	// Note that Color32 and Color implictly convert to each other. You may pass a Color object to this method without first casting it.
+	string ColorToHex(Color32 color)
+	{
+		string hex = color.r.ToString("X2") + color.g.ToString("X2") + color.b.ToString("X2");
+		return hex;
+	}
+
+	Color HexToColor(string hex)
+	{
+		byte r = byte.Parse(hex.Substring(0,2), System.Globalization.NumberStyles.HexNumber);
+		byte g = byte.Parse(hex.Substring(2,2), System.Globalization.NumberStyles.HexNumber);
+		byte b = byte.Parse(hex.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
+		return new Color32(r,g,b, 255);
 	}
 }
