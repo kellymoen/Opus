@@ -1,0 +1,252 @@
+fileFormatVersion: 2
+guid: 23532a9a86f3b7b4c83d5e2a92a3cb36
+timeCreated: 1462949132
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: body
+    100002: ears
+    100004: eyes1
+    100006: head
+    100008: horn2
+    100010: inner_body
+    100012: inner_head
+    100014: //RootNode
+    100016: L_arm
+    100018: L_ear
+    100020: L_ear 1
+    100022: L_eye
+    100024: L_leg
+    100026: mask1
+    100028: mask_ears
+    100030: mask_head
+    100032: outer__L_ear
+    100034: outer__R_ear
+    100036: outer_body
+    100038: outer_head
+    100040: R_arm
+    100042: R_ear
+    100044: R_ear 1
+    100046: R_eye
+    100048: R_leg
+    400000: body
+    400002: ears
+    400004: eyes1
+    400006: head
+    400008: horn2
+    400010: inner_body
+    400012: inner_head
+    400014: //RootNode
+    400016: L_arm
+    400018: L_ear
+    400020: L_ear 1
+    400022: L_eye
+    400024: L_leg
+    400026: mask1
+    400028: mask_ears
+    400030: mask_head
+    400032: outer__L_ear
+    400034: outer__R_ear
+    400036: outer_body
+    400038: outer_head
+    400040: R_arm
+    400042: R_ear
+    400044: R_ear 1
+    400046: R_eye
+    400048: R_leg
+    2300000: horn2
+    2300002: inner_body
+    2300004: inner_head
+    2300006: L_arm
+    2300008: L_ear 1
+    2300010: L_eye
+    2300012: L_leg
+    2300014: mask_ears
+    2300016: mask_head
+    2300018: outer__L_ear
+    2300020: outer__R_ear
+    2300022: outer_body
+    2300024: outer_head
+    2300026: R_arm
+    2300028: R_ear 1
+    2300030: R_eye
+    2300032: R_leg
+    3300000: horn2
+    3300002: inner_body
+    3300004: inner_head
+    3300006: L_arm
+    3300008: L_ear 1
+    3300010: L_eye
+    3300012: L_leg
+    3300014: mask_ears
+    3300016: mask_head
+    3300018: outer__L_ear
+    3300020: outer__R_ear
+    3300022: outer_body
+    3300024: outer_head
+    3300026: R_arm
+    3300028: R_ear 1
+    3300030: R_eye
+    3300032: R_leg
+    4300000: L_leg
+    4300002: R_leg
+    4300004: L_arm
+    4300006: R_arm
+    4300008: horn2
+    4300010: inner_body
+    4300012: outer_body
+    4300014: outer__L_ear
+    4300016: L_ear
+    4300018: outer__R_ear
+    4300020: R_ear
+    4300022: mask_ears
+    4300024: mask_head
+    4300026: outer_head
+    4300028: inner_head
+    4300030: R_eye
+    4300032: L_eye
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 200
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: body
+        weight: 1
+      - path: body/inner_body
+        weight: 1
+      - path: body/outer_body
+        weight: 1
+      - path: head
+        weight: 1
+      - path: head/ears
+        weight: 1
+      - path: head/ears/L_ear
+        weight: 1
+      - path: head/ears/L_ear/L_ear 1
+        weight: 1
+      - path: head/ears/L_ear/outer__L_ear
+        weight: 1
+      - path: head/ears/R_ear
+        weight: 1
+      - path: head/ears/R_ear/outer__R_ear
+        weight: 1
+      - path: head/ears/R_ear/R_ear 1
+        weight: 1
+      - path: head/eyes1
+        weight: 1
+      - path: head/eyes1/L_eye
+        weight: 1
+      - path: head/eyes1/R_eye
+        weight: 1
+      - path: head/inner_head
+        weight: 1
+      - path: head/mask1
+        weight: 1
+      - path: head/mask1/mask_ears
+        weight: 1
+      - path: head/mask1/mask_head
+        weight: 1
+      - path: head/outer_head
+        weight: 1
+      - path: horn2
+        weight: 1
+      - path: L_arm
+        weight: 1
+      - path: L_leg
+        weight: 1
+      - path: R_arm
+        weight: 1
+      - path: R_leg
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
