@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: c024d5667a9c17c4bbbf89f2dfca09be
-timeCreated: 1463563421
+guid: d9866ac8c2544e849991add752533cb0
+timeCreated: 1463567221
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -128,85 +128,7 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Take 001
-      takeName: Take 001
-      firstFrame: 28
-      lastFrame: 154
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask:
-      - path: 
-        weight: 1
-      - path: body
-        weight: 1
-      - path: body/inner_body
-        weight: 1
-      - path: body/outer_body
-        weight: 1
-      - path: head
-        weight: 1
-      - path: head/ears
-        weight: 1
-      - path: head/ears/L_ear
-        weight: 1
-      - path: head/ears/L_ear/L_ear 1
-        weight: 1
-      - path: head/ears/L_ear/outer__L_ear
-        weight: 1
-      - path: head/ears/R_ear
-        weight: 1
-      - path: head/ears/R_ear/outer__R_ear
-        weight: 1
-      - path: head/ears/R_ear/R_ear 1
-        weight: 1
-      - path: head/eyes1
-        weight: 1
-      - path: head/eyes1/L_eye
-        weight: 1
-      - path: head/eyes1/R_eye
-        weight: 1
-      - path: head/inner_head
-        weight: 1
-      - path: head/mask1
-        weight: 1
-      - path: head/mask1/mask_ears
-        weight: 1
-      - path: head/mask1/mask_head
-        weight: 1
-      - path: head/outer_head
-        weight: 1
-      - path: horn2
-        weight: 1
-      - path: L_arm
-        weight: 1
-      - path: L_leg
-        weight: 1
-      - path: R_arm
-        weight: 1
-      - path: R_leg
-        weight: 1
-      maskType: 0
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 1
+    clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
