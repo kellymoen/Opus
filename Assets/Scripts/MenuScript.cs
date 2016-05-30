@@ -8,6 +8,7 @@ public class MenuScript : MonoBehaviour {
 	//Name of the main scene to load on start
 	public string gameScene;
 	public string composeScene;
+	public string menu;
 
 	//Fields to store the UI text labels
 	public Text btnStart;
@@ -17,6 +18,9 @@ public class MenuScript : MonoBehaviour {
 
 	public Color colorSelectedText;
 	public Color colorText;
+
+	public GameObject menuPanel;
+	public GameObject optionsPanel;
 
 	//Option selected 0-2
 	private int selectedOption;
@@ -32,10 +36,14 @@ public class MenuScript : MonoBehaviour {
 		btnStart.color = colorText;
 		btnOptions.color = colorText;
 		btnExit.color = colorText;
+		optionsPanel = GameObject.Find ("Canvas/OptionsPanel");
+		menuPanel = GameObject.Find ("Canvas/Buttons");
+		optionsPanel.SetActive (false);
 	}
 
 	void FixedUpdate(){
-		if (Input.GetButton ("Fire1") || Input.GetKeyDown(KeyCode.Return)) {
+		if (Input.GetButtonDown ("Fire1") || Input.GetKeyDown(KeyCode.Return)) {
+			
 			switch (selectedOption) {
 			case 0:
 				StartGame ();
@@ -45,7 +53,7 @@ public class MenuScript : MonoBehaviour {
 				return;
 
 			case 2:
-				LoadOptions ();
+				MenuToOptions ();
 				return;
 			case 3:
 				Application.Quit ();
@@ -97,18 +105,33 @@ public class MenuScript : MonoBehaviour {
 		}
 	}
 
-	void StartGame(){
+	public void StartGame(){
 		// Load the game world scene
 		// Scene must be added to build settings or else this does not work
 		SceneManager.LoadScene(gameScene);
 	}
 
-	void Composition(){
+	public void Composition(){
 
 		SceneManager.LoadScene (composeScene);
 	}
 
-	void LoadOptions(){
-		//TODO
+	public void Menu(){
+		SceneManager.LoadScene (menu);
+	}
+
+	public void MenuToOptions(){
+		menuPanel.SetActive (false);
+		optionsPanel.SetActive (true);
+	}
+
+	public void OptionsToMenu(){
+		menuPanel.SetActive (true);
+		optionsPanel.SetActive (false);
+	}
+
+	public void Quit() {
+		Debug.Log ("Quitting.");
+		Application.Quit ();
 	}
 }

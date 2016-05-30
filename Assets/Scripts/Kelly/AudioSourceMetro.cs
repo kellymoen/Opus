@@ -11,7 +11,6 @@ public class AudioSourceMetro : MonoBehaviour {
 	private int beat;
 	private int lastBeat;
 
-
 	private int beatCounter;
 
 	private double lastTime;

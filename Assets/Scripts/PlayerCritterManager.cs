@@ -55,4 +55,8 @@ public class PlayerCritterManager : MonoBehaviour {
   public void closeSelection(){
     open = false;
   }
+
+	public int CritterLength() {
+		return allCritters.Count;
+	}
 }

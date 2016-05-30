@@ -10,8 +10,8 @@ GameObject:
   - 224: {fileID: 22428770}
   - 222: {fileID: 22200418}
   - 114: {fileID: 11452050}
-  - 82: {fileID: 8218698}
   - 114: {fileID: 11494576}
+  - 82: {fileID: 8218698}
   m_Layer: 0
   m_Name: Note
   m_TagString: Untagged
@@ -135,9 +135,6 @@ MonoBehaviour:
   great: {r: 1, g: 0.5137255, b: 0.5137255, a: 1}
   good: {r: 0.92941177, g: 0.8392157, b: 0.42352942, a: 1}
   bad: {r: 0, g: 0, b: 0, a: 1}
-  hit: {fileID: 8218698}
-  goodSound: {fileID: 8300000, guid: 883268babb606994294ee86ed96696ac, type: 3}
-  badSound: {fileID: 8300000, guid: ef1a11139eb0b9042807a093d646d60e, type: 3}
 --- !u!222 &22200418
 CanvasRenderer:
   m_ObjectHideFlags: 1

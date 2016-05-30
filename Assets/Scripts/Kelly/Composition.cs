@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class Composition : MonoBehaviour
 {
 	public AudioSource audioSource;
-	public AudioClip sound;
-	public AudioSourceMetro metro;
+	//public AudioClip sound;
+	private AudioSourceMetro metro;
 	public Circle circle;
 	public GameObject noteSprite;
 
@@ -28,6 +28,11 @@ public class Composition : MonoBehaviour
 	}
 
 	void Update(){
+		if (circle == null || noteSprite == null)
+			return;
+		if (metro == null) {
+			metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro> ();
+		}
 		int barIndex = (metro.GetBarCounter() / numBars) % barsLength;
 		totalTime = numBars * 4 * metro.BEAT_TIME * barsLength;
 		if (bars[barIndex] == 0) {
@@ -41,8 +46,6 @@ public class Composition : MonoBehaviour
 			audioSource.volume = 1;
 		}
 		currentTime += metro.GetDeltaTime();
-
-
 		noteSprite.transform.position = circle.PositionOnCircle(currentTime/totalTime);
 	}
 

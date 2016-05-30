@@ -26,9 +26,9 @@ public class AIManagerScript : MonoBehaviour
 
   void Update(){
     //if roaming check for player
-    if(currentState == State.Roam && Vector3.Distance(player.transform.position, transform.position) < maxPlayerDetectDistance){
-      readyBattle();
-    }
+		if (currentState == State.Roam && Vector3.Distance (player.transform.position, transform.position) < maxPlayerDetectDistance) {
+			readyBattle ();
+		}
   }
 
   public void startRoaming(){

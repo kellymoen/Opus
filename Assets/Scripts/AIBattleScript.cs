@@ -99,7 +99,8 @@ public class AIBattleScript : MonoBehaviour {
 		if (!started)
 			return;
 		 if (emitNextNoteAt <= Time.time) {
-			EmitNote (track.GetFutureTime(4));
+			EmitNote (track.GetFutureTime(beatsToReachPlayer));
+			GetComponentInChildren<Animator> ().SetTrigger ("noise");	
 			emitNextNoteAt = Time.time + track.GetFutureTime (1);
 			activeNoteIndex = (activeNoteIndex + 1) % loadedNotes.Length;
 			track.NextNote ();
@@ -165,15 +166,20 @@ public class AIBattleScript : MonoBehaviour {
 		// did they win?
 		if (currentSuccesses >= successesToWin) {
 			Debug.Log ("Success! Battle won!");
-			//transform.gameObject.SetActive (false);
 			OnWin ();
 			OnDestroy ();
 		}
 		if (currentFailures >= missesToFail) {
 			Debug.Log ("Failure! Battle lost :(");
-			//transform.gameObject.SetActive (false);
 			OnLose ();
 			OnDestroy ();
+		}
+
+		if (currentFailures >= missesToFail || currentSuccesses >= successesToWin) {
+			for (int i = 0; i < loadedNotes.Length; i++) {
+				if (loadedNotes [i] != null)
+					Destroy (loadedNotes [i]);
+			}
 		}
 	}
 
@@ -224,6 +230,7 @@ public class AIBattleScript : MonoBehaviour {
 	private void OnWin () {
 		player.GetComponent<PlayerManagerScript>().endBattle(true);
 		BattleEnd ();
+		GetComponentInChildren<Animator> ().SetTrigger ("capture");
 		Win ();
 	}
 

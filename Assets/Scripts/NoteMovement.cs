@@ -23,9 +23,6 @@ public class NoteMovement : MonoBehaviour {
 	public Color great = new Color (237, 214, 108, 255);
 	public Color good = new Color (255, 131, 131, 255);
 	public Color bad = Color.black;
-	public AudioSource hit;
-	public AudioClip goodSound;
-	public AudioClip badSound;
 
 	/** Initialise should be called as soon as a NoteMovement script is created to
 	 * set up the fields that will be the same throughout its lifetime:
@@ -37,7 +34,6 @@ public class NoteMovement : MonoBehaviour {
 		if (destination == null || origin == null)
 			Debug.LogError ("Cannot assign a null destination/origin.");
 		this.destination = destination;
-		this.hit = GetComponent<AudioSource> ();
 		transform.position = origin.position;
 		this.origin = origin;
 		this.button = button;
@@ -68,15 +64,14 @@ public class NoteMovement : MonoBehaviour {
 		} else if (GetComponent<RawImage> ().color.a == 0) {
 			gameObject.SetActive (false);
 		}
-			
-		
+
 		transform.LookAt (destination);
 		if (targetTime == 0) {
 			targetTime = 0.0000001f;
 		}
 		transform.position += transform.forward * (totalDistance / targetTime) * Time.deltaTime;
 		transform.position = new Vector3 (transform.position.x, relativeHeight, transform.position.z);
-		transform.LookAt (cam.transform.position);
+		transform.LookAt (2 * (transform.position - cam.transform.position));
 
 		if (TimeFromDestination() < 0 + PlayerHit.BAD + PlayerHit.BAD*0.5) {
 			if (!colored)
@@ -88,31 +83,28 @@ public class NoteMovement : MonoBehaviour {
 		if (fadeout || colored == true)
 			return;
 		ChangeColor (great);
-		hit.PlayOneShot (goodSound);
 	}
 
 	public void GoodHit() {
 		if (fadeout || colored == true)
 			return;
 		ChangeColor (good);
-		hit.PlayOneShot (goodSound);
 	}
 
 	public void BadHit() {
 		if (fadeout || colored == true)
 			return;
 		ChangeColor (bad);
-		hit.PlayOneShot (badSound);
 	}
 
 	public void EarlyHit() {
 		if (fadeout)
 			return;
-		GetComponent<UnityEngine.UI.RawImage> ().color = Color.yellow;
+		GetComponent<RawImage> ().color = Color.yellow;
 	}
 
 	private void ChangeColor(Color c) {
-		GetComponent<UnityEngine.UI.RawImage> ().color = c;
+		GetComponent<RawImage> ().color = c;
 		colored = true;
 	}
 

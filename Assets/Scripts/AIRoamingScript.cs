@@ -39,6 +39,7 @@ public class AIRoamingScript : MonoBehaviour
         if(idleStartTime ==0){
           idleStartTime = Time.time;
           idleTime = Random.Range(0, maxIdleTime);
+			GetComponentInChildren<Animator> ().SetBool ("isWalking", false);
           //animator.SetBool("isWalking", false);
         }
         //if timer has ended set next goal and move again
@@ -47,6 +48,7 @@ public class AIRoamingScript : MonoBehaviour
           assignNewGoal();
           //set wait time to zero
            idleStartTime = 0;
+			GetComponentInChildren<Animator> ().SetBool ("isWalking", true);
          }
       }
   }
@@ -72,7 +74,7 @@ public class AIRoamingScript : MonoBehaviour
     if(locked){
       agent.SetDestination(transform.position);
       gameObject.transform.LookAt(player.transform.position);
-      //animator.SetBool("isWalking", false);
+		GetComponentInChildren<Animator>().SetBool("isWalking", false);
     }
   }
 
