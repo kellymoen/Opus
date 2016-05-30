@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(AIRoamingScript))]
 [RequireComponent(typeof(AIFollowScript))]
+[RequireComponent(typeof(AIBattleScript))]
 public class AIManagerScript : MonoBehaviour
 {
 
@@ -10,6 +11,7 @@ public class AIManagerScript : MonoBehaviour
   private GameObject critter;
   private AIRoamingScript roamingScript;
   private AIFollowScript followScript;
+  private AIBattleScript battleScript;
   private State currentState;
 
 
@@ -17,7 +19,8 @@ public class AIManagerScript : MonoBehaviour
 
   void Start(){
     roamingScript = gameObject.GetComponent<AIRoamingScript>();
-    followScript = gameObject.GetComponent<AIFollowScript>();
+	followScript = gameObject.GetComponent<AIFollowScript>();
+    battleScript = gameObject.GetComponent<AIBattleScript>();
     player = GameObject.FindWithTag ("Player");
   }
 
@@ -32,6 +35,7 @@ public class AIManagerScript : MonoBehaviour
     currentState = State.Roam;
     followScript.enabled = false;
     roamingScript.enabled = true;
+	battleScript.enabled = false;
   }
 
   public void startFollowing(Transform slot){
@@ -39,6 +43,7 @@ public class AIManagerScript : MonoBehaviour
     roamingScript.enabled = false;
     followScript.enabled = true;
     followScript.setFollowSlot(slot);
+	battleScript.enabled = false;
   }
 
   bool isPlayerNearby(){
@@ -50,6 +55,8 @@ public class AIManagerScript : MonoBehaviour
       roamingScript.setMovementLock(true);
       currentState = State.Battle;
       //TODO enable NoteBattleScript on critter
+	  battleScript.enabled = true;
+	  battleScript.Begin (transform, player.transform);
     }
 
   }

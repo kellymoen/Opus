@@ -10,19 +10,22 @@ public class NoteMovement : MonoBehaviour {
 	// orange/yellow = too early
 	// green = good or better hit
 	// black = too late
-	public Transform destination;
-	public Transform origin;
-	private float relativeHeight = 2f;
+	private Transform destination;
+	private Transform origin;
+	private float relativeHeight = 0.1f;
 	private float startTime;
 	private float targetTime; // = the amount of time it should take to reach destination (startTime + targetTime = endTime)
 	private float totalDistance;
 	string button;
 	private bool colored = false;
 	private bool fadeout = false;
-
-	void Start() {
-		transform.position = origin.position;
-	}
+	public GameObject cam;
+	public Color great = new Color (237, 214, 108, 255);
+	public Color good = new Color (255, 131, 131, 255);
+	public Color bad = Color.black;
+	public AudioSource hit;
+	public AudioClip goodSound;
+	public AudioClip badSound;
 
 	/** Initialise should be called as soon as a NoteMovement script is created to
 	 * set up the fields that will be the same throughout its lifetime:
@@ -31,7 +34,11 @@ public class NoteMovement : MonoBehaviour {
 	 * (This last one should be moved to StartNote once we decide whether the button
 	 * to press should generate randomly or based on Track values.) */
 	public void Initialise(Transform destination, Transform origin, string button) {
+		if (destination == null || origin == null)
+			Debug.LogError ("Cannot assign a null destination/origin.");
 		this.destination = destination;
+		this.hit = GetComponent<AudioSource> ();
+		transform.position = origin.position;
 		this.origin = origin;
 		this.button = button;
 		totalDistance = Mathf.Abs(Vector3.Distance (destination.transform.position, origin.transform.position));
@@ -40,7 +47,6 @@ public class NoteMovement : MonoBehaviour {
 	/* called to put note back at origin and start it moving again */
 	public void StartNote (float newTargetTime) {
 		transform.position = origin.transform.position;
-		transform.LookAt (destination);
 		GetComponent<RawImage> ().color = new Color (255, 255, 255, 255);
 		gameObject.GetComponent<CanvasRenderer> ().SetColor (Color.white);
 		startTime = Time.time;
@@ -56,16 +62,13 @@ public class NoteMovement : MonoBehaviour {
 
 	// manages the note's inexorable march forward
 	void Update() {
-		if (!transform.gameObject.activeSelf) {
-			Debug.Log("hi?");
-			return;
-		}
 		// check if we are fading out
 		if (fadeout && GetComponent<RawImage> ().color.a > 0) {
 			return;
 		} else if (GetComponent<RawImage> ().color.a == 0) {
 			gameObject.SetActive (false);
 		}
+			
 		
 		transform.LookAt (destination);
 		if (targetTime == 0) {
@@ -73,7 +76,7 @@ public class NoteMovement : MonoBehaviour {
 		}
 		transform.position += transform.forward * (totalDistance / targetTime) * Time.deltaTime;
 		transform.position = new Vector3 (transform.position.x, relativeHeight, transform.position.z);
-		transform.LookAt (2 * (transform.position - Camera.main.transform.position));
+		transform.LookAt (cam.transform.position);
 
 		if (TimeFromDestination() < 0 + PlayerHit.BAD + PlayerHit.BAD*0.5) {
 			if (!colored)
@@ -84,28 +87,33 @@ public class NoteMovement : MonoBehaviour {
 	public void GreatHit() {
 		if (fadeout || colored == true)
 			return;
-		GetComponent<UnityEngine.UI.RawImage> ().color = Color.green;
-		colored = true;
+		ChangeColor (great);
+		hit.PlayOneShot (goodSound);
 	}
 
 	public void GoodHit() {
 		if (fadeout || colored == true)
 			return;
-		GetComponent<UnityEngine.UI.RawImage> ().color = Color.green;
-		colored = true;
+		ChangeColor (good);
+		hit.PlayOneShot (goodSound);
 	}
 
 	public void BadHit() {
 		if (fadeout || colored == true)
 			return;
-		GetComponent<UnityEngine.UI.RawImage> ().color = Color.red;
-		colored = true;
+		ChangeColor (bad);
+		hit.PlayOneShot (badSound);
 	}
 
 	public void EarlyHit() {
 		if (fadeout)
 			return;
 		GetComponent<UnityEngine.UI.RawImage> ().color = Color.yellow;
+	}
+
+	private void ChangeColor(Color c) {
+		GetComponent<UnityEngine.UI.RawImage> ().color = c;
+		colored = true;
 	}
 
 	public float TimeFromDestination() {

@@ -119,6 +119,7 @@ public class PlayerManagerScript : MonoBehaviour {
   }
 
   void switchToBattleCamera(){
+		Debug.Log ("battle camera enabled!");
     //enable battle camera & audio listener
     battleCamera.GetComponent<AudioListener>().enabled = true;
     battleCamera.GetComponent<Camera>().enabled = true;
