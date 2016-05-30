@@ -7,9 +7,11 @@ public class MenuScript : MonoBehaviour {
 
 	//Name of the main scene to load on start
 	public string gameScene;
+	public string composeScene;
 
 	//Fields to store the UI text labels
 	public Text btnStart;
+	public Text btnCompose;
 	public Text btnOptions;
 	public Text btnExit;
 
@@ -31,7 +33,7 @@ public class MenuScript : MonoBehaviour {
 		btnOptions.color = colorText;
 		btnExit.color = colorText;
 	}
-	
+
 	void FixedUpdate(){
 		if (Input.GetButton ("Fire1") || Input.GetKeyDown(KeyCode.Return)) {
 			switch (selectedOption) {
@@ -39,9 +41,13 @@ public class MenuScript : MonoBehaviour {
 				StartGame ();
 				return;
 			case 1:
+				Composition ();
+				return;
+
+			case 2:
 				LoadOptions ();
 				return;
-			case 2:
+			case 3:
 				Application.Quit ();
 				return;
 			}
@@ -52,11 +58,11 @@ public class MenuScript : MonoBehaviour {
 			if (Input.GetAxisRaw ("Vertical") > 0) {
 				selectedOption--;
 				if (selectedOption < 0) {
-					selectedOption = 2;
+					selectedOption = 3;
 				}
 				timeout = maxTimeout;
 			} else if (Input.GetAxisRaw ("Vertical") < 0) {
-				selectedOption = (selectedOption + 1) % 3;
+				selectedOption = (selectedOption + 1) % 4;
 				timeout = maxTimeout;
 			}
 		} else if (timeout > 0) {
@@ -70,6 +76,7 @@ public class MenuScript : MonoBehaviour {
 		if (timeout > 0) {
 			// Reset colours on the text
 			btnStart.color = colorText;
+			btnCompose.color = colorText;
 			btnOptions.color = colorText;
 			btnExit.color = colorText;
 			// Update selected option.
@@ -78,9 +85,12 @@ public class MenuScript : MonoBehaviour {
 				btnStart.color = colorSelectedText;
 				break;
 			case 1:
-				btnOptions.color = colorSelectedText;
+				btnCompose.color = colorSelectedText;
 				break;
 			case 2:
+				btnOptions.color = colorSelectedText;
+				break;
+			case 3:
 				btnExit.color = colorSelectedText;
 				break;
 			}
@@ -91,6 +101,11 @@ public class MenuScript : MonoBehaviour {
 		// Load the game world scene
 		// Scene must be added to build settings or else this does not work
 		SceneManager.LoadScene(gameScene);
+	}
+
+	void Composition(){
+
+		SceneManager.LoadScene (composeScene);
 	}
 
 	void LoadOptions(){

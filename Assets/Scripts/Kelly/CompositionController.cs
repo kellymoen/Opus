@@ -74,11 +74,11 @@ public class CompositionController : MonoBehaviour {
 		if (Input.GetButtonDown ("X Button")) {
 			compositions [selectedComposition].toggle ();
 		}
-		if (Input.GetButtonDown ("Z")) {
+		if (Input.GetButtonDown ("C")) {
 			compositions [selectedComposition].increaseBars ();
 		}
 
-		if (Input.GetButtonDown ("C")) {
+		if (Input.GetButtonDown ("Z")) {
 			compositions [selectedComposition].decreaseBars ();
 		}
 
