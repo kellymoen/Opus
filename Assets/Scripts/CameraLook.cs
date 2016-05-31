@@ -12,7 +12,7 @@ public class CameraLook : MonoBehaviour {
 	private float lastCast;
 
 	void Start(){
-		player = gameObject.transform.parent;
+		player = gameObject.transform.parent.gameObject;
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
 		target = GameObject.FindWithTag ("Player");
@@ -27,7 +27,6 @@ public class CameraLook : MonoBehaviour {
 		checkEsc();
 		if (lastCast + raycastDelay > Time.time) {
 			lastCast = Time.time;
-			Ray newRay = new RayHit(
 		}
 	}
 
