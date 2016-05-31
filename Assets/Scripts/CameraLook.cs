@@ -7,9 +7,12 @@ public class CameraLook : MonoBehaviour {
 	public float turnSpeed = 2.0f;
 	public float damping = 1f;
 	//TODO Use damping
-
+	private GameObject player;
+	private float raycastDelay = 0.1f;
+	private float lastCast;
 
 	void Start(){
+		player = gameObject.transform.parent;
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
 		target = GameObject.FindWithTag ("Player");
@@ -22,6 +25,10 @@ public class CameraLook : MonoBehaviour {
     transform.position = target.transform.position + offset;
     transform.LookAt(target.transform.position);
 		checkEsc();
+		if (lastCast + raycastDelay > Time.time) {
+			lastCast = Time.time;
+			Ray newRay = new RayHit(
+		}
 	}
 
 	void checkEsc(){

@@ -209,6 +209,7 @@ GameObject:
   - 143: {fileID: 14323668}
   - 114: {fileID: 11428274}
   - 114: {fileID: 11491700}
+  - 114: {fileID: 11427976}
   m_Layer: 0
   m_Name: Kit Container
   m_TagString: Player
@@ -1834,6 +1835,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11427976
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22dcbb7839659e546aaf20b2b53a9974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11428274
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1845,6 +1857,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd945621adfdec04cba372dbe9258a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tether: {fileID: 0}
+  moveScript: {fileID: 0}
+  critterManager: {fileID: 0}
+  mainCamera: {fileID: 0}
+  battleCamera: {fileID: 0}
+  critterSelectionCamera: {fileID: 0}
+  currentCritterBattle: {fileID: 0}
+  inBattle: 0
+  currentState: 1
   tetherPrefab: {fileID: 106566, guid: 42e423d1b24271248b58db9efee339ff, type: 2}
 --- !u!114 &11431778
 MonoBehaviour:
@@ -1857,6 +1878,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18dd23e351c831e4586c3ff863c6eddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  offset: {x: 0, y: 0, z: 0}
   turnSpeed: 4
   damping: 1
 --- !u!114 &11491296
@@ -1873,6 +1896,12 @@ MonoBehaviour:
   speed: 1
   jumpSpeed: 2
   lookSpeed: 5
+  controller: {fileID: 0}
+  animator: {fileID: 0}
+  moveDirection: {x: 0, y: 0, z: 0}
+  curLoc: {x: 0, y: 0, z: 0}
+  prevLoc: {x: 0, y: 0, z: 0}
+  movementLocked: 0
 --- !u!114 &11491700
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1884,6 +1913,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a7176d45577894caf5a660897842a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allCritters: []
+  open: 0
 --- !u!124 &12425424
 Behaviour:
   m_ObjectHideFlags: 1
