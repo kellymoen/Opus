@@ -38,7 +38,6 @@ public class Track : MonoBehaviour {
 			int type = int.Parse (line.Substring (7, 1));
 			timesList.Add (time);
 			notesList.Add (type);
-			Debug.Log ("Time= " + time + " Type= " + type);
 		}
 
 		times = (double[])timesList.ToArray (typeof(double));
