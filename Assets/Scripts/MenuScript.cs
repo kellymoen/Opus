@@ -218,4 +218,8 @@ public class MenuScript : MonoBehaviour {
 			break;
 		}
 	}
+
+	public void Select(int val){
+		selectedOption = val;
+	}
 }
