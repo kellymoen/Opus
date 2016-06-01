@@ -7,7 +7,6 @@ public delegate void BattleEvent();
  * and destroyed/disabled once the combat is over (whether successful or failed).
  */
 [RequireComponent(typeof(Track))]
-[RequireComponent(typeof(AudioSourceMetro))]
 [RequireComponent(typeof(AudioSource))]
 public class AIBattleScript : MonoBehaviour {
 
@@ -56,11 +55,11 @@ public class AIBattleScript : MonoBehaviour {
 
 	void Start() {
 		this.player = GameObject.FindGameObjectWithTag ("Player");
-		this.metro = GetComponent<AudioSourceMetro> ();
+		this.metro = GameObject.FindGameObjectWithTag("Metronome").GetComponent<AudioSourceMetro> ();
 		this.track = GetComponent<Track> ();
 		this.source = GetComponent<AudioSource> ();
-		source.Play ();
-		source.loop = true;
+		//source.Play ();
+		//source.loop = true;
 		source.volume = 0;
 		filename = track.filename;
 	}
@@ -72,7 +71,8 @@ public class AIBattleScript : MonoBehaviour {
 			this.player = GameObject.FindGameObjectWithTag ("Player");
 			this.noteOrigin = origin;
 			this.noteDestination = destination;
-			source.volume = 1;
+			source.volume = 1.0f;
+			Debug.Log ("PLAYING");
 			if (delayStart < beatsToReachPlayer) {
 				delayStart = 0;
 			} else {
@@ -80,7 +80,7 @@ public class AIBattleScript : MonoBehaviour {
 			}
 			beatOffset = delayStart;
 
-			SetAudio ();
+		//	SetAudio ();
 			SetCanvas ();
 			// some initialisation goes here
 			loadedNotes = new GameObject[maxLoadedNotes];
@@ -89,7 +89,7 @@ public class AIBattleScript : MonoBehaviour {
 			}
 
 			track.enabled = true;
-			metro.enabled = true;
+			//metro.enabled = true;
 			source.enabled = true;
 			started = true;
 
@@ -247,7 +247,7 @@ public class AIBattleScript : MonoBehaviour {
 		if (path == null)
 			path = "/Sound files/1.1 Beats/";
 		source.clip = Resources.Load (path + filename + ".wav") as AudioClip;			// add metro
-		metro = GetComponent<AudioSourceMetro> ();
+		this.metro = GameObject.FindGameObjectWithTag("Metronome").GetComponent<AudioSourceMetro> ();
 		Track t = gameObject.GetComponent<Track>();
 		t.filename = filename;
 	}

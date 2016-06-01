@@ -36,7 +36,6 @@ public class NoteMovement : MonoBehaviour {
 		this.destination = destination.position;
 		transform.LookAt (destination);
 		this.destination -= new Vector3(destination.forward.x, destination.forward.y, destination.forward.z);
-
 		transform.position = origin.position;
 		this.origin = origin.position;
 		this.button = button;
