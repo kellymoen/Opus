@@ -28,7 +28,7 @@ public class CompositionController : MonoBehaviour {
 				compositions [i].circle.yradius = 2 + i;
 				compositions [i].circle.composition = compositions [i];
 				compositions [i].noteSprite.GetComponent<BeatColourChange> ().metronome = metro;
-				compositions [i].gameObject.SetActive (false);
+				//compositions [i].gameObject.SetActive (false);
 				if (i == selectedComposition)
 					compositions [i].selected = true;
 				nextIndex++;

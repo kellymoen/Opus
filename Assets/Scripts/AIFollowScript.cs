@@ -22,7 +22,7 @@ public class AIFollowScript : MonoBehaviour
   }
 
 	void Update(){
-		source.loop = true;
+		//source.loop = true;
 	    if(followSlot != null){
 	      agent.SetDestination(followSlot.position);
 		  animator.SetBool ("isWalking",true);

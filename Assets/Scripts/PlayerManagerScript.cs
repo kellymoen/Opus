@@ -99,35 +99,26 @@ public class PlayerManagerScript : MonoBehaviour {
   void switchToCritterManagerCamera(){
     //enable selection camera & audio listener
     critterSelectionCamera.GetComponent<Camera>().enabled = true;
-    critterSelectionCamera.GetComponent<AudioListener>().enabled = true;
     //disable all other cameras
     mainCamera.GetComponent<Camera>().enabled = false;
-    mainCamera.GetComponent<AudioListener>().enabled = false;
     battleCamera.GetComponent<Camera>().enabled = false;
-    battleCamera.GetComponent<AudioListener>().enabled = false;
   }
 
   void switchToExploreCamera(){
     //enable main camera & audio listener
     mainCamera.GetComponent<Camera>().enabled = true;
-    mainCamera.GetComponent<AudioListener>().enabled = true;
     //disable all other cameras
     critterSelectionCamera.GetComponent<Camera>().enabled = false;
-    critterSelectionCamera.GetComponent<AudioListener>().enabled = false;
     battleCamera.GetComponent<Camera>().enabled = false;
-    battleCamera.GetComponent<AudioListener>().enabled = false;
   }
 
   void switchToBattleCamera(){
 		Debug.Log ("battle camera enabled!");
     //enable battle camera & audio listener
-    battleCamera.GetComponent<AudioListener>().enabled = true;
     battleCamera.GetComponent<Camera>().enabled = true;
     //disable all other cameras
     mainCamera.GetComponent<Camera>().enabled = false;
-    mainCamera.GetComponent<AudioListener>().enabled = false;
     critterSelectionCamera.GetComponent<Camera>().enabled = false;
-    critterSelectionCamera.GetComponent<AudioListener>().enabled = false;
 
   }
 
