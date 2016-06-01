@@ -15,7 +15,7 @@ public class CameraLook : MonoBehaviour {
 		player = gameObject.transform.parent.gameObject;
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
-		target = GameObject.FindWithTag ("CameraFocus");
+		target = GameObject.FindWithTag ("Player");
 		offset = gameObject.transform.position - target.transform.position;
 		transform.LookAt(target.transform.position);
 	}

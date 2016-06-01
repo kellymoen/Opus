@@ -103,7 +103,7 @@ public class AIBattleScript : MonoBehaviour {
 		if (!started)
 			return;
 		 if (emitNextNoteAt <= Time.time) {
-			EmitNote (track.GetFutureTime(beatsToReachPlayer));
+			EmitNote (1);
 			GetComponentInChildren<Animator> ().SetTrigger ("noise");	
 			emitNextNoteAt = Time.time + track.GetFutureTime (1);
 			activeNoteIndex = (activeNoteIndex + 1) % loadedNotes.Length;
