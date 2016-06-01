@@ -19,7 +19,7 @@ public class AIRoamingScript : MonoBehaviour
   public float maxIdleTime = 15;
 
   void Start(){
-		player = GameObject.FindWithTag ("Player");
+	player = Static.GetPlayer ();
     agent = GetComponent<NavMeshAgent>();
     //animator = GetComponent<Animator>();
     originLocation = transform.position;

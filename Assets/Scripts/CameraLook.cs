@@ -15,15 +15,15 @@ public class CameraLook : MonoBehaviour {
 		player = gameObject.transform.parent.gameObject;
 		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
-		target = GameObject.FindWithTag ("Player");
+		target = Static.GetPlayer ();
 		offset = gameObject.transform.position - target.transform.position;
 		transform.LookAt(target.transform.position);
 	}
 
 	void LateUpdate(){
 		offset = Quaternion.AngleAxis (Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
-    transform.position = target.transform.position + offset;
-    transform.LookAt(target.transform.position);
+    	transform.position = target.transform.position + offset;
+    	transform.LookAt(target.transform.position);
 		checkEsc();
 		if (lastCast + raycastDelay > Time.time) {
 			lastCast = Time.time;

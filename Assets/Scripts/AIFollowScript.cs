@@ -14,11 +14,11 @@ public class AIFollowScript : MonoBehaviour
 	private AudioSource source;
 
   void Start(){
-		player = GameObject.FindWithTag ("Player");
-    	agent = GetComponent<NavMeshAgent>();
-		source = GetComponent<AudioSource> ();
+	player = Static.GetPlayer ();
+	agent = GetComponent<NavMeshAgent>();
+	source = GetComponent<AudioSource> ();
     animator = GetComponent<Animator>();
-		metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro> ();
+	metro = Static.GetMetronome ();
   }
 
 	void Update(){

@@ -24,7 +24,6 @@ public class AIBattleScript : MonoBehaviour {
 	private bool started = false;
 
 	private string filename;
-	public string path;
 	public Transform noteDestination; // where the notes go
 	public Transform noteOrigin; // where they come from
 	public Canvas battleCanvas; // what we draw them on
@@ -36,7 +35,7 @@ public class AIBattleScript : MonoBehaviour {
 
 	public int successesToWin = 8; // number of notes to get correct in a row
 	public int missesToFail = 12; // number of notes to fail in a row before it escapes
-	public int delayStart = 0; // number of beats to wait before listening to input; defaults to 0 if less than beatsToReachPlayer
+	//public int delayStart = 0; // number of beats to wait before listening to input; de//faults to 0 if less than beatsToReachPlayer
 	public int beatsToReachPlayer = 4; // number of beats each note takes to reach the player;
 									// essentially the speed
 	[Range(0.0f,16f)]
@@ -73,16 +72,14 @@ public class AIBattleScript : MonoBehaviour {
 			this.player = Static.GetPlayer ();
 			this.noteOrigin = origin;
 			this.noteDestination = destination;
-			source.volume = 1.0f;
-			Debug.Log ("PLAYING");
+			/*
 			if (delayStart < beatsToReachPlayer) {
 				delayStart = 0;
 			} else {
 				delayStart -= beatsToReachPlayer;
 			}
-			beatOffset = delayStart;
+			beatOffset = delayStart; */
 
-		//	SetAudio ();
 			SetCanvas ();
 			// some initialisation goes here
 			loadedNotes = new GameObject[maxLoadedNotes];
@@ -91,12 +88,10 @@ public class AIBattleScript : MonoBehaviour {
 			}
 
 			track.enabled = true;
-			//metro.enabled = true;
 			source.enabled = true;
+			source.volume = 1f;
 			started = true;
-
-			// not important
-			emitNextNoteAt = delayStart * metro.BEAT_TIME;
+			emitNextNoteAt = metro.BEAT_TIME;
 			return true;
 		}
 		return false;
@@ -105,11 +100,14 @@ public class AIBattleScript : MonoBehaviour {
 	void Update(){
 		if (!started)
 			return;
-		 if (emitNextNoteAt <= Time.time) {
-			EmitNote (1);
+		NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
+		if (!note.gameObject.activeSelf)
+			playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;
+		
+		if (emitNextNoteAt <= Time.time) {
+			EmitNote ((float)track.GetNextTime());
 			GetComponentInChildren<Animator> ().SetTrigger ("noise");	
 			emitNextNoteAt = Time.time + track.GetFutureTime (1);
-			activeNoteIndex = (activeNoteIndex + 1) % loadedNotes.Length;
 			track.NextNote ();
 			// Debug.Log ("next @ " + emitNextNoteAt + ", index[" + activeNoteIndex + "]");
 		}
@@ -126,7 +124,12 @@ public class AIBattleScript : MonoBehaviour {
 
 	/** OnBeat is 'called' from AudioSourceMetro */
 	void OnBeat () {
-		
+		if (beatOffset >= 0) {
+			beatOffset--;
+			nextMetroBeat++;
+			return;
+		}
+		nextMetroBeat++;
 	}
 
 	/** When the player successfully hits a note. */
@@ -135,7 +138,7 @@ public class AIBattleScript : MonoBehaviour {
 			return;
 		NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
 		double score = note.TimeFromDestination ();
-		// if we have started listening
+		// if we have started listening			
 		if (beatOffset <= 0) { 
 			// first make sure we didn't miss anything
 			if (note.IsInRangeOfDestination ()) {
@@ -152,6 +155,7 @@ public class AIBattleScript : MonoBehaviour {
 				}
 				playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;
 				note.FadeOut (0.5f);
+				Debug.Log ("We were aiming for " + (note.TargetTime () + note.StartTime ()) + ", got a button press at " + Time.time + ", and died.");
 			} else {
 				// button press when note is out of range
 				playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;
@@ -193,6 +197,7 @@ public class AIBattleScript : MonoBehaviour {
 		anim.SetTrigger("noise");
 		//currNote.StartNote (targetTime,buttons[idx]);
 		//activeButtons [idx] = buttonNames [idx];
+		activeNoteIndex = (activeNoteIndex + 1) % loadedNotes.Length;
 	}
 
 
@@ -236,17 +241,6 @@ public class AIBattleScript : MonoBehaviour {
 		BattleEnd ();
 		GetComponentInChildren<Animator> ().SetTrigger ("capture");
 		Win ();
-	}
-
-	private void SetAudio() {
-		if (filename == null)
-			filename = "Hat1";
-		if (path == null)
-			path = "Sound files/1.1 Beats/";
-		source.clip = Resources.Load (path + filename + ".wav") as AudioClip;			// add metro
-		this.metro = GameObject.FindGameObjectWithTag("Metronome").GetComponent<AudioSourceMetro> ();
-		Track t = gameObject.GetComponent<Track>();
-		t.filename = filename;
 	}
 
 	private void SetCanvas() {

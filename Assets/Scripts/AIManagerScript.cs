@@ -21,7 +21,7 @@ public class AIManagerScript : MonoBehaviour
     roamingScript = gameObject.GetComponent<AIRoamingScript>();
 	followScript = gameObject.GetComponent<AIFollowScript>();
     battleScript = gameObject.GetComponent<AIBattleScript>();
-    player = GameObject.FindWithTag ("Player");
+	player = Static.GetPlayer ();
   }
 
   void Update(){
@@ -56,14 +56,12 @@ public class AIManagerScript : MonoBehaviour
       currentState = State.Battle;
       //TODO enable NoteBattleScript on critter
 	  battleScript.enabled = true;
-	  battleScript.Begin (transform, player.transform);
+	  battleScript.Begin (transform, GameObject.FindGameObjectWithTag("Target").transform);
     }
-
   }
 
   public void capture(){
     //TODO create playerCritterManager script
-
   }
 
   public void escape(){
