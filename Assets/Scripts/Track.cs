@@ -38,7 +38,6 @@ public class Track : MonoBehaviour {
 			int type = int.Parse (line.Substring (7, 1));
 			timesList.Add (time);
 			notesList.Add (type);
-			Debug.Log ("Time= " + time + " Type= " + type);
 		}
 
 		times = (double[])timesList.ToArray (typeof(double));
@@ -56,6 +55,11 @@ public class Track : MonoBehaviour {
 
 	public double GetNextTime(){
 		return times[currentNote];
+	}
+
+	/** Gets the time of note n in the future */
+	public float GetNextTime(int n){
+		return (float)(times [(currentNote + n) % times.Length]);
 	}
 
 	public int[] GetNotes(){

@@ -12,7 +12,7 @@ public class NoteMovement : MonoBehaviour {
 	// black = too late
 	private Vector3 destination;
 	private Vector3 origin;
-	private float relativeHeight = 0.1f;
+	private float relativeHeight = 4f;
 	private float startTime;
 	private float targetTime; // = the amount of time it should take to reach destination (startTime + targetTime = endTime)
 	private float totalDistance;
@@ -23,6 +23,7 @@ public class NoteMovement : MonoBehaviour {
 	public Color great = new Color (237, 214, 108, 255);
 	public Color good = new Color (255, 131, 131, 255);
 	public Color bad = Color.black;
+	private float enteredRangeAt;
 
 	/** Initialise should be called as soon as a NoteMovement script is created to
 	 * set up the fields that will be the same throughout its lifetime:
@@ -33,11 +34,10 @@ public class NoteMovement : MonoBehaviour {
 	public void Initialise(Transform destination, Transform origin, string button) {
 		if (destination == null || origin == null)
 			Debug.LogError ("Cannot assign a null destination/origin.");
-		this.destination = destination.position;
+		this.destination = new Vector3(destination.position.x, relativeHeight, destination.position.z);
 		transform.LookAt (destination);
-		this.destination -= new Vector3(destination.forward.x, destination.forward.y, destination.forward.z);
 		transform.position = origin.position;
-		this.origin = origin.position;
+		this.origin = new Vector3 (origin.position.x, relativeHeight, origin.position.z);
 		this.button = button;
 		totalDistance = Mathf.Abs(Vector3.Distance (destination.transform.position, origin.transform.position));
 	}
@@ -53,6 +53,7 @@ public class NoteMovement : MonoBehaviour {
 		colored = false;
 		fadeout = false;
 		gameObject.SetActive (true);
+		enteredRangeAt = 0;
 	}
 
 	public float GetTarget() { 
@@ -76,10 +77,15 @@ public class NoteMovement : MonoBehaviour {
 		transform.position = new Vector3 (transform.position.x, relativeHeight, transform.position.z);
 		transform.LookAt (cam.transform.position);
 
-		if (TimeFromDestination() < 0 + PlayerHit.BAD + PlayerHit.BAD*0.5) {
+		if (TimeFromDestination() < PlayerHit.BAD + PlayerHit.BAD*0.5 + 0.3) {
 			if (!colored)
 				GetComponent<RawImage> ().color = Color.grey; // NOW
 		}
+
+		if (enteredRangeAt == 0 && IsInRangeOfDestination ())
+			enteredRangeAt = Time.time;
+		else if (enteredRangeAt + 0.5f >= Time.time)
+			GetComponent<RawImage> ().CrossFadeAlpha (0, 0.02f, false);
 	}
 
 	public void GreatHit() {
@@ -125,5 +131,21 @@ public class NoteMovement : MonoBehaviour {
 	public void FadeOut(float seconds) {
 		fadeout = true;
 		GetComponent<RawImage> ().CrossFadeAlpha (0, seconds, false);
+	}
+
+	public bool isGoingOut() {
+		return fadeout;
+	}
+
+	public bool hasStarted() {
+		return gameObject.activeSelf && !colored && !fadeout;
+	}
+
+	public float TargetTime() {
+		return targetTime;
+	}
+
+	public float StartTime() {
+		return targetTime;
 	}
 }
