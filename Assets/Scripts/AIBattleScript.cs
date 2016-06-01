@@ -31,11 +31,12 @@ public class AIBattleScript : MonoBehaviour {
 	private GameObject player;
 	private AudioSourceMetro metro; // where we're counting from
 	private AudioSource source;
+	private Animator anim;
 	private Track track;
 
 	public int successesToWin = 8; // number of notes to get correct in a row
 	public int missesToFail = 12; // number of notes to fail in a row before it escapes
-	public int delayStart = 4; // number of beats to wait before listening to input; defaults to 0 if less than beatsToReachPlayer
+	public int delayStart = 0; // number of beats to wait before listening to input; defaults to 0 if less than beatsToReachPlayer
 	public int beatsToReachPlayer = 4; // number of beats each note takes to reach the player;
 									// essentially the speed
 	[Range(0.0f,16f)]
@@ -54,8 +55,9 @@ public class AIBattleScript : MonoBehaviour {
 	private double emitNextNoteAt = -1;
 
 	void Start() {
-		this.player = GameObject.FindGameObjectWithTag ("Player");
-		this.metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
+		this.player = Static.GetPlayer ();
+		this.anim = player.GetComponent<Animator> (); // FIXME animator of player controller or prefab?
+		this.metro = Static.GetMetronome ();
 		this.track = GetComponent<Track> ();
 		this.source = GetComponent<AudioSource> ();
 		//source.Play ();
@@ -68,7 +70,7 @@ public class AIBattleScript : MonoBehaviour {
 	public bool Begin(Transform origin, Transform destination) {
 		if (!started) {
 			this.source = GetComponent<AudioSource> ();
-			this.player = GameObject.FindGameObjectWithTag ("Player");
+			this.player = Static.GetPlayer ();
 			this.noteOrigin = origin;
 			this.noteDestination = destination;
 			source.volume = 1.0f;
@@ -188,6 +190,7 @@ public class AIBattleScript : MonoBehaviour {
 		NoteMovement currNote = loadedNotes [activeNoteIndex].GetComponent<NoteMovement> ();
 		//int idx = buttons [Random.Range (0, buttons.Length - 1)];
 		currNote.StartNote (targetTime);
+		anim.SetTrigger("noise");
 		//currNote.StartNote (targetTime,buttons[idx]);
 		//activeButtons [idx] = buttonNames [idx];
 	}
@@ -239,7 +242,7 @@ public class AIBattleScript : MonoBehaviour {
 		if (filename == null)
 			filename = "Hat1";
 		if (path == null)
-			path = "/Sound files/1.1 Beats/";
+			path = "Sound files/1.1 Beats/";
 		source.clip = Resources.Load (path + filename + ".wav") as AudioClip;			// add metro
 		this.metro = GameObject.FindGameObjectWithTag("Metronome").GetComponent<AudioSourceMetro> ();
 		Track t = gameObject.GetComponent<Track>();
