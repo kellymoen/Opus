@@ -9,6 +9,7 @@ public class PlayerManagerScript : MonoBehaviour {
   private PlayerCritterManager critterManager;
   private GameObject mainCamera;
   private GameObject battleCamera;
+  private GameObject currentCritterBattle;
   private bool inBattle = false;
   private State currentState = State.Explore;
 
