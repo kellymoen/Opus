@@ -7,7 +7,6 @@ public delegate void BattleEvent();
  * and destroyed/disabled once the combat is over (whether successful or failed).
  */
 [RequireComponent(typeof(Track))]
-[RequireComponent(typeof(AudioSourceMetro))]
 [RequireComponent(typeof(AudioSource))]
 public class AIBattleScript : MonoBehaviour {
 
@@ -56,7 +55,7 @@ public class AIBattleScript : MonoBehaviour {
 
 	void Start() {
 		this.player = GameObject.FindGameObjectWithTag ("Player");
-		this.metro = GetComponent<AudioSourceMetro> ();
+		this.metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
 		this.track = GetComponent<Track> ();
 		this.source = GetComponent<AudioSource> ();
 		source.Play ();
@@ -93,7 +92,8 @@ public class AIBattleScript : MonoBehaviour {
 			source.enabled = true;
 			started = true;
 
-			emitNextNoteAt = metro.GetBeatStartTime () + metro.BEAT_TIME;
+			// not important
+			emitNextNoteAt = delayStart * metro.BEAT_TIME;
 			return true;
 		}
 		return false;
@@ -123,14 +123,7 @@ public class AIBattleScript : MonoBehaviour {
 
 	/** OnBeat is 'called' from AudioSourceMetro */
 	void OnBeat () {
-		if (!started)
-			return;
-		// if we're resting, return
-		if (beatOffset > 0) {
-			beatOffset--;
-		} else {
-		}
-		nextMetroBeat++;
+		
 	}
 
 	/** When the player successfully hits a note. */
