@@ -79,7 +79,8 @@ public class Track : MonoBehaviour {
 		if (currentNote + n >= times.Length) {
 			int indOfN = (currentNote + n) % times.Length;
 			float timeToEnd = (float)(trackLength - times [currentNote]);
-			return (float)(timeToEnd + times [indOfN]);
+			int extraLoops = (int)(n / trackLength);
+			return (float)(timeToEnd + times [indOfN] + (extraLoops - 1) * trackLength);
 		} else {
 			return (float)(times [currentNote + n] - times [currentNote]);
 		}
