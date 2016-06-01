@@ -9,6 +9,7 @@ public class Composition : MonoBehaviour
 	private AudioSourceMetro metro;
 	public Circle circle;
 	public GameObject noteSprite;
+	private Track track;
 
 	public int[] bars;
 	public int barsLength = 1;
@@ -17,24 +18,56 @@ public class Composition : MonoBehaviour
 	double wait;
 	double currentTime;
 	double totalTime;
+
 	public bool mute = false;
 	public bool selected = false;
+
+	private bool beatSet = false;
+
+
 	public int selectedSegment = 0;
 
 	public void Start ()
 	{
 		bars = new int[16];
 		currentTime = 0;
+		audioSource = GetComponent<AudioSource> ();
+		track = GetComponent<Track> ();
+
+		totalTime = audioSource.clip.length;
+	}
+
+	public void SetBeats(){
+		if (track != null && track.enabled == true) {
+			double[] beats = track.GetTimes ();
+			for (int i =0; i < beats.Length; i++){
+				double beat = beats [i];
+				totalTime = audioSource.clip.length;
+				GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
+				cube.transform.position = circle.PositionOnCircle (beat / totalTime);
+			}
+		} else {
+			Debug.Log ("NOT ACTIVE YET");
+		}
 	}
 
 	void Update(){
 		if (circle == null || noteSprite == null)
 			return;
-		if (metro == null) {
+		while (metro == null) {
 			metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro> ();
 		}
+
+		if (!beatSet) {
+			SetBeats ();
+			beatSet = true;
+		}
+		totalTime = audioSource.clip.length * barsLength;
+
+		numBars = (int)(audioSource.clip.length / 2.181f);
+
+			
 		int barIndex = (metro.GetBarCounter() / numBars) % barsLength;
-		totalTime = numBars * 4 * metro.BEAT_TIME * barsLength;
 		if (bars[barIndex] == 0) {
 			mute = true;
 		} else {
@@ -45,6 +78,7 @@ public class Composition : MonoBehaviour
 		} else {
 			audioSource.volume = 1;
 		}
+		totalTime = audioSource.clip.length * barsLength;
 		currentTime += metro.GetDeltaTime();
 		noteSprite.transform.position = circle.PositionOnCircle(currentTime/totalTime);
 	}
