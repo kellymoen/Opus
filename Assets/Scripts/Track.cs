@@ -57,6 +57,11 @@ public class Track : MonoBehaviour {
 		return times[currentNote];
 	}
 
+	/** Gets the time of note n in the future */
+	public float GetNextTime(int n){
+		return (float)(times [(currentNote + n) % times.Length]);
+	}
+
 	public int[] GetNotes(){
 		return notes;
 	}
