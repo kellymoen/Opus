@@ -72,6 +72,7 @@ public class AIBattleScript : MonoBehaviour {
 			this.player = Static.GetPlayer ();
 			this.noteOrigin = origin;
 			this.noteDestination = destination;
+			nextMetroBeat = metro.GetBeat () + 1;
 			/*
 			if (delayStart < beatsToReachPlayer) {
 				delayStart = 0;
