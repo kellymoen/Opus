@@ -9,7 +9,6 @@ public class PlayerManagerScript : MonoBehaviour {
   private PlayerCritterManager critterManager;
   private GameObject mainCamera;
   private GameObject battleCamera;
-  private GameObject critterSelectionCamera;
   private GameObject currentCritterBattle;
   private bool inBattle = false;
   private State currentState = State.Explore;
@@ -21,13 +20,12 @@ public class PlayerManagerScript : MonoBehaviour {
     critterManager = gameObject.GetComponent<PlayerCritterManager>();
     mainCamera = GameObject.Find("MainCamera");
     battleCamera = GameObject.Find("BattleCamera");
-    critterSelectionCamera = GameObject.Find("CritterSelectionCamera");
   }
 
   void Update(){
     if(CrossPlatformInputManager.GetButtonDown("Fire2")){
       if(currentState == State.Explore){
-        openSelectionMenu();
+        //openSelectionMenu();
       }
       else if(currentState == State.Menu){
         closeSelectionMenu();
@@ -48,7 +46,6 @@ public class PlayerManagerScript : MonoBehaviour {
   }
 
   private void openSelectionMenu(){
-    switchToCritterManagerCamera();
     currentState = State.Menu;
     moveScript.setMovementLock(true);
     critterManager.openSelection();
@@ -96,19 +93,12 @@ public class PlayerManagerScript : MonoBehaviour {
     }
   }
 
-  void switchToCritterManagerCamera(){
-    //enable selection camera & audio listener
-    critterSelectionCamera.GetComponent<Camera>().enabled = true;
-    //disable all other cameras
-    mainCamera.GetComponent<Camera>().enabled = false;
-    battleCamera.GetComponent<Camera>().enabled = false;
-  }
+
 
   void switchToExploreCamera(){
     //enable main camera & audio listener
     mainCamera.GetComponent<Camera>().enabled = true;
     //disable all other cameras
-    critterSelectionCamera.GetComponent<Camera>().enabled = false;
     battleCamera.GetComponent<Camera>().enabled = false;
   }
 
@@ -118,7 +108,6 @@ public class PlayerManagerScript : MonoBehaviour {
     battleCamera.GetComponent<Camera>().enabled = true;
     //disable all other cameras
     mainCamera.GetComponent<Camera>().enabled = false;
-    critterSelectionCamera.GetComponent<Camera>().enabled = false;
 
   }
 

@@ -31,7 +31,7 @@ public class Movement : MonoBehaviour {
 				else{
 					animator.SetBool("isWalking", false);
 				}
-				if (CrossPlatformInputManager.GetButton ("Jump")) {
+				if (CrossPlatformInputManager.GetButtonDown ("Jump")) {
 					animator.SetTrigger ("jump");
 					moveDirection.y = jumpSpeed;
 				}
