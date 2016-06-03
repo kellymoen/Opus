@@ -59,7 +59,6 @@ public class PlayerManagerScript : MonoBehaviour {
   }
 
   public bool startBattle(GameObject critter){
-    //TODO make sure only one battle at a time is active
     if(critter != null && currentState == State.Explore){
       currentState = State.Battle;
       currentCritterBattle = critter;
@@ -67,6 +66,7 @@ public class PlayerManagerScript : MonoBehaviour {
       moveScript.setMovementLock(true);
       //camera switch
       switchToBattleCamera();
+      removeBattleCameraViewObstructions();
       createTether();
       return true;
     }
@@ -108,6 +108,9 @@ public class PlayerManagerScript : MonoBehaviour {
     battleCamera.GetComponent<Camera>().enabled = true;
     //disable all other cameras
     mainCamera.GetComponent<Camera>().enabled = false;
+  }
+
+  void removeBattleCameraViewObstructions(){
 
   }
 
