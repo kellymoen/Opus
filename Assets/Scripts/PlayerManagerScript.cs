@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(Movement))]
@@ -12,6 +13,7 @@ public class PlayerManagerScript : MonoBehaviour {
   private GameObject currentCritterBattle;
   private bool inBattle = false;
   private State currentState = State.Explore;
+  private List<GameObject> hiddenObjects = new List<GameObject>();
 
   public GameObject tetherPrefab;
 
@@ -66,7 +68,7 @@ public class PlayerManagerScript : MonoBehaviour {
       moveScript.setMovementLock(true);
       //camera switch
       switchToBattleCamera();
-      removeBattleCameraViewObstructions();
+      removeBattleCameraViewObstructions(critter);
       createTether();
       return true;
     }
@@ -80,6 +82,7 @@ public class PlayerManagerScript : MonoBehaviour {
     switchToExploreCamera();
     moveScript.setMovementLock(false);
     Destroy(tether);
+
     //tell ai if it has been captured or if it should run away
     if(success){
       critterManager.addCritter(currentCritterBattle);
@@ -91,6 +94,7 @@ public class PlayerManagerScript : MonoBehaviour {
       currentCritterBattle.GetComponent<AIManagerScript>().escape();
       currentCritterBattle = null;
     }
+    returnObstructionsToView();
   }
 
 
@@ -110,8 +114,27 @@ public class PlayerManagerScript : MonoBehaviour {
     mainCamera.GetComponent<Camera>().enabled = false;
   }
 
-  void removeBattleCameraViewObstructions(){
+  void removeBattleCameraViewObstructions(GameObject critter){
+    RaycastHit hit;
+    if(Physics.Raycast(battleCamera.transform.position, transform.position - battleCamera.transform.position, out hit)){
+      if(hit.transform != transform){
+        hiddenObjects.Add(hit.transform.gameObject);
+        hit.transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
+      }
+    }
+    if(Physics.Raycast(battleCamera.transform.position, critter.transform.position - battleCamera.transform.position, out hit)){
+      if(hit.transform != critter.transform){
+        hiddenObjects.Add(hit.transform.gameObject);
+        hit.transform.gameObject.GetComponent<MeshRenderer>().enabled = false;
+      }
+    }
+  }
 
+  void returnObstructionsToView(){
+    foreach(GameObject gObject in hiddenObjects){
+      gObject.GetComponent<MeshRenderer>().enabled = true;
+    }
+    hiddenObjects.Clear();
   }
 
 }
