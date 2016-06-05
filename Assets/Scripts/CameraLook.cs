@@ -5,6 +5,9 @@ public class CameraLook : MonoBehaviour {
 
 	public float turnSpeed = 2.0f;
 	public float damping = 1f;
+
+	private float minY = .1f;
+	private float maxY = 60f;
 	private GameObject player;
 	private GameObject target;
 	private GameObject kitModel;
@@ -45,7 +48,14 @@ public class CameraLook : MonoBehaviour {
 
 	Vector3 GetNewCameraPos(){
 		offset = Quaternion.AngleAxis (Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
-		//offset = Quaternion.AngleAxis (Input.GetAxis("Mouse Y") * turnSpeed, Vector3.left) * offset;
+		float newY = (Quaternion.AngleAxis (Input.GetAxis("Mouse Y") * turnSpeed, Vector3.left) * offset).y;
+		if(newY < minY){
+			newY = minY;
+		}
+		else if(newY > maxY){
+			newY = maxY;
+		}
+		offset = new Vector3(offset.x, newY, offset.z);
 		Vector3 abovePos = target.transform.position;
 		for(float i = 0f; i < 1f; i += .1f){
 			Vector3 pos = Vector3.Lerp(target.transform.position + offset, abovePos, i);
