@@ -45,19 +45,15 @@ public class CameraLook : MonoBehaviour {
 
 	Vector3 GetNewCameraPos(){
 		offset = Quaternion.AngleAxis (Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
+		//offset = Quaternion.AngleAxis (Input.GetAxis("Mouse Y") * turnSpeed, Vector3.left) * offset;
 		Vector3 abovePos = target.transform.position;
-		Vector3[] checkPoints = new Vector3[5];
-		checkPoints[0] = Vector3.Lerp(target.transform.position + offset, abovePos, 0f);
-		checkPoints[1] = Vector3.Lerp(target.transform.position + offset, abovePos, 0.25f);
-		checkPoints[2] = Vector3.Lerp(target.transform.position + offset, abovePos, 0.5f);
-		checkPoints[3] = Vector3.Lerp(target.transform.position + offset, abovePos, 0.75f);
-		checkPoints[4] = Vector3.Lerp(target.transform.position + offset, abovePos, 0.9f);
-		for(int i = 0; i < checkPoints.Length; i++){
-			if(CanSeePlayer(checkPoints[i])){
-				return checkPoints[i];
+		for(float i = 0f; i < 1f; i += .1f){
+			Vector3 pos = Vector3.Lerp(target.transform.position + offset, abovePos, i);
+			if(CanSeePlayer(pos)){
+				return pos;
 			}
 		}
-		return checkPoints[4];//For the compilers sake
+		return Vector3.Lerp(target.transform.position + offset, abovePos, 1f);//For the compilers sake
 	}
 
 	bool CanSeePlayer(Vector3 viewPoint){
