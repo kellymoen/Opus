@@ -15,4 +15,8 @@ public class Static : MonoBehaviour {
 	public static AudioSourceMetro GetMetronome() {
 		return GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
 	}
+
+	public static GameObject GetTarget() {
+		return GameObject.FindGameObjectWithTag ("Target");
+	}
 }

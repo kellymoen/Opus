@@ -36,7 +36,7 @@ public class AudioSourceMetro : MonoBehaviour {
 		if (beat != lastBeat) {
 			lastBeat = beat;
 			beatCounter++;
-			Debug.Log ("METRO BEAT @ "+Time.time);
+//			Debug.Log ("METRO BEAT @ "+Time.time);
 			OnBeat ();
 		}
 		lastTime = time;

@@ -57,8 +57,15 @@ public class Track : MonoBehaviour {
 		return times[currentNote];
 	}
 
+	public double GetNextTimeRelative() {
+		if (currentNote + 1 == times.Length)
+			return trackLength;
+		return times[(currentNote + 1) % Mathf.Max (times.Length)]
+			- times[currentNote];
+	}
+
 	/** Gets the time of note n in the future */
-	public float GetNextTime(int n){
+	public float GetNextTime(int n) {
 		return (float)(times [(currentNote + n) % times.Length]);
 	}
 

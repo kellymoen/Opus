@@ -15,7 +15,7 @@ public class AIManagerScript : MonoBehaviour
   private State currentState;
 
 
-  public float maxPlayerDetectDistance = 20f;
+  public float maxPlayerDetectDistance = 0.5f;
 
   void Start(){
     roamingScript = gameObject.GetComponent<AIRoamingScript>();
@@ -54,8 +54,9 @@ public class AIManagerScript : MonoBehaviour
     if(player.GetComponent<PlayerManagerScript>().startBattle(gameObject)){
       roamingScript.setMovementLock(true);
       currentState = State.Battle;
-	    battleScript.enabled = true;
-	    battleScript.Begin (transform, GameObject.FindGameObjectWithTag("Target").transform);
+      //TODO enable NoteBattleScript on critter
+	  battleScript.enabled = true;
+	  battleScript.Begin (transform, GameObject.FindGameObjectWithTag("Target").transform);
     }
   }
 
