@@ -6,7 +6,7 @@ public class PlayerCritterManager : MonoBehaviour {
   private Dictionary<Transform, GameObject> activeCritters;
   //all available critters
   private List<GameObject> allCritters;
-  private bool open = false;
+  private float heightOffGround = 0.5f;//For moving critters around, to avoid getting stuck add extra height
 
   void Start(){
     activeCritters = new Dictionary<Transform, GameObject>();
@@ -18,22 +18,23 @@ public class PlayerCritterManager : MonoBehaviour {
   }
 
   void Update(){
-    if(open){
-
-    }
   }
 
   public void addCritter(GameObject critter){
     //if any spaces available add to current following
-    addCritterToFirstSpaceAvailable(critter);
+    if(!addCritterToFirstSpaceAvailable(critter)){
+      //if no spaces available disable critter
+      critter.SetActive(false);
+    }
     //add to List of all critters
     allCritters.Add(critter);
   }
 
-  private bool addCritterToFirstSpaceAvailable(GameObject critter){
+  public bool addCritterToFirstSpaceAvailable(GameObject critter){
     foreach(KeyValuePair<Transform, GameObject> pair in activeCritters){
       if(pair.Value == null){
         activeCritters[pair.Key] = critter;
+        critter.SetActive(true);
         critter.GetComponent<AIManagerScript>().startFollowing(pair.Key);
         return true;
       }
@@ -41,20 +42,20 @@ public class PlayerCritterManager : MonoBehaviour {
     return false;
   }
 
-  private void displayAllCritters(){
-    foreach(GameObject critter in allCritters){
-      //TODO display
+  public bool stopCritterFollowing(GameObject critter){
+    if(critter == null){
+      return false;
     }
+    foreach(KeyValuePair<Transform, GameObject> pair in activeCritters){
+      if(pair.Value == critter){
+        activeCritters[pair.Key] = null;
+        critter.SetActive(false);
+        return true;
+      }
+    }
+    return false;
   }
 
-  public void openSelection(){
-    open = true;
-    displayAllCritters();
-  }
-
-  public void closeSelection(){
-    open = false;
-  }
 
 	public int CritterLength() {
 		return allCritters.Count;

@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine.UI;
 
-/** I mean, it *works*. I wouldn't say it's particularly good.*/
 [RequireComponent(typeof(RawImage))]
 public class NoteMovement : MonoBehaviour {
 	// note: grey = note is in range of destination
@@ -78,17 +77,25 @@ public class NoteMovement : MonoBehaviour {
 		if (targetTime == 0) {
 			targetTime = 0.000000001f;
 		}
-		transform.LookAt (destination);
-		transform.position += transform.forward * (totalDistance / (float)targetTime) * Time.deltaTime;
-		transform.rotation = rotation;
+
+		//if (Vector3.Distance (transform.position, destination) > 0.001f) {
+			transform.LookAt (destination);
+			transform.position += transform.forward * (totalDistance / (float)targetTime) * Time.deltaTime;
+			transform.rotation = rotation; 
+		/*} else {
+			transform.LookAt (2 * transform.position - destination);
+			transform.position += transform.forward * (totalDistance / (float)targetTime) * Time.deltaTime;
+			transform.rotation = rotation;
+		} */
 
 		if (TimeFromDestination() < PlayerHit.BAD + PlayerHit.BAD*0.5 + 0.3) {
 		//	if (!colored)
 		//		GetComponent<RawImage> ().color = Color.grey; // NOW
 		}
-
-		if (enteredRangeAt == 0 && Vector3.Distance(transform.position,destination) <= 0.001f)
+		if (enteredRangeAt == 0 && Vector3.Distance (transform.position, destination) <= 0.001f) {
 			enteredRangeAt = Time.time;
+			GetComponent<RawImage> ().color = Color.cyan;
+		}
 	}
 
 	public void GreatHit() {

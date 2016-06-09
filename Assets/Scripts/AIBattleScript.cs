@@ -42,7 +42,7 @@ public class AIBattleScript : MonoBehaviour {
 	private int beatOffset = 0; // counts down to start time
 	private int nextMetroBeat = 0; // metronome beat we expect
 	private double emitNextNoteAt = -1;
-	private double trackOffset; // == beatsToReachPlayer*BEAT_TIME
+	private double trackStartTime; // == Time.time+beatsToReachPlayer*BEAT_TIME
 
 	private GameObject player;
 	private AudioSourceMetro metro; // where we're counting from
@@ -56,7 +56,7 @@ public class AIBattleScript : MonoBehaviour {
 	void Start() {
 		this.player = Static.GetPlayer ();
 		this.metro = Static.GetMetronome ();
-		this.anim = player.GetComponent<Animator> (); // FIXME animator of player controller or prefab?
+		this.anim = player.GetComponent<Animator> ();
 		this.track = GetComponent<Track> ();
 		this.source = GetComponent<AudioSource> ();
 		source.volume = 0;
@@ -72,6 +72,7 @@ public class AIBattleScript : MonoBehaviour {
 			this.noteOrigin = origin;
 			this.noteDestination = destination;
 			nextMetroBeat = metro.GetBeat () + 1;
+			trackStartTime = (double)Time.time + (beatsToReachPlayer * metro.BEAT_TIME); // 
 			/*
 			if (delayStart < beatsToReachPlayer) {
 				delayStart = 0;
@@ -80,14 +81,14 @@ public class AIBattleScript : MonoBehaviour {
 			}
 			beatOffset = delayStart; */
 
+			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 			SetCanvas ();
 			// some initialisation goes here
 			loadedNotes = new GameObject[maxLoadedNotes];
 			for (int i = 0; i < loadedNotes.Length; i++) {
 				loadedNotes [i] = CreateNote ();
 			}
-
-
+			started = true;
 			return true;
 		}
 		return false;
@@ -98,10 +99,15 @@ public class AIBattleScript : MonoBehaviour {
 			return;
 		// OnBeat handles the audio playing
 		NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
+		if (trackStartTime <= Time.time && (!source.isPlaying || source.volume == 0)) {
+			source.Play ();
+			source.loop = true;
+			source.volume = 1;
+		}
 		// emit a new note if it is time to do so
 		if (emitNextNoteAt <= Time.time) {
 			NoteMovement emitted = EmitNote ();
-			emitNextNoteAt = metro.GetBeatStartTime () + metro.BEAT_TIME;
+			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 		}
 		if (Input.GetButtonDown ("X Button")) {
 			OnPress ();
@@ -133,17 +139,6 @@ public class AIBattleScript : MonoBehaviour {
 			beatOffset--;
 			nextMetroBeat = metro.GetBeat () + 1;
 			return;
-		}
-		if (beatOffset == -1) {
-			// this will only be true when we first start the battle
-			if (source.volume == 0f) {
-				track.enabled = true;
-				source.enabled = true;
-				source.loop = true;
-				source.volume = 1f;
-				source.Play ();
-			}
-			beatOffset = -2;
 		}
 		// finally
 		nextMetroBeat = metro.GetBeat () + 1;
@@ -245,12 +240,14 @@ public class AIBattleScript : MonoBehaviour {
 					Destroy (loadedNotes [i]);
 			}
 		}
+		this.enabled = false;
 	}
 
 	/* Once we have things to do when the player loses to the sprite, put them here. */
 	private void OnLose () {
 		player.GetComponent<PlayerManagerScript>().endBattle(false);
 		BattleEnd ();
+		source.volume = 0;
 		Loss ();
 	}
 

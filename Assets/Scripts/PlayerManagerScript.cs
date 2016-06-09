@@ -48,14 +48,12 @@ public class PlayerManagerScript : MonoBehaviour {
   private void openSelectionMenu(){
     currentState = State.Menu;
     moveScript.setMovementLock(true);
-    critterManager.openSelection();
   }
 
   private void closeSelectionMenu(){
     switchToExploreCamera();
     currentState = State.Explore;
     moveScript.setMovementLock(false);
-    critterManager.closeSelection();
   }
 
   public bool startBattle(GameObject critter){
