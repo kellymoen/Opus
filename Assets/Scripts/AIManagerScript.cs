@@ -15,7 +15,7 @@ public class AIManagerScript : MonoBehaviour
   private State currentState;
 
 
-  public float maxPlayerDetectDistance = 0.5f;
+  public float maxPlayerDetectDistance = 20f;
 
   void Start(){
     roamingScript = gameObject.GetComponent<AIRoamingScript>();
