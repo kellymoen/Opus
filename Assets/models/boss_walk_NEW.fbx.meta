@@ -1,0 +1,165 @@
+fileFormatVersion: 2
+guid: b48f3e10fef5ad543baa471971957d1b
+timeCreated: 1465592283
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: head
+    100004: inner_body1
+    100006: inner_head
+    100008: L_back
+    100010: L_backleg_bottom
+    100012: L_backleg_top
+    100014: L_eye
+    100016: L_front
+    100018: L_frontleg_bottom
+    100020: L_frontleg_top
+    100022: mask2
+    100024: outer_body1
+    100026: outer_head
+    100028: R_back
+    100030: R_backleg_bottom
+    100032: R_backleg_top
+    100034: R_eye
+    100036: R_front
+    100038: R_frontleg_bottom
+    100040: R_frontleg_top
+    100042: tail
+    400000: //RootNode
+    400002: head
+    400004: inner_body1
+    400006: inner_head
+    400008: L_back
+    400010: L_backleg_bottom
+    400012: L_backleg_top
+    400014: L_eye
+    400016: L_front
+    400018: L_frontleg_bottom
+    400020: L_frontleg_top
+    400022: mask2
+    400024: outer_body1
+    400026: outer_head
+    400028: R_back
+    400030: R_backleg_bottom
+    400032: R_backleg_top
+    400034: R_eye
+    400036: R_front
+    400038: R_frontleg_bottom
+    400040: R_frontleg_top
+    400042: tail
+    2300000: inner_body1
+    2300002: inner_head
+    2300004: L_backleg_bottom
+    2300006: L_backleg_top
+    2300008: L_eye
+    2300010: L_frontleg_bottom
+    2300012: L_frontleg_top
+    2300014: mask2
+    2300016: outer_body1
+    2300018: outer_head
+    2300020: R_backleg_bottom
+    2300022: R_backleg_top
+    2300024: R_eye
+    2300026: R_frontleg_bottom
+    2300028: R_frontleg_top
+    2300030: tail
+    3300000: inner_body1
+    3300002: inner_head
+    3300004: L_backleg_bottom
+    3300006: L_backleg_top
+    3300008: L_eye
+    3300010: L_frontleg_bottom
+    3300012: L_frontleg_top
+    3300014: mask2
+    3300016: outer_body1
+    3300018: outer_head
+    3300020: R_backleg_bottom
+    3300022: R_backleg_top
+    3300024: R_eye
+    3300026: R_frontleg_bottom
+    3300028: R_frontleg_top
+    3300030: tail
+    4300000: tail
+    4300002: outer_body1
+    4300004: inner_body1
+    4300006: inner_head
+    4300008: outer_head
+    4300010: L_eye
+    4300012: R_eye
+    4300014: mask2
+    4300016: R_frontleg_top
+    4300018: R_frontleg_bottom
+    4300020: L_frontleg_bottom
+    4300022: L_frontleg_top
+    4300024: R_backleg_top
+    4300026: R_backleg_bottom
+    4300028: L_backleg_top
+    4300030: L_backleg_bottom
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
