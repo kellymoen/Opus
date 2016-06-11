@@ -30,6 +30,7 @@ public class Movement : MonoBehaviour {
 				}
 				else{
 					animator.SetBool("isWalking", false);
+					controller.SimpleMove(Vector3.zero);
 				}
 				if (CrossPlatformInputManager.GetButtonDown ("Jump")) {
 					animator.SetTrigger ("jump");
