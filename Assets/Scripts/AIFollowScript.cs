@@ -17,7 +17,7 @@ public class AIFollowScript : MonoBehaviour
 	player = Static.GetPlayer ();
 	agent = GetComponent<NavMeshAgent>();
 	source = GetComponent<AudioSource> ();
-    animator = GetComponent<Animator>();
+  animator = GetComponent<Animator>();
 	metro = Static.GetMetronome ();
   }
 

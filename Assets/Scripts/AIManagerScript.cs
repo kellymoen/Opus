@@ -13,15 +13,16 @@ public class AIManagerScript : MonoBehaviour
   private AIFollowScript followScript;
   private AIBattleScript battleScript;
   private State currentState;
+  private Animator animator;
 
 
   public float maxPlayerDetectDistance = 20f;
 
   void Start(){
     roamingScript = gameObject.GetComponent<AIRoamingScript>();
-	followScript = gameObject.GetComponent<AIFollowScript>();
+	   followScript = gameObject.GetComponent<AIFollowScript>();
     battleScript = gameObject.GetComponent<AIBattleScript>();
-	player = Static.GetPlayer ();
+	   player = Static.GetPlayer ();
   }
 
   void Update(){
@@ -43,7 +44,7 @@ public class AIManagerScript : MonoBehaviour
     roamingScript.enabled = false;
     followScript.enabled = true;
     followScript.setFollowSlot(slot);
-	battleScript.enabled = false;
+	  battleScript.enabled = false;
   }
 
   bool isPlayerNearby(){
@@ -54,18 +55,16 @@ public class AIManagerScript : MonoBehaviour
     if(player.GetComponent<PlayerManagerScript>().startBattle(gameObject)){
       roamingScript.setMovementLock(true);
       currentState = State.Battle;
-      //TODO enable NoteBattleScript on critter
-	  battleScript.enabled = true;
-	  battleScript.Begin (transform, GameObject.FindGameObjectWithTag("Target").transform);
+	    battleScript.enabled = true;
+	    battleScript.Begin (transform, GameObject.FindGameObjectWithTag("Target").transform);
     }
   }
 
   public void capture(){
-    //TODO create playerCritterManager script
+    animator.SetTrigger("capture");
   }
 
   public void escape(){
-    //Destroy(gameObject);
     //TODO respawn critter
   }
 }

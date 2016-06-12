@@ -1,0 +1,184 @@
+fileFormatVersion: 2
+guid: ff363d25130b94f24aeb678232674829
+timeCreated: 1463567222
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: body
+    100002: //RootNode
+    100004: ears
+    100006: eyes1
+    100008: head
+    100010: horn2
+    100012: inner_body
+    100014: inner_head
+    100016: L_arm
+    100018: L_ear
+    100020: L_ear 1
+    100022: L_eye
+    100024: L_leg
+    100026: mask1
+    100028: mask_ears
+    100030: mask_head
+    100032: note
+    100034: outer__L_ear
+    100036: outer__R_ear
+    100038: outer_body
+    100040: outer_head
+    100042: outer_note1
+    100044: R_arm
+    100046: R_ear
+    100048: R_ear 1
+    100050: R_eye
+    100052: R_leg
+    400000: body
+    400002: //RootNode
+    400004: ears
+    400006: eyes1
+    400008: head
+    400010: horn2
+    400012: inner_body
+    400014: inner_head
+    400016: L_arm
+    400018: L_ear
+    400020: L_ear 1
+    400022: L_eye
+    400024: L_leg
+    400026: mask1
+    400028: mask_ears
+    400030: mask_head
+    400032: note
+    400034: outer__L_ear
+    400036: outer__R_ear
+    400038: outer_body
+    400040: outer_head
+    400042: outer_note1
+    400044: R_arm
+    400046: R_ear
+    400048: R_ear 1
+    400050: R_eye
+    400052: R_leg
+    2300000: horn2
+    2300002: inner_body
+    2300004: inner_head
+    2300006: L_arm
+    2300008: L_ear 1
+    2300010: L_eye
+    2300012: L_leg
+    2300014: mask_ears
+    2300016: mask_head
+    2300018: note
+    2300020: outer__L_ear
+    2300022: outer__R_ear
+    2300024: outer_body
+    2300026: outer_head
+    2300028: outer_note1
+    2300030: R_arm
+    2300032: R_ear 1
+    2300034: R_eye
+    2300036: R_leg
+    3300000: horn2
+    3300002: inner_body
+    3300004: inner_head
+    3300006: L_arm
+    3300008: L_ear 1
+    3300010: L_eye
+    3300012: L_leg
+    3300014: mask_ears
+    3300016: mask_head
+    3300018: note
+    3300020: outer__L_ear
+    3300022: outer__R_ear
+    3300024: outer_body
+    3300026: outer_head
+    3300028: outer_note1
+    3300030: R_arm
+    3300032: R_ear 1
+    3300034: R_eye
+    3300036: R_leg
+    4300000: L_leg
+    4300002: R_leg
+    4300004: L_arm
+    4300006: R_arm
+    4300008: horn2
+    4300010: inner_body
+    4300012: outer_body
+    4300014: outer__L_ear
+    4300016: L_ear
+    4300018: outer__R_ear
+    4300020: R_ear
+    4300022: mask_ears
+    4300024: mask_head
+    4300026: outer_head
+    4300028: inner_head
+    4300030: R_eye
+    4300032: L_eye
+    4300034: note
+    4300036: outer_note1
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

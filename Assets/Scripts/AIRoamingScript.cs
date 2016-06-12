@@ -19,9 +19,9 @@ public class AIRoamingScript : MonoBehaviour
   public float maxIdleTime = 15;
 
   void Start(){
-	player = Static.GetPlayer ();
+	  player = Static.GetPlayer ();
     agent = GetComponent<NavMeshAgent>();
-    //animator = GetComponent<Animator>();
+    animator = GetComponent<Animator>();
     originLocation = transform.position;
     assignNewGoal();
   }
@@ -39,16 +39,15 @@ public class AIRoamingScript : MonoBehaviour
         if(idleStartTime ==0){
           idleStartTime = Time.time;
           idleTime = Random.Range(0, maxIdleTime);
-			GetComponentInChildren<Animator> ().SetBool ("isWalking", false);
-          //animator.SetBool("isWalking", false);
+          animator.SetBool("isWalking", false);
         }
         //if timer has ended set next goal and move again
         if(Time.time - idleStartTime >= idleTime){
-          //animator.SetBool("isWalking", true);
+          animator.SetBool("isWalking", true);
           assignNewGoal();
           //set wait time to zero
-           idleStartTime = 0;
-			GetComponentInChildren<Animator> ().SetBool ("isWalking", true);
+          idleStartTime = 0;
+			    GetComponentInChildren<Animator> ().SetBool ("isWalking", true);
          }
       }
   }
@@ -74,7 +73,7 @@ public class AIRoamingScript : MonoBehaviour
     if(locked){
       agent.SetDestination(transform.position);
       gameObject.transform.LookAt(player.transform.position);
-		GetComponentInChildren<Animator>().SetBool("isWalking", false);
+		  animator.SetBool("isWalking", false);
     }
   }
 
