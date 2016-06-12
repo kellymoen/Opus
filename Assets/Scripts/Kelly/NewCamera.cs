@@ -27,7 +27,7 @@ public class NewCamera : MonoBehaviour {
 
 		y = Mathf.Clamp(y, yMinLimit, yMaxLimit);
 		Vector3 position = getPos ();
-		transform.position = Vector3.Lerp(transform.position, position, 3.0f * Time.deltaTime);
+		transform.position = Vector3.Lerp(transform.position, position, 4.0f * Time.deltaTime);
 		transform.LookAt (target.position + new Vector3(0,height,0));
 	}
 
