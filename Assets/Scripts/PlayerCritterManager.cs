@@ -18,6 +18,7 @@ public class PlayerCritterManager : MonoBehaviour {
   }
 
   void Update(){
+
   }
 
   public void addCritter(GameObject critter){
@@ -56,7 +57,9 @@ public class PlayerCritterManager : MonoBehaviour {
     return false;
   }
 
-
+  public List<GameObject> getAllCritters(){
+    return allCritters;
+  }
 	public int CritterLength() {
 		return allCritters.Count;
 	}
