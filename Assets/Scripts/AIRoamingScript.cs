@@ -15,7 +15,7 @@ public class AIRoamingScript : MonoBehaviour
   private bool movementLocked = false;
 
   public float minDistance = 3;
-  public float radius = 20;
+  public float walkRadius = 150;
   public float maxIdleTime = 15;
 
   void Start(){
@@ -54,18 +54,21 @@ public class AIRoamingScript : MonoBehaviour
 
   void assignNewGoal(){
     currentGoal = randomPosition();
-    bool successfullyAssigned = agent.SetDestination(currentGoal);
-    int count = 0;
-    while(!successfullyAssigned && count < 10000){
-      successfullyAssigned = agent.SetDestination(currentGoal);
-      count++;
+    NavMeshPath path = new NavMeshPath();
+    agent.CalculatePath(currentGoal, path);
+    while(path.status == NavMeshPathStatus.PathPartial) {
+      currentGoal = randomPosition();
+      agent.CalculatePath(currentGoal, path);
     }
+    agent.SetDestination(currentGoal);
   }
 
   Vector3 randomPosition(){
-    float x = Random.Range(originLocation.x - radius, originLocation.x + radius);
-    float z = Random.Range(originLocation.z - radius, originLocation.z + radius);
-    return new Vector3(x, originLocation.y, z);
+    Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
+    randomDirection += transform.position;
+    NavMeshHit hit;
+    NavMesh.SamplePosition(randomDirection, out hit, walkRadius, 1);
+    return hit.position;
   }
 
   public void setMovementLock(bool locked){
