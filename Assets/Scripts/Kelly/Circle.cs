@@ -3,15 +3,23 @@ using System.Collections;
 
 public class Circle : MonoBehaviour
 {
+	public float scale = 5;
 	public int segments;
 	public float xradius;
 	public float yradius;
 	public GameObject line;
 	public Composition composition;
 	GameObject[] renderers;
+	private Vector3 playerPos;
 
 	void Start ()
 	{
+		if (GameObject.Find ("Kit Prefab") != null) {
+			Debug.Log ("WHAT");
+			playerPos = GameObject.Find ("Kit Prefab").transform.position;
+		} else {
+			playerPos = new Vector3 (0, 0, 0);
+		}
 		int[] elems = composition.bars;
 		renderers = new GameObject[16];
 		for (int i = 0; i < 16; i++) {
@@ -42,6 +50,12 @@ public class Circle : MonoBehaviour
 	}
 
 	void Update(){
+		if (GameObject.Find ("Kit Container") != null) {
+			playerPos = GameObject.Find ("Kit Container").transform.position;
+		} else {
+			playerPos = new Vector3 (0, 0, 0);
+		}
+
 		int[] elems = composition.bars;
 		for (int i = 0; i < composition.barsLength; i++) {
 			float arcDegrees = 360.0f / (float)composition.barsLength;
@@ -50,17 +64,17 @@ public class Circle : MonoBehaviour
 			renderer.enabled = true;
 			if (composition.selected) {
 				if (composition.selectedSegment == i) {
-					renderer.material.color = new Color (1.0f, 0.0f, 0.0f);
+					renderer.material.color = new Color (1.0f, 0.0f, 0.0f, 0.6f);
 				} else {
-					renderer.material.color = new Color (1.0f, 1.0f, 1.0f);
+					renderer.material.color = new Color (1.0f, 1.0f, 1.0f, 0.6f);
 				}
 			}
 			else
-				renderer.material.color = HexToColor ("3A00F3FF");;
+				renderer.material.color = HexToColor ("3A00F380");;
 			if (elems [i] == 0) {
-				renderer.SetWidth (0.1f, 0.1f);
+				renderer.SetWidth (0.1f * scale, 0.1f * scale);
 			} else {
-				renderer.SetWidth (0.5f, 0.5f);
+				renderer.SetWidth (0.2f * scale, 0.2f * scale);
 			}
 			renderer.SetVertexCount (segments + 1);
 			renderer.useWorldSpace = false;
@@ -77,7 +91,7 @@ public class Circle : MonoBehaviour
 	void CreatePoints (LineRenderer line, float startAngle, float degrees, int segments)
 	{
 		float x;
-		float y = 0.001f;
+		float y = 20.001f;
 		float z = 0f;
 
 		float angle = startAngle;
@@ -87,18 +101,19 @@ public class Circle : MonoBehaviour
 			x = Mathf.Sin (Mathf.Deg2Rad * angle) * xradius;
 			z = Mathf.Cos (Mathf.Deg2Rad * angle) * yradius;
 
-			line.SetPosition (i,new Vector3(x,y,z) );
+			line.SetPosition (i,new Vector3(x,y,z) + playerPos );
 
 			angle += (degrees / segments);
 		}
 	}
 
 
-	public Vector3 PositionOnCircle(double t){
-		float angle = 360f * (float)t;
+	public Vector3 PositionOnCircle(float t){
+		float angle = 360.0f * (float)t;
 		float x = Mathf.Sin (Mathf.Deg2Rad * angle) * xradius;
 		float z = Mathf.Cos (Mathf.Deg2Rad * angle) * yradius;
-		return new Vector3 (x, 0.001f, z);
+		Vector3 position = new Vector3 (x, 18.001f, z) + playerPos;
+		return position;
 	}
 
 	//Author: mvi
@@ -114,6 +129,7 @@ public class Circle : MonoBehaviour
 		byte r = byte.Parse(hex.Substring(0,2), System.Globalization.NumberStyles.HexNumber);
 		byte g = byte.Parse(hex.Substring(2,2), System.Globalization.NumberStyles.HexNumber);
 		byte b = byte.Parse(hex.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
-		return new Color32(r,g,b, 255);
+		byte a = byte.Parse(hex.Substring(6,2), System.Globalization.NumberStyles.HexNumber);
+		return new Color32 (r, g, b, a);
 	}
 }

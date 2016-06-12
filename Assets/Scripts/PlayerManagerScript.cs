@@ -3,9 +3,10 @@ using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(Movement))]
 public class PlayerManagerScript : MonoBehaviour {
-  enum State {Battle, Explore, Menu};
+  enum State {Battle, Explore, Menu, Compose};
   private GameObject tether;
-  private Movement moveScript;
+  private NewMovement moveScript;
+	private CompositionController composeScript;
   private PlayerCritterManager critterManager;
   private GameObject mainCamera;
   private GameObject battleCamera;
@@ -16,7 +17,8 @@ public class PlayerManagerScript : MonoBehaviour {
   public GameObject tetherPrefab;
 
   void Start(){
-    moveScript = gameObject.GetComponent<Movement>();
+    moveScript = gameObject.GetComponent<NewMovement>();
+		composeScript = gameObject.GetComponent<CompositionController>();
     critterManager = gameObject.GetComponent<PlayerCritterManager>();
     mainCamera = GameObject.Find("MainCamera");
     battleCamera = GameObject.Find("BattleCamera");
@@ -33,8 +35,13 @@ public class PlayerManagerScript : MonoBehaviour {
     }
 
     //remove once we have an actual capture mechanic
-    if(CrossPlatformInputManager.GetButtonDown("Fire3") && currentState == State.Battle){
-      endBattle(true);
+		if (Input.GetButtonDown ("Fire3")) {
+			if (currentState == State.Explore)	{
+				startCompose ();
+			}
+			 else if (currentState == State.Compose) {
+				endCompose ();
+			}
     }
   }
 
@@ -91,6 +98,19 @@ public class PlayerManagerScript : MonoBehaviour {
     }
   }
 
+	void startCompose(){
+		currentState = State.Compose;
+		switchToBattleCamera();
+		moveScript.setMovementLock(true);
+		composeScript.setControllable (true);
+	}
+
+	void endCompose(){
+		currentState = State.Explore;
+		switchToExploreCamera();
+		moveScript.setMovementLock(false);
+		composeScript.setControllable (false);
+	}
 
 
   void switchToExploreCamera(){

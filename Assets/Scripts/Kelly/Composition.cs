@@ -44,7 +44,7 @@ public class Composition : MonoBehaviour
 				double beat = beats [i];
 				totalTime = audioSource.clip.length;
 				GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
-				cube.transform.position = circle.PositionOnCircle (beat / totalTime);
+				cube.transform.position = circle.PositionOnCircle ((float)(beat / totalTime));
 			}
 		} else {
 			Debug.Log ("NOT ACTIVE YET");
@@ -80,7 +80,8 @@ public class Composition : MonoBehaviour
 		}
 		totalTime = audioSource.clip.length * barsLength;
 		currentTime += metro.GetDeltaTime();
-		noteSprite.transform.position = circle.PositionOnCircle(currentTime/totalTime);
+		noteSprite.transform.position = circle.PositionOnCircle((float)(currentTime/totalTime));
+		noteSprite.transform.rotation = Quaternion.Euler (0, 90.0f + 360.0f * (float)(currentTime / totalTime),0);
 	}
 
 	public void moveLeft(){
