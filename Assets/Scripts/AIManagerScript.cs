@@ -65,6 +65,6 @@ public class AIManagerScript : MonoBehaviour
   }
 
   public void escape(){
-    //TODO respawn critter
+    roamingScript.respawn();
   }
 }

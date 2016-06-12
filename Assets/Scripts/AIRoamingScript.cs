@@ -14,6 +14,7 @@ public class AIRoamingScript : MonoBehaviour
 	private GameObject player;
   private bool movementLocked = false;
 
+  public float respawnDistance = 50;
   public float minDistance = 3;
   public float walkRadius = 150;
   public float maxIdleTime = 15;
@@ -65,7 +66,7 @@ public class AIRoamingScript : MonoBehaviour
 
   Vector3 randomPosition(){
     Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
-    randomDirection += transform.position;
+    randomDirection += originLocation;
     NavMeshHit hit;
     NavMesh.SamplePosition(randomDirection, out hit, walkRadius, 1);
     return hit.position;
@@ -78,6 +79,16 @@ public class AIRoamingScript : MonoBehaviour
       gameObject.transform.LookAt(player.transform.position);
 		  animator.SetBool("isWalking", false);
     }
+  }
+
+  public void respawn(){
+    Vector3 newPos = randomPosition();
+    while(Vector3.Distance (newPos, player.transform.position) < respawnDistance){
+      newPos = randomPosition();
+    }
+    transform.position = newPos;
+    setMovementLock(false);
+    assignNewGoal();
   }
 
 }
