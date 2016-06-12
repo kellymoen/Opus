@@ -13,15 +13,17 @@ public class MenuScript : MonoBehaviour {
 	public string composeScene;
 	public string menu;
 
-	//Fields to store the UI text labels
-	public Text btnStart;
-	public Text btnCompose;
-	public Text btnOptions;
-	public Text btnExit;
+	//Fields to store the UI selections
+	public GameObject btnStart;
+	public GameObject btnHelp;
+	public GameObject btnOptions;
+	public GameObject btnExit;
+
 	public Text lblMusic;
 	public Text lblSfx;
 	public Text lblMenu;
 	public Text lblBack;
+
 	//Store the volume sliders
 	public Slider slMusic;
 	public Slider slSfx;
@@ -49,9 +51,6 @@ public class MenuScript : MonoBehaviour {
 		timeout = 0;
 		// Make -1 so nothing selected initially
 		selectedOption = -1;
-		btnStart.color = colorText;
-		btnOptions.color = colorText;
-		btnExit.color = colorText;
 		optionsPanel = GameObject.Find ("Canvas/OptionsPanel");
 		menuPanel = GameObject.Find ("Canvas/Buttons");
 		optionsPanel.SetActive (false);
@@ -87,16 +86,12 @@ public class MenuScript : MonoBehaviour {
 		//If option hasn't changed in last 10 ticks
 		if (timeout == 0) {
 			//Check if up or down movement
-			if (Input.GetAxisRaw ("Vertical") > 0) {
-				selectedOption--;
-				if (selectedOption < 0) {
-					selectedOption = 3;
-				}
-				timeout = maxTimeout;
-			} else if (Input.GetAxisRaw ("Vertical") < 0) {
-				selectedOption = (selectedOption + 1) % 4;
+			if (Input.GetAxisRaw ("Vertical") != 0) {
+				MoveSelection (Input.GetAxisRaw ("Vertical") > 0 ? 1 : -1);
 				timeout = maxTimeout;
 			}
+
+			//Update the current slider if we need to
 			if (inOptions) {
 				curSliderValue = GetCurSlValue ();
 				//Check if horizontal movement
@@ -117,57 +112,12 @@ public class MenuScript : MonoBehaviour {
 					break;
 				}
 			}
+
 		} else if (timeout > 0) {
 			timeout--;
 		}
 	}
 
-	void Update(){
-		// Prevent some unnecessary color changes
-		// Can't guarantee that update will be run before FixedUpdate runs again so don't use timeout == maxTimeout
-		if (timeout > 0) {
-			// Reset colours on the text
-			btnStart.color = colorText;
-			btnCompose.color = colorText;
-			btnOptions.color = colorText;
-			btnExit.color = colorText;
-			lblMusic.color = colorText;
-			lblSfx.color = colorText;
-			lblMenu.color = colorText;
-			lblBack.color = colorText;
-			// Update selected option.
-			switch (selectedOption) {
-			case 0:
-				btnStart.color = colorSelectedText;
-				lblMusic.color = colorSelectedText;
-				break;
-			case 1:
-				btnCompose.color = colorSelectedText;
-				lblSfx.color = colorSelectedText;
-				break;
-			case 2:
-				btnOptions.color = colorSelectedText;
-				lblMenu.color = colorSelectedText;
-				break;
-			case 3:
-				btnExit.color = colorSelectedText;
-				lblBack.color = colorSelectedText;
-				break;
-			}
-		}
-	}
-
-	private float GetCurSlValue(){
-		switch (selectedOption) {
-		case 0:
-			return slMusic.value;
-		case 1:
-			return slSfx.value;
-		case 2:
-			return slMenu.value;
-		}
-		return 0.0f;
-	}
 
 	public void StartGame(){
 		// Load the game world scene
@@ -185,12 +135,20 @@ public class MenuScript : MonoBehaviour {
 	}
 
 	public void MenuToOptions(){
+		UnselectCurrent ();
+		selectedOption = 3;
+		SelectCurrent ();
+
 		inOptions = true;
 		menuPanel.SetActive (false);
 		optionsPanel.SetActive (true);
 	}
 
 	public void OptionsToMenu(){
+		UnselectCurrent ();
+		selectedOption = 2;
+		SelectCurrent ();
+
 		inOptions = false;
 		menuPanel.SetActive (true);
 		optionsPanel.SetActive (false);
@@ -202,7 +160,6 @@ public class MenuScript : MonoBehaviour {
 	}
 
 	public void OnSlider(float value){
-		//do stuff
 		switch (selectedOption) {
 		case 0:
 			//Modify music volume
@@ -221,5 +178,75 @@ public class MenuScript : MonoBehaviour {
 
 	public void Select(int val){
 		selectedOption = val;
+	}
+
+
+	private void MoveSelection(int dir){
+		UnselectCurrent ();
+		if (dir < 0) {
+			selectedOption = (selectedOption + 1) % 4;
+		} else {
+			selectedOption--;
+			if (selectedOption < 0) {
+				selectedOption = 3;
+			}
+		}
+		SelectCurrent ();
+	}
+
+	private void UnselectCurrent(){
+		// Update selected option.
+		switch (selectedOption) {
+		case 0:
+			btnStart.GetComponent<ImageSelect> ().setSelect (false);
+			lblMusic.color = colorText;
+			break;
+		case 1:
+			btnHelp.GetComponent<ImageSelect> ().setSelect (false);
+			lblSfx.color = colorText;
+			break;
+		case 2:
+			btnOptions.GetComponent<ImageSelect> ().setSelect (false);
+			lblMenu.color = colorText;
+			break;
+		case 3:
+			btnExit.GetComponent<ImageSelect> ().setSelect (false);
+			lblBack.color = colorText;
+			break;
+		}
+	}
+
+	private void SelectCurrent(){
+		// Update selected option.
+		switch (selectedOption) {
+		case 0:
+			btnStart.GetComponent<ImageSelect> ().setSelect (true);
+			lblMusic.color = colorSelectedText;
+			break;
+		case 1:
+			btnHelp.GetComponent<ImageSelect> ().setSelect (true);
+			lblSfx.color = colorSelectedText;
+			break;
+		case 2:
+			btnOptions.GetComponent<ImageSelect> ().setSelect (true);
+			lblMenu.color = colorSelectedText;
+			break;
+		case 3:
+			btnExit.GetComponent<ImageSelect> ().setSelect (true);
+			lblBack.color = colorSelectedText;
+			break;
+		}
+	}
+
+	private float GetCurSlValue(){
+		switch (selectedOption) {
+		case 0:
+			return slMusic.value;
+		case 1:
+			return slSfx.value;
+		case 2:
+			return slMenu.value;
+		}
+		return 0.0f;
 	}
 }
