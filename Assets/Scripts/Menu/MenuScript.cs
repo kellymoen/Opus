@@ -6,19 +6,19 @@ using UnityEngine.Audio;
 
 public class MenuScript : MonoBehaviour {
 
-
-	public AudioMixer mainAudioMixer;
 	//Name of the main scene to load on start
 	public string gameScene;
-	public string composeScene;
-	public string menu;
+	public AudioMixer mainAudioMixer;
+
+	public GameObject menuPanel;
+	public GameObject optionsPanel;
+	public GameObject helpPanel;
 
 	//Fields to store the UI selections
 	public GameObject btnStart;
 	public GameObject btnHelp;
 	public GameObject btnOptions;
 	public GameObject btnExit;
-
 	public Text lblMusic;
 	public Text lblSfx;
 	public Text lblMenu;
@@ -32,13 +32,10 @@ public class MenuScript : MonoBehaviour {
 	public Color colorSelectedText;
 	public Color colorText;
 
-	public GameObject menuPanel;
-	public GameObject optionsPanel;
-
-	private bool inOptions = false;
+	private enum MenuScreen { Main, Options, Help };
+	private MenuScreen curScreen = MenuScreen.Main;
 	//Option selected 0-2
 	private int selectedOption;
-
 	private float curSliderValue;
 
 	//Timeout counter to slow down selection changing
@@ -51,53 +48,62 @@ public class MenuScript : MonoBehaviour {
 		timeout = 0;
 		// Make -1 so nothing selected initially
 		selectedOption = -1;
-		optionsPanel = GameObject.Find ("Canvas/OptionsPanel");
-		menuPanel = GameObject.Find ("Canvas/Buttons");
 		optionsPanel.SetActive (false);
+		helpPanel.SetActive (false);
 	}
 
 	void FixedUpdate(){
 		if (Input.GetButtonDown ("Fire1") || Input.GetKeyDown(KeyCode.Return)) {
 			switch (selectedOption) {
 			case 0:
-				if (!inOptions) {
+				if (curScreen == MenuScreen.Main) {
 					StartGame ();
 				}
 				return;
 			case 1:
-				if (!inOptions) {
-					Composition ();
+				if (curScreen == MenuScreen.Main) {
+					ToHelp ();
 				}
 				return;
 			case 2:
-				if (!inOptions) {
-					MenuToOptions ();
+				if (curScreen == MenuScreen.Main) {
+					ToOptions ();
 				}
 				return;
 			case 3:
-				if (!inOptions) {
+				if (curScreen == MenuScreen.Main) {
 					Application.Quit ();
 				} else {
-					OptionsToMenu ();
+					ToMenu ();
 				}
 				return;
 			}
 		}
+
 		//If option hasn't changed in last 10 ticks
 		if (timeout == 0) {
-			//Check if up or down movement
-			if (Input.GetAxisRaw ("Vertical") != 0) {
-				MoveSelection (Input.GetAxisRaw ("Vertical") > 0 ? 1 : -1);
+			float vertInput = Input.GetAxisRaw ("Vertical");
+			float horizInput = Input.GetAxisRaw ("Horizontal");
+
+			//Check movement, No options in help screen
+			if (curScreen == MenuScreen.Main && (horizInput != 0 || vertInput != 0)) {
+				//Choose option that is in the specified direction from the center
+				int option = (Mathf.Abs (vertInput) >= Mathf.Abs (horizInput)) ? ((vertInput > 0) ? 0 : 2) : ((horizInput > 0) ? 3 : 1);
+				Select (option);
+				//MoveSelection (horizInput > 0 ? 1 : -1);
+				timeout = maxTimeout;
+			}else if (vertInput != 0 && curScreen == MenuScreen.Options) {
+				MoveSelection (vertInput > 0 ? 1 : -1);
 				timeout = maxTimeout;
 			}
 
 			//Update the current slider if we need to
-			if (inOptions) {
+			if (curScreen == MenuScreen.Options) {
 				curSliderValue = GetCurSlValue ();
 				//Check if horizontal movement
-				if (Input.GetAxisRaw ("Horizontal") > 0) {
+				if (horizInput > 0) {
 					curSliderValue = (curSliderValue + 5);
-				} else if (Input.GetAxisRaw ("Horizontal") < 0) {
+				} else if (horizInput < 0) {
 					curSliderValue = (curSliderValue - 5);
 				}
 				switch (selectedOption) {
@@ -125,38 +131,44 @@ public class MenuScript : MonoBehaviour {
 		SceneManager.LoadScene(gameScene);
 	}
 
-	public void Composition(){
-
-		SceneManager.LoadScene (composeScene);
+	public void Quit() {
+		Debug.Log ("Quitting.");
+		Application.Quit ();
 	}
 
-	public void Menu(){
-		SceneManager.LoadScene (menu);
+	//Switch menu to main
+	public void ToMenu(){
+		UnselectCurrent ();
+		selectedOption = -1;
+
+		curScreen = MenuScreen.Main;
+		menuPanel.SetActive (true);
+		optionsPanel.SetActive (false);
+		helpPanel.SetActive (false);
 	}
 
-	public void MenuToOptions(){
+	//Switch menu to options
+	public void ToOptions(){
 		UnselectCurrent ();
 		selectedOption = 3;
 		SelectCurrent ();
 
-		inOptions = true;
+		curScreen = MenuScreen.Options;
 		menuPanel.SetActive (false);
 		optionsPanel.SetActive (true);
+		helpPanel.SetActive (false);
 	}
 
-	public void OptionsToMenu(){
+	//Switch menu to help
+	public void ToHelp(){
 		UnselectCurrent ();
-		selectedOption = 2;
+		selectedOption = 3;
 		SelectCurrent ();
 
-		inOptions = false;
-		menuPanel.SetActive (true);
+		curScreen = MenuScreen.Help;
+		menuPanel.SetActive (false);
 		optionsPanel.SetActive (false);
-	}
-
-	public void Quit() {
-		Debug.Log ("Quitting.");
-		Application.Quit ();
+		helpPanel.SetActive (true);
 	}
 
 	public void OnSlider(float value){
@@ -176,8 +188,10 @@ public class MenuScript : MonoBehaviour {
 		}
 	}
 
-	public void Select(int val){
+	private void Select(int val){
+		UnselectCurrent ();
 		selectedOption = val;
+		SelectCurrent ();
 	}
 
 
