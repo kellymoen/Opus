@@ -12,9 +12,9 @@ public class PlayerHit : MonoBehaviour {
 //	public static event OnHit OnGood;
 //	public static event OnHit OnGreat;
 
-	public static double BAD = 0.15;
-	public static double GOOD = 0.06;
-	public static double GREAT = 0;
+	public static double BAD = 0.2;
+	public static double GOOD = 0.08;
+	public static double GREAT = 0.2;
 	public static double HalfBeat = 0.2728;
 	private int nextBeat = 0;
 

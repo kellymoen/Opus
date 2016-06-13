@@ -39,6 +39,7 @@ public class Composition : MonoBehaviour
 	}
 
 	public void SetBeats(){
+		return;
 		if (track != null && track.enabled == true) {
 			double[] beats = track.GetTimes ();
 			for (int i =0; i < beats.Length; i++){

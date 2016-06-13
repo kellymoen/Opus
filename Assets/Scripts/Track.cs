@@ -19,7 +19,7 @@ public class Track : MonoBehaviour {
 	private int currentNote;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		music = GetComponent<AudioSource> ();
 		currentNote = 0;
 		//Should load track here

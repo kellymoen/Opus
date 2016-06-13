@@ -95,8 +95,8 @@ public class NoteMovement : MonoBehaviour {
 		}
 
 		transform.LookAt (destination);
-		transform.position += transform.forward * (totalDistance / (float)targetTime) * Time.deltaTime;
-		transform.rotation = rotation;
+		transform.position += transform.forward * (totalDistance / 1) * Time.deltaTime;
+		transform.rotation = Quaternion.LookRotation(-Camera.main.transform.forward);
 
 		if (enteredRangeAt == 0 && Vector3.Distance (transform.position, destination) <= 0.001f) {
 			enteredRangeAt = Time.time;
@@ -142,14 +142,14 @@ public class NoteMovement : MonoBehaviour {
 	}
 
 	public double TimeFromDestination() {
-		return (startTime + targetTime) - Time.time;
+		return targetTime - Time.time;
 	}
 
 	public bool IsInRangeOfDestination() {
 		if (fadeout || !gameObject.activeSelf)
 			return false;
-		return (startTime + targetTime - PlayerHit.BAD) <= Time.time
-			&& Time.time < startTime + targetTime + PlayerHit.BAD;
+		return (targetTime - PlayerHit.BAD) <= Time.time
+			&& Time.time < targetTime + PlayerHit.BAD;
 	}
 
 	public void FadeOut(float seconds) {

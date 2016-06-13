@@ -9,7 +9,7 @@ public class MarkerScript : MonoBehaviour {
 
 	void Start() {
 		target = Static.GetTarget ();
-		cam = GameObject.FindGameObjectWithTag ("BattleCamera").GetComponent<Camera>();
+		cam = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<Camera>();
 		GetComponent<UnityEngine.UI.RawImage> ().enabled = false;
 		//gameObject.GetComponentInParent<Canvas> ().enabled = false;
 		AIBattleScript.BattleStart += BattleStart;
@@ -31,6 +31,6 @@ public class MarkerScript : MonoBehaviour {
 
 	void Update() {
 		transform.position = target.transform.position;
-		transform.rotation = rotation;
+		transform.rotation = Quaternion.LookRotation(-Camera.main.transform.forward);;
 	}
 }
