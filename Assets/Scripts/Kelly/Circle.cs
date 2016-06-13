@@ -11,6 +11,7 @@ public class Circle : MonoBehaviour
 	public Composition composition;
 	GameObject[] renderers;
 	private Vector3 playerPos;
+	private bool displayCircle;
 
 	void Start ()
 	{
@@ -55,35 +56,41 @@ public class Circle : MonoBehaviour
 		} else {
 			playerPos = new Vector3 (0, 0, 0);
 		}
-
-		int[] elems = composition.bars;
-		for (int i = 0; i < composition.barsLength; i++) {
-			float arcDegrees = 360.0f / (float)composition.barsLength;
-			int segments = 100 / composition.barsLength;
-			LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
-			renderer.enabled = true;
-			if (composition.selected) {
-				if (composition.selectedSegment == i) {
-					renderer.material.color = new Color (1.0f, 0.0f, 0.0f, 0.6f);
+		if (displayCircle) {
+			int[] elems = composition.bars;
+			for (int i = 0; i < composition.barsLength; i++) {
+				float arcDegrees = 360.0f / (float)composition.barsLength;
+				int segments = 100 / composition.barsLength;
+				LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
+				renderer.enabled = true;
+				if (composition.selected) {
+					if (composition.selectedSegment == i) {
+						renderer.material.color = new Color (1.0f, 0.0f, 0.0f, 0.6f);
+					} else {
+						renderer.material.color = new Color (1.0f, 1.0f, 1.0f, 0.6f);
+					}
+				} else
+					renderer.material.color = HexToColor ("3A00F380");
+				;
+				if (elems [i] == 0) {
+					renderer.SetWidth (0.1f * scale, 0.1f * scale);
 				} else {
-					renderer.material.color = new Color (1.0f, 1.0f, 1.0f, 0.6f);
+					renderer.SetWidth (0.2f * scale, 0.2f * scale);
 				}
+				renderer.SetVertexCount (segments + 1);
+				renderer.useWorldSpace = false;
+				CreatePoints (renderer, arcDegrees * i, arcDegrees, segments);
 			}
-			else
-				renderer.material.color = HexToColor ("3A00F380");;
-			if (elems [i] == 0) {
-				renderer.SetWidth (0.1f * scale, 0.1f * scale);
-			} else {
-				renderer.SetWidth (0.2f * scale, 0.2f * scale);
-			}
-			renderer.SetVertexCount (segments + 1);
-			renderer.useWorldSpace = false;
-			CreatePoints (renderer, arcDegrees*i, arcDegrees, segments);
-		}
 
-		for (int i = composition.barsLength; i < 16; i++) {
-			LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
-			renderer.enabled = false;
+			for (int i = composition.barsLength; i < 16; i++) {
+				LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
+				renderer.enabled = false;
+			}
+		} else {
+			for (int i = composition.barsLength; i < 16; i++) {
+				LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
+				renderer.enabled = false;
+			}
 		}
 	}
 
@@ -131,5 +138,14 @@ public class Circle : MonoBehaviour
 		byte b = byte.Parse(hex.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
 		byte a = byte.Parse(hex.Substring(6,2), System.Globalization.NumberStyles.HexNumber);
 		return new Color32 (r, g, b, a);
+	}
+
+
+	public void ShowCircle(){
+		this.displayCircle = true;
+	}
+
+	public void HideCircle(){
+		this.displayCircle = false;
 	}
 }

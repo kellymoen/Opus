@@ -16,6 +16,7 @@ public class CompositionController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Initialise ();
+		HideComposition ();
 		//gameObject.transform.localPosition = new Vector3 (transform.position.x, transform.position.y, -2f);
 	}
 
@@ -115,6 +116,7 @@ public class CompositionController : MonoBehaviour {
 		if (enabled) {
 			for (int i = 0; i < compositions.Length; i++) {
 				compositions [i].enabled = true;
+				compositions [i].circle.enabled = true;
 				if (i == selectedComposition)
 					compositions [i].selected = true;
 			}
@@ -130,6 +132,7 @@ public class CompositionController : MonoBehaviour {
 			for (int i = 0; i < compositions.Length; i++) {
 				compositions [i].enabled = false;
 				compositions [i].selected = false;
+				compositions [i].circle.enabled = false;
 			}
 		}
 	}

@@ -97,6 +97,22 @@ public class PlayerManagerScript : MonoBehaviour {
     }
   }
 
+	void startCompose(){
+		currentState = State.Compose;
+		//switchToBattleCamera();
+		moveScript.setMovementLock(true);
+		composeScript.setControllable (true);
+		composeScript.ShowComposition ();
+	}
+
+	void endCompose(){
+		currentState = State.Explore;
+		//switchToExploreCamera();
+		moveScript.setMovementLock(false);
+		composeScript.setControllable (false);
+		composeScript.HideComposition ();
+	}
+
   void switchToExploreCamera(){
     //enable main camera & audio listener
     mainCamera.GetComponent<Camera>().enabled = true;
