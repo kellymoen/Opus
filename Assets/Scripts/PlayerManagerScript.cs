@@ -97,6 +97,22 @@ public class PlayerManagerScript : MonoBehaviour {
     }
   }
 
+<<<<<<< HEAD
+=======
+	void startCompose(){
+		currentState = State.Compose;
+		//switchToBattleCamera();
+		moveScript.setMovementLock(true);
+		composeScript.setControllable (true);
+	}
+
+	void endCompose(){
+		currentState = State.Explore;
+		//switchToExploreCamera();
+		moveScript.setMovementLock(false);
+		composeScript.setControllable (false);
+	}
+>>>>>>> refs/remotes/origin/master
 
 
   void switchToExploreCamera(){
