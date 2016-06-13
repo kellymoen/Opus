@@ -11,6 +11,7 @@ public class CompositionController : MonoBehaviour {
 	public int axisUsed = 0;
 	public int nextIndex = 0;
 	private bool controllable = false;
+	private PlayerCritterManager critterManagerScript;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,7 @@ public class CompositionController : MonoBehaviour {
 	}
 
 	void Initialise() {
+		critterManagerScript = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerCritterManager>();
 		metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
 		for (int i = 0; i < compositions.Length; i++) {
 			//Instantiate Circles and Spheres
@@ -36,7 +38,7 @@ public class CompositionController : MonoBehaviour {
 		}
 		Debug.Log ("initialised controller");
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (!enabled)
@@ -106,7 +108,7 @@ public class CompositionController : MonoBehaviour {
 		} else {
 			AudioListener.pause = false;
 		}
-	
+
 	}
 
 	public void ShowComposition() {
