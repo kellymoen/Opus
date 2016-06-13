@@ -101,6 +101,7 @@ public class PlayerManagerScript : MonoBehaviour {
 	void startCompose(){
 		currentState = State.Compose;
 		//switchToBattleCamera();
+		mainCamera.GetComponent<NewCamera>().EnableComposeCam();
 		moveScript.setMovementLock(true);
 		composeScript.setControllable (true);
 		composeScript.ShowComposition ();
@@ -109,6 +110,7 @@ public class PlayerManagerScript : MonoBehaviour {
 	void endCompose(){
 		currentState = State.Explore;
 		//switchToExploreCamera();
+		mainCamera.GetComponent<NewCamera>().DisableComposeCam();
 		moveScript.setMovementLock(false);
 		composeScript.setControllable (false);
 		composeScript.HideComposition ();

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Circle : MonoBehaviour
 {
-	public float scale = 5;
+	public float scale = 1;
 	public int segments;
 	public float xradius;
 	public float yradius;
@@ -87,7 +87,7 @@ public class Circle : MonoBehaviour
 				renderer.enabled = false;
 			}
 		} else {
-			for (int i = composition.barsLength; i < 16; i++) {
+			for (int i = 0; i < 16; i++){ 
 				LineRenderer renderer = renderers [i].GetComponent<LineRenderer> ();
 				renderer.enabled = false;
 			}

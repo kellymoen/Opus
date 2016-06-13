@@ -10,6 +10,8 @@ public class NewCamera : MonoBehaviour {
 	public float yMaxLimit;
 	public float height, FollowDistance;
 	public Transform target;
+	public Transform composePos;
+	public bool composeCamera = false;
 
 	// Use this for initialization
 	void Start () {
@@ -26,9 +28,14 @@ public class NewCamera : MonoBehaviour {
 		x -= Input.GetAxis ("RHorizontal") * xSpeed * 0.02f;
 
 		y = Mathf.Clamp(y, yMinLimit, yMaxLimit);
-		Vector3 position = getPos ();
-		transform.position = Vector3.Lerp(transform.position, position, 4.0f * Time.deltaTime);
-		transform.LookAt (target.position + new Vector3(0,height,0));
+		if (!composeCamera) {
+			Vector3 position = getPos ();
+			transform.position = Vector3.Lerp (transform.position, position, 4.0f * Time.deltaTime);
+			transform.LookAt (target.position + new Vector3 (0, height, 0));
+		} else {
+			transform.position = Vector3.Lerp (transform.position, composePos.position, 4.0f * Time.deltaTime);
+			transform.rotation = Quaternion.Lerp(transform.rotation, composePos.rotation, 4.0f * Time.deltaTime);
+		}
 	}
 
 	Vector3 getPos(){
@@ -68,5 +75,13 @@ public class NewCamera : MonoBehaviour {
 			}
 		}
 		return true;
+	}
+
+	public void EnableComposeCam(){
+		this.composeCamera = true;
+	}
+
+	public void DisableComposeCam(){
+		this.composeCamera = false;
 	}
 }
