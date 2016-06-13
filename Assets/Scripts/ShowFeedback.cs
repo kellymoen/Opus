@@ -29,7 +29,7 @@ public class ShowFeedback : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.Find ("Kit Prefab");
-		tether = GameObject.Find ("Feedback Canvas/Tether");
+		tether = GameObject.Find ("Tether");
 		AIBattleScript.BattleStart += BattleStart;
 		AIBattleScript.BattleEnd += BattleEnd;
 		AIBattleScript.GoodHit += GoodHit;
@@ -45,9 +45,9 @@ public class ShowFeedback : MonoBehaviour {
 	}
 
 	private void BattleEnd(bool isWin) {
-		if (true)
-			Won();
-		else Lost();
+		if (isWin) {
+			Won ();
+		} else Lost();
 	}
 
 	public void BadHit() {
@@ -68,7 +68,7 @@ public class ShowFeedback : MonoBehaviour {
 	public void Miss() {
 		Set (bad);
 		hit.PlayOneShot (missSound);
-		expiresAt += 5f;
+		expiresAt += pauseFor;
 	}
 
 	private void Won() {
@@ -76,7 +76,7 @@ public class ShowFeedback : MonoBehaviour {
 		Set (fireflies);
 		hit.Stop ();
 		hit.PlayOneShot (winSound);
-		expiresAt += 5f;
+		expiresAt += pauseFor;
 	}
 
 

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(RawImage))]
+
 public class NoteMovement : MonoBehaviour {
 	// note: grey = note is in range of destination
 	// red = bad hit
@@ -31,11 +32,11 @@ public class NoteMovement : MonoBehaviour {
 
 	void Start() {
 		if (leftTexture == null)
-			leftTexture = Resources.Load("L_button.png") as Texture;
+			leftTexture = Resources.Load("L_button_mirror") as Texture;
 		if (rightTexture == null)
-			rightTexture = Resources.Load("R_button.png") as Texture;
+			rightTexture = Resources.Load("R_button_mirror") as Texture;
 		if (bothTexture == null)
-			bothTexture = Resources.Load ("LR_button.png") as Texture;
+			bothTexture = Resources.Load ("LR_button_mirror") as Texture;
 	}
 
 

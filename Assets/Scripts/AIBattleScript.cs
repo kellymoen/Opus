@@ -25,7 +25,7 @@ public class AIBattleScript : MonoBehaviour {
 	public int missesToFail = 12; // number of notes to fail in a row before it escapes
 	//public int delayStart = 0; // number of beats to wait before listening to input; de//faults to 0 if less than beatsToReachPlayer
 	public int beatsToReachPlayer = 4; // number of beats each note takes to reach the player;
-									// essentially the speed
+	// essentially the speed
 	[Range(0.0f,16f)]
 	public int maxLoadedNotes = 4; // how many notes we can have LOADED (not necessarily active) at any time
 	// fields for managing our loaded notes
@@ -75,15 +75,7 @@ public class AIBattleScript : MonoBehaviour {
 			this.metro = Static.GetMetronome ();
 			this.track = GetComponent<Track> ();
 			nextMetroBeat = metro.GetBeat () + 1;
-			trackStartTime = (double)Time.time + (beatsToReachPlayer * metro.BEAT_TIME); // 
-			/*
-			if (delayStart < beatsToReachPlayer) {
-				delayStart = 0;
-			} else {
-				delayStart -= beatsToReachPlayer;
-			}
-			beatOffset = delayStart; */
-
+			trackStartTime = (double)Time.time + (beatsToReachPlayer * metro.BEAT_TIME);
 			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 			SetCanvas ();
 			// some initialisation goes here
@@ -103,16 +95,16 @@ public class AIBattleScript : MonoBehaviour {
 		// OnBeat handles the audio playing
 		NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
 		if (trackStartTime <= Time.time && (!source.isPlaying || source.volume == 0)) {
+			source.volume = 1;
 			source.Play ();
 			source.loop = true;
-			source.volume = 1;
 		}
 		// emit a new note if it is time to do so
 		if (emitNextNoteAt <= Time.time) {
 			NoteMovement emitted = EmitNote ();
 			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 		}
-		if (Input.GetButtonDown (Static.LB) || Input.GetButtonDown("Y Button")) {
+		if (Input.GetButtonDown (Static.LB) || Input.GetButtonDown(Static.RB)) {
 			OnPress ();
 		}
 		if (note.TimeFromDestination () <= -PlayerHit.BAD) {
@@ -120,7 +112,7 @@ public class AIBattleScript : MonoBehaviour {
 			playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;	
 		}
 	}
-		
+
 	void OnDisable() {
 		//PlayerHit.OnButtonPress -= OnPress;
 		AudioSourceMetro.OnBeat -= OnBeat;
@@ -196,6 +188,7 @@ public class AIBattleScript : MonoBehaviour {
 
 	/** Gets the right button texture for the note. */
 	private Texture TextureCheck(int note) {
+		Debug.Log (note);
 		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB))
 			return NoteMovement.bothTexture;
 		else if ((note == 1) && Input.GetButtonDown (Static.LB))
@@ -228,12 +221,9 @@ public class AIBattleScript : MonoBehaviour {
 	private NoteMovement EmitNote() {
 		double targetTime = track.GetFutureTime(1);
 		NoteMovement currNote = loadedNotes [activeNoteIndex].GetComponent<NoteMovement> ();
-		//int idx = buttons [Random.Range (0, buttons.Length - 1)];
 		int futureNote = track.GetFutureNote(1);
 		currNote.StartNote (targetTime, futureNote, TextureCheck(futureNote));
 		anim.SetTrigger("noise");
-		//currNote.StartNote (targetTime,buttons[idx]);
-		//activeButtons [idx] = buttonNames [idx];
 		activeNoteIndex = (activeNoteIndex + 1) % loadedNotes.Length;
 		track.NextNote ();
 		return currNote;
