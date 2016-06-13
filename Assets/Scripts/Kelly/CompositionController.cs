@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CompositionController : MonoBehaviour {
-	bool paused = true;
+	bool paused = false;
 	public Composition[] compositions;
 	public GameObject sphere;
 	public GameObject circle;

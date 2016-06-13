@@ -105,19 +105,19 @@ public class NoteMovement : MonoBehaviour {
 	}
 
 	public void GreatHit() {
-		if (fadeout || colored == true)
+		if (fadeout || colored)
 			return;
 		ChangeColor (great);
 	}
 
 	public void GoodHit() {
-		if (fadeout || colored == true)
+		if (fadeout || colored)
 			return;
 		ChangeColor (good);
 	}
 
 	public void BadHit() {
-		if (fadeout || colored == true)
+		if (fadeout || colored)
 			return;
 		ChangeColor (bad);
 	}
@@ -128,7 +128,15 @@ public class NoteMovement : MonoBehaviour {
 		GetComponent<RawImage> ().color = Color.yellow;
 	}
 
+	public void Missed() {
+		if (colored)
+			return;
+		ChangeColor (Color.grey);
+	}
+
 	private void ChangeColor(Color c) {
+		if (colored)
+			return;
 		GetComponent<RawImage> ().color = c;
 		colored = true;
 	}
