@@ -39,9 +39,9 @@ public class NewCamera : MonoBehaviour {
 	}
 
 	Vector3 getPos(){
-		Quaternion rotation = Quaternion.Euler(y, x, 0f);
+		Quaternion rotation = Quaternion.Euler(-y, x, 0f);
 		transform.rotation = rotation;
-		Vector3 position = rotation * new Vector3(0f, height, -FollowDistance) + target.position;
+		Vector3 position = rotation * new Vector3(0f, height, FollowDistance) + target.position;
 		Vector3 direction = Vector3.Normalize (target.position - position);
 		Vector3 pos = new Vector3 ();
 		for(float i = 0f; i < 1f; i += .1f){

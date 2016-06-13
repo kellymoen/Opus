@@ -62,7 +62,7 @@ public class CompositionController : MonoBehaviour {
 				}
 			} else {
 				
-				if (Input.GetAxis ("Vertical") > 0.1 || Input.GetAxis ("Horizontal") > 0.1) {
+				if (Input.GetAxis ("Vertical") > 0.5) {
 
 					if (axisUsed <= 0) {
 							compositions [selectedComposition].selected = false;
@@ -74,7 +74,7 @@ public class CompositionController : MonoBehaviour {
 					} else {
 						axisUsed--;
 					}
-				} else if (Input.GetAxis ("Vertical") < -0.1 || Input.GetAxis ("Horizontal") < -0.1) {
+				} else if (Input.GetAxis ("Vertical") < -0.5) {
 					if (axisUsed <= 0) {
 							compositions [selectedComposition].selected = false;
 							selectedComposition--;
