@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-[RequireComponent(typeof(Movement))]
+[RequireComponent(typeof(NewMovement))]
 [RequireComponent(typeof(Animator))]
 public class PlayerManagerScript : MonoBehaviour {
   enum State {Battle, Explore, Menu};
   private GameObject tether;
   private Animator anim;
-  private Movement moveScript;
+  private NewMovement moveScript;
   private PlayerCritterManager critterManager;
   private GameObject mainCamera;
   private GameObject battleCamera;
@@ -18,7 +18,7 @@ public class PlayerManagerScript : MonoBehaviour {
   public GameObject tetherPrefab;
 
   void Start(){
-    moveScript = gameObject.GetComponent<Movement>();
+    moveScript = gameObject.GetComponent<NewMovement>();
     critterManager = gameObject.GetComponent<PlayerCritterManager>();
     mainCamera = GameObject.Find("MainCamera");
     battleCamera = GameObject.Find("BattleCamera");
@@ -96,24 +96,6 @@ public class PlayerManagerScript : MonoBehaviour {
       currentCritterBattle = null;
     }
   }
-
-<<<<<<< HEAD
-=======
-	void startCompose(){
-		currentState = State.Compose;
-		//switchToBattleCamera();
-		moveScript.setMovementLock(true);
-		composeScript.setControllable (true);
-	}
-
-	void endCompose(){
-		currentState = State.Explore;
-		//switchToExploreCamera();
-		moveScript.setMovementLock(false);
-		composeScript.setControllable (false);
-	}
->>>>>>> refs/remotes/origin/master
-
 
   void switchToExploreCamera(){
     //enable main camera & audio listener
