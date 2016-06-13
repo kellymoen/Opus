@@ -17,18 +17,18 @@ public class AIFollowScript : MonoBehaviour
 	player = Static.GetPlayer ();
 	agent = GetComponent<NavMeshAgent>();
 	source = GetComponent<AudioSource> ();
-  animator = GetComponent<Animator>();
+    animator = GetComponentInChildren<Animator>();
 	metro = Static.GetMetronome ();
   }
 
-	void Update(){
-		//source.loop = true;
-	    if(followSlot != null){
-	      agent.SetDestination(followSlot.position);
-		  animator.SetBool ("isWalking",true);
-	    }
-		if (!source.isPlaying)
-			source.Play ();
+  void Update(){
+	//source.loop = true;
+    if(followSlot != null){
+      agent.SetDestination(followSlot.position);
+	  animator.SetBool ("isWalking",true);
+    }
+	if (!source.isPlaying)
+		source.Play ();
   }
 
   public void setFollowSlot(Transform slot){

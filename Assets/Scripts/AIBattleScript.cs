@@ -2,6 +2,7 @@
 using System.Collections;
 
 public delegate void BattleEvent();
+public delegate void BattleStop(bool isWin);
 
 /** AIBattleScripts are (will be) created/enabled when the player enters combat with a notesprite,
  * and destroyed/disabled once the combat is over (whether successful or failed).
@@ -13,10 +14,9 @@ public class AIBattleScript : MonoBehaviour {
 	public static event BattleEvent GoodHit;
 	public static event BattleEvent BadHit;
 	public static event BattleEvent GreatHit;
-	public static event BattleEvent BattleEnd;
+	public static event BattleStop BattleEnd;
 	public static event BattleEvent BattleStart;
-	public static event BattleEvent Win;
-	public static event BattleEvent Loss;
+	public static event BattleEvent OnMiss;
 
 	public Texture[] buttons;
 	public string[] buttonNames;
@@ -25,7 +25,7 @@ public class AIBattleScript : MonoBehaviour {
 	public int missesToFail = 12; // number of notes to fail in a row before it escapes
 	//public int delayStart = 0; // number of beats to wait before listening to input; de//faults to 0 if less than beatsToReachPlayer
 	public int beatsToReachPlayer = 4; // number of beats each note takes to reach the player;
-									// essentially the speed
+	// essentially the speed
 	[Range(0.0f,16f)]
 	public int maxLoadedNotes = 4; // how many notes we can have LOADED (not necessarily active) at any time
 	// fields for managing our loaded notes
@@ -55,10 +55,10 @@ public class AIBattleScript : MonoBehaviour {
 
 	void Start() {
 		this.player = Static.GetPlayer ();
-		this.metro = Static.GetMetronome ();
-		this.anim = player.GetComponent<Animator> ();
-		this.track = GetComponent<Track> ();
+		this.anim = GetComponentInChildren<Animator> ();
 		this.source = GetComponent<AudioSource> ();
+		this.track = GetComponent<Track> ();
+		AudioSourceMetro.OnBeat += OnBeat;
 		source.volume = 0;
 		filename = track.filename;
 	}
@@ -66,21 +66,16 @@ public class AIBattleScript : MonoBehaviour {
 	/** Returns true if calling this method has started the battle; false otherwise. */
 	public bool Begin(Transform origin, Transform destination) {
 		if (!started) {
-			BattleStart ();
+			if (BattleStart != null)
+				BattleStart ();
 			this.source = GetComponent<AudioSource> ();
 			this.player = Static.GetPlayer ();
 			this.noteOrigin = origin;
 			this.noteDestination = destination;
+			this.metro = Static.GetMetronome ();
+			this.track = GetComponent<Track> ();
 			nextMetroBeat = metro.GetBeat () + 1;
-			trackStartTime = (double)Time.time + (beatsToReachPlayer * metro.BEAT_TIME); // 
-			/*
-			if (delayStart < beatsToReachPlayer) {
-				delayStart = 0;
-			} else {
-				delayStart -= beatsToReachPlayer;
-			}
-			beatOffset = delayStart; */
-
+			trackStartTime = (double)Time.time + (beatsToReachPlayer * metro.BEAT_TIME);
 			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 			SetCanvas ();
 			// some initialisation goes here
@@ -100,16 +95,16 @@ public class AIBattleScript : MonoBehaviour {
 		// OnBeat handles the audio playing
 		NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
 		if (trackStartTime <= Time.time && (!source.isPlaying || source.volume == 0)) {
+			source.volume = 1;
 			source.Play ();
 			source.loop = true;
-			source.volume = 1;
 		}
 		// emit a new note if it is time to do so
 		if (emitNextNoteAt <= Time.time) {
 			NoteMovement emitted = EmitNote ();
 			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 		}
-		if (Input.GetButtonDown ("X Button")) {
+		if (Input.GetButtonDown (Static.LB) || Input.GetButtonDown(Static.RB)) {
 			OnPress ();
 		}
 		if (note.TimeFromDestination () <= -PlayerHit.BAD) {
@@ -117,7 +112,7 @@ public class AIBattleScript : MonoBehaviour {
 			playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;	
 		}
 	}
-		
+
 	void OnDisable() {
 		//PlayerHit.OnButtonPress -= OnPress;
 		AudioSourceMetro.OnBeat -= OnBeat;
@@ -132,7 +127,7 @@ public class AIBattleScript : MonoBehaviour {
 		//PlayerHit.OnButtonPress += OnPress;
 	}		
 
-	void OnBeat () {
+	public void OnBeat () {
 		if (!started)
 			return;
 		if (beatOffset >= 0) {
@@ -144,17 +139,17 @@ public class AIBattleScript : MonoBehaviour {
 		nextMetroBeat = metro.GetBeat () + 1;
 	}
 
-	/** When the player successfully hits a note. */
+	/** When the player tries to hit a note. */
 	void OnPress() {
 		if (!started)
 			return;
+		player.GetComponent<Animator>().SetTrigger("noise");
 		// if we have started listening			
 		if (beatOffset <= 0) { 
 			NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
 			// first make sure we didn't miss anything
-			if (note.IsInRangeOfDestination ()) {
+			if (note.IsInRangeOfDestination () && ButtonCheck(note.GetButton())) {
 				double score = Abs (note.TimeFromDestination ());
-				Debug.Log ("Note is in range @ " + Time.time + ", score = " + score);
 				if (score <= PlayerHit.GREAT) {
 					GreatHit ();
 					currentSuccesses++;
@@ -164,35 +159,51 @@ public class AIBattleScript : MonoBehaviour {
 				} else if (score <= PlayerHit.BAD) {
 					BadHit ();
 					currentFailures++;
-					currentSuccesses = 0; // HACK reset successes on every fail
+					currentSuccesses = (currentSuccesses - 1 >= 0) ? currentSuccesses-1 : 0; // straight-up ending their streak seemed a little harsh
 				}
 				playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;
 				note.FadeOut (0.5f);
-				Debug.Log ("GOAL["+playerInputIndex+"]:   "+ (note.TargetTime () + note.StartTime ()) + 
-						 "\nACTUAL: "+ (score <= PlayerHit.GOOD ? "good or better":"bad") +
-					     "\n@ TIME: " + Time.time);
 			} else {
-				Debug.Log ("================================" +
-					"\nGOAL["+playerInputIndex+"]:   "+ (note.TargetTime () + note.StartTime ()) + 
-					     "\n@ TIME: " + Time.time);
 				// button press when note is out of range
 				playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;
-				//currentFailures++; easy mode
+				currentFailures++;
+				OnMiss();
 				note.FadeOut (0.5f);
 			}
 		}
 		CheckEnd ();
 	}
 
+	/** Decides whether the button press is good. 
+	We treat 1 = X, 2 = Y, and anything greater than those as 'both at the same time' */
+	private bool ButtonCheck(int note) {
+		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB))
+			return true;
+		else if ((note == 1) && Input.GetButtonDown (Static.LB))
+			return true;
+		else if ((note == 2) && Input.GetButtonDown (Static.RB))
+			return true;
+		return false;
+	}
+
+	/** Gets the right button texture for the note. */
+	private Texture TextureCheck(int note) {
+		Debug.Log (note);
+		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB))
+			return NoteMovement.bothTexture;
+		else if ((note == 1) && Input.GetButtonDown (Static.LB))
+			return NoteMovement.leftTexture;
+		else
+			return NoteMovement.rightTexture;
+	}
+
 	private void CheckEnd() {
 		// did they win?
 		if (currentSuccesses >= successesToWin) {
-			Debug.Log ("Success! Battle won!");
 			OnWin ();
 			OnDestroy ();
 		}
 		if (currentFailures >= missesToFail) {
-			Debug.Log ("Failure! Battle lost :(");
 			OnLose ();
 			OnDestroy ();
 		}
@@ -210,11 +221,9 @@ public class AIBattleScript : MonoBehaviour {
 	private NoteMovement EmitNote() {
 		double targetTime = track.GetFutureTime(1);
 		NoteMovement currNote = loadedNotes [activeNoteIndex].GetComponent<NoteMovement> ();
-		//int idx = buttons [Random.Range (0, buttons.Length - 1)];
-		currNote.StartNote (targetTime);
+		int futureNote = track.GetFutureNote(1);
+		currNote.StartNote (targetTime, futureNote, TextureCheck(futureNote));
 		anim.SetTrigger("noise");
-		//currNote.StartNote (targetTime,buttons[idx]);
-		//activeButtons [idx] = buttonNames [idx];
 		activeNoteIndex = (activeNoteIndex + 1) % loadedNotes.Length;
 		track.NextNote ();
 		return currNote;
@@ -228,7 +237,7 @@ public class AIBattleScript : MonoBehaviour {
 		note.SetActive (false);
 		note.transform.SetParent (battleCanvas.transform, true);
 		NoteMovement noteScript = note.GetComponent<NoteMovement> ();
-		noteScript.Initialise (noteDestination,noteOrigin,"X");
+		noteScript.Initialise (noteDestination,noteOrigin);
 		return note;
 	}
 
@@ -246,17 +255,15 @@ public class AIBattleScript : MonoBehaviour {
 	/* Once we have things to do when the player loses to the sprite, put them here. */
 	private void OnLose () {
 		player.GetComponent<PlayerManagerScript>().endBattle(false);
-		BattleEnd ();
 		source.volume = 0;
-		Loss ();
+		BattleEnd (false);
 	}
 
 	/* Once we have things to do when the player wins against the sprite, put them here. */
 	private void OnWin () {
 		player.GetComponent<PlayerManagerScript>().endBattle(true);
-		BattleEnd ();
-		GetComponentInChildren<Animator> ().SetTrigger ("capture");
-		Win ();
+		anim.SetTrigger ("capture");
+		BattleEnd (true);
 	}
 
 	private void SetCanvas() {
@@ -268,8 +275,9 @@ public class AIBattleScript : MonoBehaviour {
 					break;
 				}
 			}
-			if (battleCanvas == null)
+			if (battleCanvas == null) {
 				Debug.LogError ("Please ensure the scene contains a Canvas named \"Battle Canvas\", or assign the appropriate one to this script!");// what we draw them on
+			}
 		}
 		if (battleCanvas == null)
 			Debug.LogError ("Canvas cannot be null");

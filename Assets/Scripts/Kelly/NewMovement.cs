@@ -25,8 +25,10 @@ public class NewMovement : MonoBehaviour {
 		float angle = 90.0f-(Mathf.Atan2 (direction.z, direction.x) * 180 / Mathf.PI);
 		x = Input.GetAxis("Horizontal") * speed;
 		y = Input.GetAxis("Vertical") * speed;
-		float directionAngle = 90.0f - (Mathf.Atan2 (y, x) * 180 / Mathf.PI);
-		Vector3 movement = new Vector3 (x, 0, y);
+		float directionAngle = 90.0f + (Mathf.Atan2 (y, x) * 180 / Mathf.PI);
+		//Debug.Log (directionAngle);
+		Vector3 movement = new Vector3 (x, 0, -y);
+		//Debug.Log (movement.magnitude);
 		if (movement.magnitude > 5 && !movementLocked) {
 			animator.SetBool ("isWalking", true);
 			Quaternion rotation = Quaternion.Euler (0, angle, 0);

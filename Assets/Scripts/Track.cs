@@ -100,4 +100,14 @@ public class Track : MonoBehaviour {
 			return (float)(times [currentNote + n] - times [currentNote]);
 		}
 	}
+	
+	/** Gets the note at n in the future (0 = current)*/
+	public int GetFutureNote(int n){
+		if (currentNote + n >= times.Length) {
+			int indOfN = (currentNote + n) % times.Length;
+			return notes[indOfN];
+		} else {
+			return notes[currentNote + n];
+		}
+	}
 }
