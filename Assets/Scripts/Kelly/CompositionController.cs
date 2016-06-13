@@ -11,6 +11,7 @@ public class CompositionController : MonoBehaviour {
 	public int axisUsed = 0;
 	public int nextIndex = 0;
 	private bool controllable = false;
+	private bool trackClicked = false;
 	private PlayerCritterManager critterManagerScript;
 
 	// Use this for initialization
@@ -49,44 +50,41 @@ public class CompositionController : MonoBehaviour {
 			if (Input.GetButtonDown ("Start")) {
 				paused = !paused;
 			}
+			if (trackClicked) {
+				Vector2 axis= new Vector2 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"));
+				if (axis.magnitude > 0.1) {
+					float axisAngle = 90.0f + (Mathf.Atan2 (axis.y, axis.x) * 180 / Mathf.PI);
+					if (axisAngle < 0)
+						axisAngle += 360;
+					Debug.Log (axisAngle);
+					int selectedSegment = (int)((axisAngle / 360.0f) * compositions [selectedComposition].barsLength);
+					compositions [selectedComposition].setSegment (selectedSegment);
+				}
+			} else {
+				
+				if (Input.GetAxis ("Vertical") > 0.1 || Input.GetAxis ("Horizontal") > 0.1) {
 
-			if (Input.GetAxis ("Vertical") > 0.1) {
-				if (axisUsed <= 0) {
-					compositions [selectedComposition].selected = false;
-					selectedComposition++;
-					if (selectedComposition > compositions.Length - 1)
-						selectedComposition = compositions.Length - 1;
-					compositions [selectedComposition].selected = true;
-					axisUsed = 10;
-				} else {
-					axisUsed--;
-				}
-			} else if (Input.GetAxis ("Vertical") < -0.1) {
-				if (axisUsed <= 0) {
-					compositions [selectedComposition].selected = false;
-					selectedComposition--;
-					if (selectedComposition < 0)
-						selectedComposition = 0;
-					compositions [selectedComposition].selected = true;
-					axisUsed = 10;
-				} else {
-					axisUsed--;
-				}
-			}
-
-			if (Input.GetAxis ("Horizontal") > 0.1) {
-				if (axisUsed <= 0) {
-					compositions [selectedComposition].moveRight ();
-					axisUsed = 10;
-				} else {
-					axisUsed--;
-				}
-			} else if (Input.GetAxis ("Horizontal") < -0.1) {
-				if (axisUsed <= 0) {
-					compositions [selectedComposition].moveLeft ();
-					axisUsed = 10;
-				} else {
-					axisUsed--;
+					if (axisUsed <= 0) {
+							compositions [selectedComposition].selected = false;
+							selectedComposition++;
+							if (selectedComposition > compositions.Length - 1)
+								selectedComposition = compositions.Length - 1;
+							compositions [selectedComposition].selected = true;
+						axisUsed = 10;
+					} else {
+						axisUsed--;
+					}
+				} else if (Input.GetAxis ("Vertical") < -0.1 || Input.GetAxis ("Horizontal") < -0.1) {
+					if (axisUsed <= 0) {
+							compositions [selectedComposition].selected = false;
+							selectedComposition--;
+							if (selectedComposition < 0)
+								selectedComposition = 0;
+							compositions [selectedComposition].selected = true;
+						axisUsed = 10;
+					} else {
+						axisUsed--;
+					}
 				}
 			}
 
@@ -96,6 +94,10 @@ public class CompositionController : MonoBehaviour {
 			if (Input.GetButtonDown ("R Button")) {
 				compositions [selectedComposition].increaseBars ();
 			}
+			if (Input.GetButtonDown ("Y Button")) {
+				trackClicked = !trackClicked;
+			}
+
 
 			if (Input.GetButtonDown ("L Button")) {
 				compositions [selectedComposition].decreaseBars ();

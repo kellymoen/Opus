@@ -21,6 +21,7 @@ public class Composition : MonoBehaviour
 
 	public bool mute = false;
 	public bool selected = false;
+	public bool clicked = false;
 
 	private bool beatSet = false;
 
@@ -97,6 +98,10 @@ public class Composition : MonoBehaviour
 		if (selectedSegment > barsLength - 1) {
 			selectedSegment = 0;
 		}
+	}
+
+	public void setSegment (int segment){
+		selectedSegment = segment;
 	}
 
 	public void increaseBars(){

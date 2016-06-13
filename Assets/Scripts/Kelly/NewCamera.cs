@@ -33,8 +33,8 @@ public class NewCamera : MonoBehaviour {
 			transform.position = Vector3.Lerp (transform.position, position, 4.0f * Time.deltaTime);
 			transform.LookAt (target.position + new Vector3 (0, height, 0));
 		} else {
-			transform.position = Vector3.Lerp (transform.position, composePos.position, 4.0f * Time.deltaTime);
-			transform.rotation = Quaternion.Lerp(transform.rotation, composePos.rotation, 4.0f * Time.deltaTime);
+			transform.position = Vector3.Lerp (transform.position, composePos.position, 2.0f * Time.deltaTime);
+			transform.rotation = Quaternion.Lerp(transform.rotation, composePos.rotation, 2.0f * Time.deltaTime);
 		}
 	}
 
