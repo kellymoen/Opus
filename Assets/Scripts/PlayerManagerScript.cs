@@ -100,14 +100,14 @@ public class PlayerManagerScript : MonoBehaviour {
 
 	void startCompose(){
 		currentState = State.Compose;
-		switchToBattleCamera();
+		//switchToBattleCamera();
 		moveScript.setMovementLock(true);
 		composeScript.setControllable (true);
 	}
 
 	void endCompose(){
 		currentState = State.Explore;
-		switchToExploreCamera();
+		//switchToExploreCamera();
 		moveScript.setMovementLock(false);
 		composeScript.setControllable (false);
 	}
