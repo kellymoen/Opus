@@ -22,7 +22,7 @@ public class MenuScript : MonoBehaviour {
 	public Text lblMusic;
 	public Text lblSfx;
 	public Text lblMenu;
-	public Text lblBack;
+	public GameObject btnBack;
 
 	//Store the volume sliders
 	public Slider slMusic;
@@ -86,8 +86,8 @@ public class MenuScript : MonoBehaviour {
 			float horizInput = Input.GetAxisRaw ("Horizontal");
 
 			//* CODE FOR USING THE MENU WITHOUT A CONTROLLER *//
-			//vertInput += (Input.GetKey(KeyCode.UpArrow) ? 1 : 0) + (Input.GetKey(KeyCode.DownArrow) ? -1 : 0);
-			//horizInput += (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
+			// vertInput += (Input.GetKey(KeyCode.UpArrow) ? 1 : 0) + (Input.GetKey(KeyCode.DownArrow) ? -1 : 0);
+			// horizInput += (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
 
 			//Check movement, No options in help screen
 			if (curScreen == MenuScreen.Main && (horizInput != 0 || vertInput != 0)) {
@@ -229,7 +229,7 @@ public class MenuScript : MonoBehaviour {
 			break;
 		case 3:
 			btnExit.GetComponent<ImageSelect> ().setSelect (false);
-			lblBack.color = colorText;
+			btnBack.GetComponent<ImageSelect> ().setSelect (false);
 			break;
 		}
 	}
@@ -251,7 +251,7 @@ public class MenuScript : MonoBehaviour {
 			break;
 		case 3:
 			btnExit.GetComponent<ImageSelect> ().setSelect (true);
-			lblBack.color = colorSelectedText;
+			btnBack.GetComponent<ImageSelect> ().setSelect (true);
 			break;
 		}
 	}
