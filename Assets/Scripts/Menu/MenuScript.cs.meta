@@ -1,10 +1,25 @@
 fileFormatVersion: 2
 guid: 49d4839b31f28634199663f00c469821
-timeCreated: 1464075423
+timeCreated: 1465819000
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - mainAudioMixer: {fileID: 24100000, guid: 1bf78221c0a2a0d47934e6dd1033934f, type: 2}
+  - menuPanel: {instanceID: 0}
+  - optionsPanel: {instanceID: 0}
+  - helpPanel: {instanceID: 0}
+  - btnStart: {instanceID: 0}
+  - btnHelp: {instanceID: 0}
+  - btnOptions: {instanceID: 0}
+  - btnExit: {instanceID: 0}
+  - lblMusic: {instanceID: 0}
+  - lblSfx: {instanceID: 0}
+  - lblMenu: {instanceID: 0}
+  - btnBack: {instanceID: 0}
+  - slMusic: {instanceID: 0}
+  - slSfx: {instanceID: 0}
+  - slMenu: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

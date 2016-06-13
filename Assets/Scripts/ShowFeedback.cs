@@ -24,12 +24,10 @@ public class ShowFeedback : MonoBehaviour {
 	private GameObject active;
 	private float expiresAt;
 	private Canvas me;
-	private GameObject tether;
 
 	// Use this for initialization
 	void Start () {
 		player = GameObject.Find ("Kit Prefab");
-		tether = GameObject.Find ("Tether");
 		AIBattleScript.BattleStart += BattleStart;
 		AIBattleScript.BattleEnd += BattleEnd;
 		AIBattleScript.GoodHit += GoodHit;
