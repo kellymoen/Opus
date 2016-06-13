@@ -27,7 +27,7 @@ public class AudioSourceMetro : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		double time = sound.time;
 		beat = (int)(time / BEAT_TIME);
 		beatStartTime = Time.time - time + (beat * BEAT_TIME);

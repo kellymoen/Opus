@@ -152,7 +152,7 @@ public class CompositionController : MonoBehaviour {
 
 	private Composition MakeCompositionObject(GameObject noot) {
 		metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
-		Composition nootComp = noot.AddComponent<Composition> ();
+		Composition nootComp = noot.GetComponent<Composition> ();
 		nootComp.noteSprite = Instantiate (sphere);
 		nootComp.circle = Instantiate (circle).GetComponent<Circle> ();
 		nootComp.circle.xradius = 2 + nextIndex;

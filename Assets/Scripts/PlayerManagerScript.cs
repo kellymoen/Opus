@@ -71,7 +71,7 @@ public class PlayerManagerScript : MonoBehaviour {
 			gameObject.transform.LookAt(critter.transform.position);
 			moveScript.setMovementLock(true);
 			//camera switch
-			switchToBattleCamera();
+			mainCamera.GetComponent<NewCamera>().EnableBattleCam();
 			createTether();
 			return true;
 		}
@@ -82,7 +82,7 @@ public class PlayerManagerScript : MonoBehaviour {
 
 	public void endBattle(bool success){
 		currentState = State.Explore;
-		switchToExploreCamera();
+		mainCamera.GetComponent<NewCamera>().EnableExploreCam();
 		moveScript.setMovementLock(false);
 		Destroy(tether);
 		//tell ai if it has been captured or if it should run away
@@ -110,7 +110,7 @@ public class PlayerManagerScript : MonoBehaviour {
 	void endCompose(){
 		currentState = State.Explore;
 		//switchToExploreCamera();
-		mainCamera.GetComponent<NewCamera>().DisableComposeCam();
+		mainCamera.GetComponent<NewCamera>().EnableExploreCam();
 		moveScript.setMovementLock(false);
 		composeScript.setControllable (false);
 		composeScript.HideComposition ();

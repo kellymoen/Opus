@@ -137,7 +137,7 @@ public class NoteMovement : MonoBehaviour {
 	private void ChangeColor(Color c) {
 		if (colored)
 			return;
-		GetComponent<RawImage> ().color = c;
+		GetComponent<RawImage> ().CrossFadeColor (c, 0f, false, false);
 		colored = true;
 	}
 

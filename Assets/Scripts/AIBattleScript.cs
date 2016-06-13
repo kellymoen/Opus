@@ -23,7 +23,6 @@ public class AIBattleScript : MonoBehaviour {
 	public Canvas battleCanvas; // what we draw them on
 	public int successesToWin = 8; // number of notes to get correct in a row
 	public int missesToFail = 12; // number of notes to fail in a row before it escapes
-	//public int delayStart = 0; // number of beats to wait before listening to input; de//faults to 0 if less than beatsToReachPlayer
 	public int beatsToReachPlayer = 4; // number of beats each note takes to reach the player;
 	// essentially the speed
 	[Range(0.0f,16f)]
@@ -34,7 +33,8 @@ public class AIBattleScript : MonoBehaviour {
 	private int playerInputIndex = 0;
 	private int activeNoteIndex = 0;
 	private bool started = false;
-	private double cheatMode;
+	private double metroTrackOffset; // how far out the next metro is from the next track
+	private static double cheatLevel;
 
 	private int currentSuccesses = 0;
 	private int currentFailures = 0;
@@ -53,7 +53,6 @@ public class AIBattleScript : MonoBehaviour {
 	private Transform noteDestination; // where the notes go
 	private Transform noteOrigin; // where they come from
 	private string filename;
-	private string buttonPressed;
 
 	void Start() {
 		this.player = Static.GetPlayer ();
@@ -77,7 +76,7 @@ public class AIBattleScript : MonoBehaviour {
 			this.metro = Static.GetMetronome ();
 			this.track = GetComponent<Track> ();
 			nextMetroBeat = metro.GetBeat () + 1;
-			trackStartTime = metro.GetBeatStartTime() + (beatsToReachPlayer * metro.BEAT_TIME);
+			trackStartTime = metro.GetBeatStartTime() + (1 * metro.BEAT_TIME);
 			emitNextNoteAt = track.GetFutureTime(1);
 			SetCanvas ();
 			// some initialisation goes here
@@ -93,8 +92,8 @@ public class AIBattleScript : MonoBehaviour {
 
 	void Update(){
 		if (Input.GetKeyDown ("y")) {
-			Debug.Log ("CHEAT MODE " + cheatMode);
-			cheatMode += 0.005;
+			Debug.Log ("CHEAT MODE " + cheatLevel);
+			cheatLevel += 0.005;
 		}
 		if (!started)
 			return;
@@ -148,6 +147,7 @@ public class AIBattleScript : MonoBehaviour {
 		}
 		// finally
 		nextMetroBeat = metro.GetBeat () + 1;
+		metroTrackOffset = (metro.GetBeatStartTime () + metro.BEAT_TIME) - track.GetNextTimeRelative ();
 	}
 
 	/** When the player tries to hit a note. */
@@ -161,10 +161,10 @@ public class AIBattleScript : MonoBehaviour {
 			// first make sure we didn't miss anything
 			if (note.IsInRangeOfDestination () && ButtonCheck(note.GetButton())) {
 				double score = Abs (note.TimeFromDestination ());
-				if (score <= PlayerHit.GREAT + cheatMode) {
+				if (score <= PlayerHit.GREAT + cheatLevel) {
 					GreatHit ();
 					currentSuccesses++;
-				} else if (score <= PlayerHit.GOOD + cheatMode) {
+				} else if (score <= PlayerHit.GOOD + cheatLevel) {
 					GoodHit ();
 					currentSuccesses++;
 				} else if (score <= PlayerHit.BAD) {

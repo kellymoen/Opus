@@ -58,10 +58,9 @@ public class Track : MonoBehaviour {
 	}
 
 	public double GetNextTimeRelative() {
-		if (currentNote + 1 == times.Length)
-			return trackLength;
-		return times[(currentNote + 1) % Mathf.Max (times.Length)]
-			- times[currentNote];
+		if (currentNote - 1 < 0)
+			return times[times.Length-1];
+		return times[currentNote] - times[currentNote-1];
 	}
 
 	/** Gets the time of note n in the future */
