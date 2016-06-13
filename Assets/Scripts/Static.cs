@@ -7,6 +7,7 @@ public static class Static {
 	static GameObject target;
 	public static string LB = "L Button";
 	public static string RB = "R Button";
+	public static string both = "both";
 	
 	public static GameObject GetPlayer() {
 		if (player == null)

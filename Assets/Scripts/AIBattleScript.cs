@@ -34,6 +34,7 @@ public class AIBattleScript : MonoBehaviour {
 	private int playerInputIndex = 0;
 	private int activeNoteIndex = 0;
 	private bool started = false;
+	private double cheatMode;
 
 	private int currentSuccesses = 0;
 	private int currentFailures = 0;
@@ -52,6 +53,7 @@ public class AIBattleScript : MonoBehaviour {
 	private Transform noteDestination; // where the notes go
 	private Transform noteOrigin; // where they come from
 	private string filename;
+	private string buttonPressed;
 
 	void Start() {
 		this.player = Static.GetPlayer ();
@@ -75,8 +77,8 @@ public class AIBattleScript : MonoBehaviour {
 			this.metro = Static.GetMetronome ();
 			this.track = GetComponent<Track> ();
 			nextMetroBeat = metro.GetBeat () + 1;
-			trackStartTime = (double)Time.time + (beatsToReachPlayer * metro.BEAT_TIME);
-			emitNextNoteAt = Time.time + track.GetFutureTime(1);
+			trackStartTime = metro.GetBeatStartTime() + (beatsToReachPlayer * metro.BEAT_TIME);
+			emitNextNoteAt = track.GetFutureTime(1);
 			SetCanvas ();
 			// some initialisation goes here
 			loadedNotes = new GameObject[maxLoadedNotes];
@@ -90,20 +92,29 @@ public class AIBattleScript : MonoBehaviour {
 	}
 
 	void Update(){
+		if (Input.GetKeyDown ("`")) {
+			Debug.Log ("CHEAT MODE " + cheatMode);
+			cheatMode += 0.005;
+		}
 		if (!started)
 			return;
 		// OnBeat handles the audio playing
 		NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
-		if (trackStartTime <= Time.time && (!source.isPlaying || source.volume == 0)) {
+		// when starting play
+		if (trackStartTime <= Time.time && (!source.isPlaying && source.volume == 0)) {
 			source.volume = 1;
 			source.Play ();
 			source.loop = true;
+			emitNextNoteAt += Time.time;
 		}
+		if (source.volume == 0 || !source.isPlaying)
+			return;
 		// emit a new note if it is time to do so
 		if (emitNextNoteAt <= Time.time) {
 			NoteMovement emitted = EmitNote ();
 			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 		}
+	
 		if (Input.GetButtonDown (Static.LB) || Input.GetButtonDown(Static.RB)) {
 			OnPress ();
 		}
@@ -125,7 +136,7 @@ public class AIBattleScript : MonoBehaviour {
 		nextMetroBeat = Static.GetMetronome().GetBeat() + 1;
 		//PlayerHit.OnMiss += OnMiss;
 		//PlayerHit.OnButtonPress += OnPress;
-	}		
+	}
 
 	public void OnBeat () {
 		if (!started)
@@ -145,15 +156,15 @@ public class AIBattleScript : MonoBehaviour {
 			return;
 		player.GetComponent<Animator>().SetTrigger("noise");
 		// if we have started listening			
-		if (beatOffset <= 0) { 
+		if (beatOffset <= 0) {
 			NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
 			// first make sure we didn't miss anything
 			if (note.IsInRangeOfDestination () && ButtonCheck(note.GetButton())) {
 				double score = Abs (note.TimeFromDestination ());
-				if (score <= PlayerHit.GREAT) {
+				if (score <= PlayerHit.GREAT + cheatMode) {
 					GreatHit ();
 					currentSuccesses++;
-				} else if (score <= PlayerHit.GOOD) {
+				} else if (score <= PlayerHit.GOOD + cheatMode) {
 					GoodHit ();
 					currentSuccesses++;
 				} else if (score <= PlayerHit.BAD) {
@@ -168,6 +179,7 @@ public class AIBattleScript : MonoBehaviour {
 				playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;
 				currentFailures++;
 				OnMiss();
+				note.Missed ();
 				note.FadeOut (0.5f);
 			}
 		}
@@ -177,18 +189,22 @@ public class AIBattleScript : MonoBehaviour {
 	/** Decides whether the button press is good. 
 	We treat 1 = X, 2 = Y, and anything greater than those as 'both at the same time' */
 	private bool ButtonCheck(int note) {
-		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB))
+		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB)) {
+			Debug.Log ("Yes, it's a double button!" + note);
 			return true;
-		else if ((note == 1) && Input.GetButtonDown (Static.LB))
+		} else if ((note == 1) && Input.GetButtonDown (Static.LB)) {
+			Debug.Log ("Yes, it's a left button!"+ note);
 			return true;
-		else if ((note == 2) && Input.GetButtonDown (Static.RB))
+		} else if ((note == 2) && Input.GetButtonDown (Static.RB)) {
+			Debug.Log ("Yes, it's a right button!"+ note);
 			return true;
+		}
+		Debug.Log ("Nope, no buttons here.");
 		return false;
 	}
 
 	/** Gets the right button texture for the note. */
 	private Texture TextureCheck(int note) {
-		Debug.Log (note);
 		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB))
 			return NoteMovement.bothTexture;
 		else if ((note == 1) && Input.GetButtonDown (Static.LB))
@@ -256,6 +272,8 @@ public class AIBattleScript : MonoBehaviour {
 	private void OnLose () {
 		player.GetComponent<PlayerManagerScript>().endBattle(false);
 		source.volume = 0;
+		source.Stop ();
+		source.loop = false;
 		BattleEnd (false);
 	}
 
