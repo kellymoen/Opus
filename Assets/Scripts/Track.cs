@@ -86,18 +86,28 @@ public class Track : MonoBehaviour {
 	}
 
 	/** Gets the time from currentNote until note n */
-	public float GetFutureTime(int n){
+	public double GetFutureTime(int n){
 		if (currentNote + n >= times.Length) {
 			int indOfN = (currentNote + n) % times.Length;
-			float timeToEnd = (float)(trackLength - times [currentNote]);
+			double timeToEnd = (trackLength - times [currentNote]);
 			int extraLoops = (int)(n / trackLength);
 			if (extraLoops <= 0)
 				extraLoops = 0;
 			else
 				extraLoops--;
-			return (float)(timeToEnd + times [indOfN] + extraLoops * trackLength);
+			return (timeToEnd + times [indOfN] + extraLoops * trackLength);
 		} else {
-			return (float)(times [currentNote + n] - times [currentNote]);
+			return (times [currentNote + n] - times [currentNote]);
+		}
+	}
+	
+	/** Gets the note at n in the future (0 = current)*/
+	public int GetFutureNote(int n){
+		if (currentNote + n >= times.Length) {
+			int indOfN = (currentNote + n) % times.Length;
+			return notes[indOfN];
+		} else {
+			return notes[currentNote + n];
 		}
 	}
 }

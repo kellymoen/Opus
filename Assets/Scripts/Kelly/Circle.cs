@@ -10,14 +10,15 @@ public class Circle : MonoBehaviour
 	public GameObject line;
 	public Composition composition;
 	GameObject[] renderers;
+	private Transform player;
 	private Vector3 playerPos;
 	private bool displayCircle;
 
 	void Start ()
 	{
 		if (GameObject.Find ("Kit Prefab") != null) {
-			Debug.Log ("WHAT");
-			playerPos = GameObject.Find ("Kit Prefab").transform.position;
+			playerPos = GameObject.Find ("Kit Container").transform.position;
+			player = GameObject.Find ("Kit Container").transform;
 		} else {
 			playerPos = new Vector3 (0, 0, 0);
 		}
@@ -53,6 +54,7 @@ public class Circle : MonoBehaviour
 	void Update(){
 		if (GameObject.Find ("Kit Container") != null) {
 			playerPos = GameObject.Find ("Kit Container").transform.position;
+			player = GameObject.Find ("Kit Container").transform;
 		} else {
 			playerPos = new Vector3 (0, 0, 0);
 		}
@@ -98,7 +100,7 @@ public class Circle : MonoBehaviour
 	void CreatePoints (LineRenderer line, float startAngle, float degrees, int segments)
 	{
 		float x;
-		float y = 20.001f;
+		float y = 10.001f;
 		float z = 0f;
 
 		float angle = startAngle;
@@ -107,8 +109,8 @@ public class Circle : MonoBehaviour
 		{
 			x = Mathf.Sin (Mathf.Deg2Rad * angle) * xradius;
 			z = Mathf.Cos (Mathf.Deg2Rad * angle) * yradius;
-
-			line.SetPosition (i,new Vector3(x,y,z) + playerPos );
+			Vector3 position = new Vector3 (x,y,z);
+			line.SetPosition (i, player.TransformDirection(position) + playerPos );
 
 			angle += (degrees / segments);
 		}
@@ -119,7 +121,7 @@ public class Circle : MonoBehaviour
 		float angle = 360.0f * (float)t;
 		float x = Mathf.Sin (Mathf.Deg2Rad * angle) * xradius;
 		float z = Mathf.Cos (Mathf.Deg2Rad * angle) * yradius;
-		Vector3 position = new Vector3 (x, 18.001f, z) + playerPos;
+		Vector3 position = player.TransformDirection(new Vector3 (x, 10.001f, z)) + playerPos;
 		return position;
 	}
 
