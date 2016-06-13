@@ -77,7 +77,7 @@ public class AIBattleScript : MonoBehaviour {
 			this.track = GetComponent<Track> ();
 			nextMetroBeat = metro.GetBeat () + 1;
 			trackStartTime = metro.GetBeatStartTime() + (1 * metro.BEAT_TIME);
-			emitNextNoteAt = track.GetFutureTime(1);
+			emitNextNoteAt = track.GetFutureTime(1) + track.GetTrackStartTime() + 1.091f;
 			SetCanvas ();
 			// some initialisation goes here
 			loadedNotes = new GameObject[maxLoadedNotes];
@@ -100,11 +100,8 @@ public class AIBattleScript : MonoBehaviour {
 		// OnBeat handles the audio playing
 		NoteMovement note = loadedNotes [playerInputIndex].GetComponent<NoteMovement> ();
 		// when starting play
-		if (trackStartTime <= Time.time && (!source.isPlaying && source.volume == 0)) {
+		if (source.volume == 0) {
 			source.volume = 1;
-			source.Play ();
-			source.loop = true;
-			emitNextNoteAt += Time.time;
 		}
 		if (source.volume == 0 || !source.isPlaying)
 			return;
@@ -164,14 +161,14 @@ public class AIBattleScript : MonoBehaviour {
 				if (score <= PlayerHit.GREAT + cheatLevel) {
 					GreatHit ();
 					currentSuccesses++;
-				} else if (score <= PlayerHit.GOOD + cheatLevel) {
+				} else {//if (score <= PlayerHit.GOOD + cheatLevel) {
 					GoodHit ();
 					currentSuccesses++;
-				} else if (score <= PlayerHit.BAD) {
-					BadHit ();
-					currentFailures++;
-					currentSuccesses = (currentSuccesses - 1 >= 0) ? currentSuccesses-1 : 0; // straight-up ending their streak seemed a little harsh
-				}
+				} //else if (score <= PlayerHit.BAD) {
+				//	BadHit ();
+				//	currentFailures++;
+				//	currentSuccesses = (currentSuccesses - 1 >= 0) ? currentSuccesses-1 : 0; // straight-up ending their streak seemed a little harsh
+			//	}
 				playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;
 				note.FadeOut (0.5f);
 			} else {
@@ -189,6 +186,7 @@ public class AIBattleScript : MonoBehaviour {
 	/** Decides whether the button press is good. 
 	We treat 1 = X, 2 = Y, and anything greater than those as 'both at the same time' */
 	private bool ButtonCheck(int note) {
+		return true;
 		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB)) {
 			Debug.Log ("Yes, it's a double button!" + note);
 			return true;
@@ -235,9 +233,9 @@ public class AIBattleScript : MonoBehaviour {
 	/** When a new beat is detected (rough method for now, sorry!) a new
 	 * visual representation of the note is enabled. */
 	private NoteMovement EmitNote() {
-		double targetTime = track.GetFutureTime(1);
+		double targetTime = Time.time + 1.091f;
 		NoteMovement currNote = loadedNotes [activeNoteIndex].GetComponent<NoteMovement> ();
-		int futureNote = track.GetFutureNote(1);
+		int futureNote = 1;
 		currNote.StartNote (targetTime, futureNote, TextureCheck(futureNote));
 		anim.SetTrigger("noise");
 		activeNoteIndex = (activeNoteIndex + 1) % loadedNotes.Length;

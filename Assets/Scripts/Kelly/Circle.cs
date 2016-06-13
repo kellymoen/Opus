@@ -20,7 +20,7 @@ public class Circle : MonoBehaviour
 			playerPos = GameObject.Find ("Kit Container").transform.position;
 			player = GameObject.Find ("Kit Container").transform;
 		} else {
-			playerPos = new Vector3 (0, 0, 0);
+			return;
 		}
 		int[] elems = composition.bars;
 		renderers = new GameObject[16];
@@ -56,7 +56,7 @@ public class Circle : MonoBehaviour
 			playerPos = GameObject.Find ("Kit Container").transform.position;
 			player = GameObject.Find ("Kit Container").transform;
 		} else {
-			playerPos = new Vector3 (0, 0, 0);
+			return;
 		}
 		if (displayCircle) {
 			int[] elems = composition.bars;
@@ -118,6 +118,12 @@ public class Circle : MonoBehaviour
 
 
 	public Vector3 PositionOnCircle(float t){
+		if (GameObject.Find ("Kit Container") != null) {
+			playerPos = GameObject.Find ("Kit Container").transform.position;
+			player = GameObject.Find ("Kit Container").transform;
+		} else {
+			return new Vector3(0,0,0);
+		}
 		float angle = 360.0f * (float)t;
 		float x = Mathf.Sin (Mathf.Deg2Rad * angle) * xradius;
 		float z = Mathf.Cos (Mathf.Deg2Rad * angle) * yradius;
