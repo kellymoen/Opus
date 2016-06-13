@@ -8,8 +8,6 @@ public static class Static {
 	
 	public static GameObject GetPlayer() {
 		if (player == null)
-			player = GameObject.Find ("Kit Prefab/Kit Container");
-		if (player == null)
 			player = GameObject.FindGameObjectWithTag ("Player");
 		return player;
 	}

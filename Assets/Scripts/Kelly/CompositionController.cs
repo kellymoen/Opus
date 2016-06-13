@@ -21,8 +21,8 @@ public class CompositionController : MonoBehaviour {
 	}
 
 	void Initialise() {
-		critterManagerScript = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerCritterManager>();
-		metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
+		critterManagerScript = Static.GetPlayer().GetComponent<PlayerCritterManager>();
+		metro = Static.GetMetronome();
 		for (int i = 0; i < compositions.Length; i++) {
 			//Instantiate Circles and Spheres
 			if (compositions [i] != null) {
@@ -115,6 +115,8 @@ public class CompositionController : MonoBehaviour {
 	public void ShowComposition() {
 		if (enabled) {
 			for (int i = 0; i < compositions.Length; i++) {
+				if (compositions [i] == null)
+					continue;
 				compositions [i].enabled = true;
 				compositions [i].circle.enabled = true;
 				if (i == selectedComposition)
@@ -130,6 +132,8 @@ public class CompositionController : MonoBehaviour {
 	public void HideComposition() {
 		if (enabled) {
 			for (int i = 0; i < compositions.Length; i++) {
+				if (compositions [i] == null)
+					continue;
 				compositions [i].enabled = false;
 				compositions [i].selected = false;
 				compositions [i].circle.enabled = false;
@@ -138,7 +142,7 @@ public class CompositionController : MonoBehaviour {
 	}
 
 	private Composition MakeCompositionObject(GameObject noot) {
-		metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
+		metro = Static.GetMetronome();
 		Composition nootComp = noot.AddComponent<Composition> ();
 		nootComp.noteSprite = Instantiate (sphere);
 		nootComp.circle = Instantiate (circle).GetComponent<Circle> ();
