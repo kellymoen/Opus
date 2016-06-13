@@ -103,6 +103,7 @@ public class PlayerManagerScript : MonoBehaviour {
 		//switchToBattleCamera();
 		moveScript.setMovementLock(true);
 		composeScript.setControllable (true);
+		composeScript.ShowComposition ();
 	}
 
 	void endCompose(){
@@ -110,6 +111,7 @@ public class PlayerManagerScript : MonoBehaviour {
 		//switchToExploreCamera();
 		moveScript.setMovementLock(false);
 		composeScript.setControllable (false);
+		composeScript.HideComposition ();
 	}
 
 
