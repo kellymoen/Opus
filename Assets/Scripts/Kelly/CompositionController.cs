@@ -53,7 +53,7 @@ public class CompositionController : MonoBehaviour {
 			if (trackClicked) {
 				Vector2 axis= new Vector2 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"));
 				if (axis.magnitude > 0.1) {
-					float axisAngle = 90.0f + (Mathf.Atan2 (axis.y, axis.x) * 180 / Mathf.PI);
+					float axisAngle = 90.0f - (Mathf.Atan2 (axis.y, axis.x) * 180 / Mathf.PI);
 					if (axisAngle < 0)
 						axisAngle += 360;
 					Debug.Log (axisAngle);

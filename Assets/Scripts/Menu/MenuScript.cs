@@ -82,21 +82,26 @@ public class MenuScript : MonoBehaviour {
 		}
 		//If option hasn't changed in last 10 ticks
 		if (timeout == 0) {
-			float vertInput = Input.GetAxisRaw ("Vertical");
-			float horizInput = Input.GetAxisRaw ("Horizontal");
+			float vertInput = Input.GetAxis ("Vertical");
+			float horizInput = Input.GetAxis ("Horizontal");
 
 			//* CODE FOR USING THE MENU WITHOUT A CONTROLLER *//
 			// vertInput += (Input.GetKey(KeyCode.UpArrow) ? 1 : 0) + (Input.GetKey(KeyCode.DownArrow) ? -1 : 0);
 			// horizInput += (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
-
+			Vector2 axis = new Vector2(horizInput, vertInput);
 			//Check movement, No options in help screen
-			if (curScreen == MenuScreen.Main && (horizInput != 0 || vertInput != 0)) {
+			if (curScreen == MenuScreen.Main && (axis.magnitude > 0.1)) {
 				//Choose option that is in the specified direction from the center
-				int option = (Mathf.Abs (vertInput) >= Mathf.Abs (horizInput)) ? ((vertInput > 0) ? 0 : 2) : ((horizInput > 0) ? 3 : 1);
+				float axisAngle = (45 - (Mathf.Atan2 (axis.y, axis.x) * 180 / Mathf.PI)) % 360;
+				if (axisAngle < 0)
+					axisAngle += 360;
+				Debug.Log (axisAngle);
+				int option = 3 - (int)((axisAngle / 360.0f) * 4);
+				//int option = (Mathf.Abs (vertInput) >= Mathf.Abs (horizInput)) ? ((vertInput > 0) ? 0 : 2) : ((horizInput > 0) ? 3 : 1);
 				Select (option);
 				//MoveSelection (horizInput > 0 ? 1 : -1);
 				timeout = maxTimeout;
-			}else if (vertInput != 0 && curScreen == MenuScreen.Options) {
+			}else if (Mathf.Abs(vertInput) > 0.2 && curScreen == MenuScreen.Options) {
 				MoveSelection (vertInput > 0 ? 1 : -1);
 				timeout = maxTimeout;
 			}
@@ -105,9 +110,9 @@ public class MenuScript : MonoBehaviour {
 			if (curScreen == MenuScreen.Options) {
 				curSliderValue = GetCurSlValue ();
 				//Check if horizontal movement
-				if (horizInput > 0) {
+				if (horizInput > 0.2) {
 					curSliderValue = (curSliderValue + 5);
-				} else if (horizInput < 0) {
+				} else if (horizInput < 0.2) {
 					curSliderValue = (curSliderValue - 5);
 				}
 				switch (selectedOption) {
