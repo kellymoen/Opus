@@ -10,6 +10,7 @@ public class CompositionController : MonoBehaviour {
 	public int selectedComposition = 0;
 	public int axisUsed = 0;
 	public int nextIndex = 0;
+	public int compositionsSize = 0;
 	private bool controllable = false;
 	private bool trackClicked = false;
 	private PlayerCritterManager critterManagerScript;
@@ -65,10 +66,12 @@ public class CompositionController : MonoBehaviour {
 				if (Input.GetAxis ("Vertical") > 0.5) {
 
 					if (axisUsed <= 0) {
+						if (compositions [selectedComposition] != null)
 							compositions [selectedComposition].selected = false;
 							selectedComposition++;
-							if (selectedComposition > compositions.Length - 1)
-								selectedComposition = compositions.Length - 1;
+						if (selectedComposition > compositionsSize - 1)
+							selectedComposition = compositionsSize - 1;
+						if (compositions [selectedComposition] != null)
 							compositions [selectedComposition].selected = true;
 						axisUsed = 10;
 					} else {
@@ -76,10 +79,12 @@ public class CompositionController : MonoBehaviour {
 					}
 				} else if (Input.GetAxis ("Vertical") < -0.5) {
 					if (axisUsed <= 0) {
+						if (compositions [selectedComposition] != null)
 							compositions [selectedComposition].selected = false;
 							selectedComposition--;
 							if (selectedComposition < 0)
 								selectedComposition = 0;
+						if (compositions [selectedComposition] != null)
 							compositions [selectedComposition].selected = true;
 						axisUsed = 10;
 					} else {
@@ -153,8 +158,8 @@ public class CompositionController : MonoBehaviour {
 		nootComp.circle.xradius = 2 + nextIndex;
 		nootComp.circle.yradius = 2 + nextIndex;
 		nootComp.circle.composition = nootComp;
-		nootComp.noteSprite.GetComponent<BeatColourChange> ().metronome = metro;
-		noot.gameObject.SetActive (false);
+		nootComp.bars = new int[16];
+		//noot.gameObject.SetActive (false);
 		noot.transform.SetParent (transform);
 		return noot.GetComponent<Composition> ();
 	}
@@ -162,6 +167,7 @@ public class CompositionController : MonoBehaviour {
 	public Composition AddNoot(GameObject noot) {
 		if (nextIndex < compositions.Length) {
 			compositions [nextIndex] = MakeCompositionObject (noot);
+			compositionsSize++;
 			return compositions [nextIndex++].GetComponent<Composition>();
 		}
 		Debug.LogError ("Composition is full!");

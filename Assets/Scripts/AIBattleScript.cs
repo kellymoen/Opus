@@ -92,7 +92,7 @@ public class AIBattleScript : MonoBehaviour {
 	}
 
 	void Update(){
-		if (Input.GetKeyDown ("`")) {
+		if (Input.GetKeyDown ("y")) {
 			Debug.Log ("CHEAT MODE " + cheatMode);
 			cheatMode += 0.005;
 		}
