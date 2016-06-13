@@ -115,6 +115,8 @@ public class CompositionController : MonoBehaviour {
 	public void ShowComposition() {
 		if (enabled) {
 			for (int i = 0; i < compositions.Length; i++) {
+				if (compositions [i] == null)
+					continue;
 				compositions [i].noteSprite.active = true;
 				//compositions [i].enabled = true;
 				compositions [i].circle.ShowCircle ();
@@ -131,6 +133,8 @@ public class CompositionController : MonoBehaviour {
 	public void HideComposition() {
 		if (enabled) {
 			for (int i = 0; i < compositions.Length; i++) {
+				if (compositions [i] == null)
+					continue;
 				compositions [i].noteSprite.active = false;
 				//compositions [i].enabled = false;
 				compositions [i].selected = false;

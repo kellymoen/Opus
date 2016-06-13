@@ -57,6 +57,7 @@ public class AIBattleScript : MonoBehaviour {
 		this.player = Static.GetPlayer ();
 		this.anim = GetComponentInChildren<Animator> ();
 		this.source = GetComponent<AudioSource> ();
+		this.track = GetComponent<Track> ();
 		AudioSourceMetro.OnBeat += OnBeat;
 		source.volume = 0;
 		filename = track.filename;
@@ -111,7 +112,7 @@ public class AIBattleScript : MonoBehaviour {
 			NoteMovement emitted = EmitNote ();
 			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 		}
-		if (Input.GetButtonDown ("X Button") || Input.GetButtonDown("Y Button")) {
+		if (Input.GetButtonDown (Static.LB) || Input.GetButtonDown("Y Button")) {
 			OnPress ();
 		}
 		if (note.TimeFromDestination () <= -PlayerHit.BAD) {
@@ -184,20 +185,20 @@ public class AIBattleScript : MonoBehaviour {
 	/** Decides whether the button press is good. 
 	We treat 1 = X, 2 = Y, and anything greater than those as 'both at the same time' */
 	private bool ButtonCheck(int note) {
-		if ((note > 2) && Input.GetButtonDown ("X Button") && Input.GetButtonDown ("Y Button"))
+		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB))
 			return true;
-		else if ((note == 1) && Input.GetButtonDown ("X Button"))
+		else if ((note == 1) && Input.GetButtonDown (Static.LB))
 			return true;
-		else if ((note == 2) && Input.GetButtonDown ("Y Button"))
+		else if ((note == 2) && Input.GetButtonDown (Static.RB))
 			return true;
 		return false;
 	}
 
 	/** Gets the right button texture for the note. */
 	private Texture TextureCheck(int note) {
-		if ((note > 2) && Input.GetButtonDown ("X Button") && Input.GetButtonDown ("Y Button"))
+		if ((note > 2) && Input.GetButtonDown (Static.LB) && Input.GetButtonDown (Static.RB))
 			return NoteMovement.bothTexture;
-		else if ((note == 1) && Input.GetButtonDown ("X Button"))
+		else if ((note == 1) && Input.GetButtonDown (Static.LB))
 			return NoteMovement.leftTexture;
 		else
 			return NoteMovement.rightTexture;

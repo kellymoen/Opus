@@ -5,6 +5,8 @@ public static class Static {
 	static GameObject metronome;
 	static GameObject player;
 	static GameObject target;
+	public static string LB = "L Button";
+	public static string RB = "R Button";
 	
 	public static GameObject GetPlayer() {
 		if (player == null)
