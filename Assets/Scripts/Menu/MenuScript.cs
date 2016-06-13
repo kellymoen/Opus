@@ -95,13 +95,12 @@ public class MenuScript : MonoBehaviour {
 				float axisAngle = (45 - (Mathf.Atan2 (axis.y, axis.x) * 180 / Mathf.PI)) % 360;
 				if (axisAngle < 0)
 					axisAngle += 360;
-				Debug.Log (axisAngle);
 				int option = 3 - (int)((axisAngle / 360.0f) * 4);
 				//int option = (Mathf.Abs (vertInput) >= Mathf.Abs (horizInput)) ? ((vertInput > 0) ? 0 : 2) : ((horizInput > 0) ? 3 : 1);
 				Select (option);
 				//MoveSelection (horizInput > 0 ? 1 : -1);
 				timeout = maxTimeout;
-			}else if (Mathf.Abs(vertInput) > 0.2 && curScreen == MenuScreen.Options) {
+			}else if (Mathf.Abs(vertInput) > 0.5 && curScreen == MenuScreen.Options) {
 				MoveSelection (vertInput > 0 ? 1 : -1);
 				timeout = maxTimeout;
 			}
@@ -110,10 +109,10 @@ public class MenuScript : MonoBehaviour {
 			if (curScreen == MenuScreen.Options) {
 				curSliderValue = GetCurSlValue ();
 				//Check if horizontal movement
-				if (horizInput > 0.2) {
-					curSliderValue = (curSliderValue + 5);
-				} else if (horizInput < 0.2) {
-					curSliderValue = (curSliderValue - 5);
+				if (horizInput > 0.5f) {
+					curSliderValue += 1.0f;
+				} else if (horizInput < -0.5f) {
+					curSliderValue -= 1.0f;
 				}
 				switch (selectedOption) {
 				case 0:
