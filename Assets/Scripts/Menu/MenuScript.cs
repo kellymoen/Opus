@@ -33,7 +33,7 @@ public class MenuScript : MonoBehaviour {
 	public Color colorText;
 
 	private enum MenuScreen { Main, Options, Help };
-	private MenuScreen curScreen = MenuScreen.Main;
+	private MenuScreen curScreen;
 	//Option selected 0-2
 	private int selectedOption;
 	private float curSliderValue;
@@ -41,13 +41,14 @@ public class MenuScript : MonoBehaviour {
 	//Timeout counter to slow down selection changing
 	private float timeout;
 	[Range(0,30)]
-	public const float maxTimeout = 10;
+	public float maxTimeout = 10;
 
 
 	void Start () {
 		timeout = 0;
 		// Make -1 so nothing selected initially
 		selectedOption = -1;
+		curScreen = MenuScreen.Main;
 		optionsPanel.SetActive (false);
 		helpPanel.SetActive (false);
 	}
@@ -79,11 +80,14 @@ public class MenuScript : MonoBehaviour {
 				return;
 			}
 		}
-
 		//If option hasn't changed in last 10 ticks
 		if (timeout == 0) {
 			float vertInput = Input.GetAxisRaw ("Vertical");
 			float horizInput = Input.GetAxisRaw ("Horizontal");
+
+			//* CODE FOR USING THE MENU WITHOUT A CONTROLLER *//
+			//vertInput += (Input.GetKey(KeyCode.UpArrow) ? 1 : 0) + (Input.GetKey(KeyCode.DownArrow) ? -1 : 0);
+			//horizInput += (Input.GetKey(KeyCode.RightArrow) ? 1 : 0) + (Input.GetKey(KeyCode.LeftArrow) ? -1 : 0);
 
 			//Check movement, No options in help screen
 			if (curScreen == MenuScreen.Main && (horizInput != 0 || vertInput != 0)) {
@@ -183,7 +187,7 @@ public class MenuScript : MonoBehaviour {
 			break;
 		case 2:
 			//Modify menu volume
-			mainAudioMixer.SetFloat ("MenuVol",value);
+			mainAudioMixer.SetFloat ("UIVol",value);
 			break;
 		}
 	}
