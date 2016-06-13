@@ -68,7 +68,7 @@ public class AudioSourceMetro : MonoBehaviour {
 
 	public double GetDeltaTime(){
 		if (lastTime > sound.time) {
-			lastTime -= 2.182;
+			lastTime -= sound.clip.length;
 		}
 			return sound.time - lastTime;
 	}

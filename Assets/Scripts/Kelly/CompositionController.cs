@@ -21,15 +21,15 @@ public class CompositionController : MonoBehaviour {
 	}
 
 	void Initialise() {
-		critterManagerScript = Static.GetPlayer().GetComponent<PlayerCritterManager>();
-		metro = Static.GetMetronome();
+		critterManagerScript = GameObject.FindGameObjectWithTag ("Player").GetComponent<PlayerCritterManager>();
+		metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
 		for (int i = 0; i < compositions.Length; i++) {
 			//Instantiate Circles and Spheres
 			if (compositions [i] != null) {
 				compositions [i].noteSprite = Instantiate (sphere);
 				compositions [i].circle = Instantiate (circle).GetComponent<Circle> ();
-				compositions [i].circle.xradius = (2 + i) * 5;
-				compositions [i].circle.yradius = (2 + i) * 5;
+				compositions [i].circle.xradius = (2 + i) ;
+				compositions [i].circle.yradius = (2 + i) ;
 				compositions [i].circle.composition = compositions [i];
 				//compositions [i].gameObject.SetActive (false);
 				if (i == selectedComposition)
@@ -50,7 +50,7 @@ public class CompositionController : MonoBehaviour {
 				paused = !paused;
 			}
 
-			if (Input.GetAxis ("Vertical") > 0) {
+			if (Input.GetAxis ("Vertical") > 0.1) {
 				if (axisUsed <= 0) {
 					compositions [selectedComposition].selected = false;
 					selectedComposition++;
@@ -61,7 +61,7 @@ public class CompositionController : MonoBehaviour {
 				} else {
 					axisUsed--;
 				}
-			} else if (Input.GetAxis ("Vertical") < 0) {
+			} else if (Input.GetAxis ("Vertical") < -0.1) {
 				if (axisUsed <= 0) {
 					compositions [selectedComposition].selected = false;
 					selectedComposition--;
@@ -74,14 +74,14 @@ public class CompositionController : MonoBehaviour {
 				}
 			}
 
-			if (Input.GetAxis ("Horizontal") > 0) {
+			if (Input.GetAxis ("Horizontal") > 0.1) {
 				if (axisUsed <= 0) {
 					compositions [selectedComposition].moveRight ();
 					axisUsed = 10;
 				} else {
 					axisUsed--;
 				}
-			} else if (Input.GetAxis ("Horizontal") < 0) {
+			} else if (Input.GetAxis ("Horizontal") < -0.1) {
 				if (axisUsed <= 0) {
 					compositions [selectedComposition].moveLeft ();
 					axisUsed = 10;
@@ -90,14 +90,14 @@ public class CompositionController : MonoBehaviour {
 				}
 			}
 
-			if (Input.GetButtonDown ("X Button")) {
+			if (Input.GetButtonDown ("A Button")) {
 				compositions [selectedComposition].toggle ();
 			}
-			if (Input.GetButtonDown ("C")) {
+			if (Input.GetButtonDown ("R Button")) {
 				compositions [selectedComposition].increaseBars ();
 			}
 
-			if (Input.GetButtonDown ("Z")) {
+			if (Input.GetButtonDown ("L Button")) {
 				compositions [selectedComposition].decreaseBars ();
 			}
 		}
@@ -115,10 +115,9 @@ public class CompositionController : MonoBehaviour {
 	public void ShowComposition() {
 		if (enabled) {
 			for (int i = 0; i < compositions.Length; i++) {
-				if (compositions [i] == null)
-					continue;
-				compositions [i].enabled = true;
-				compositions [i].circle.enabled = true;
+				compositions [i].noteSprite.active = true;
+				//compositions [i].enabled = true;
+				compositions [i].circle.ShowCircle ();
 				if (i == selectedComposition)
 					compositions [i].selected = true;
 			}
@@ -132,17 +131,16 @@ public class CompositionController : MonoBehaviour {
 	public void HideComposition() {
 		if (enabled) {
 			for (int i = 0; i < compositions.Length; i++) {
-				if (compositions [i] == null)
-					continue;
-				compositions [i].enabled = false;
+				compositions [i].noteSprite.active = false;
+				//compositions [i].enabled = false;
 				compositions [i].selected = false;
-				compositions [i].circle.enabled = false;
+				compositions [i].circle.HideCircle ();
 			}
 		}
 	}
 
 	private Composition MakeCompositionObject(GameObject noot) {
-		metro = Static.GetMetronome();
+		metro = GameObject.FindGameObjectWithTag ("Metronome").GetComponent<AudioSourceMetro>();
 		Composition nootComp = noot.AddComponent<Composition> ();
 		nootComp.noteSprite = Instantiate (sphere);
 		nootComp.circle = Instantiate (circle).GetComponent<Circle> ();

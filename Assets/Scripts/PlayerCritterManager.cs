@@ -11,7 +11,7 @@ public class PlayerCritterManager : MonoBehaviour {
   private CompositionController compController;
 
   void Start(){
-    compController = GameObject.Find("CompositionController").GetComponent<CompositionController>();
+    compController = GameObject.Find("Kit Container").GetComponent<CompositionController>();
     activeCritters = new Dictionary<Transform, GameObject>();
     allCritters = new List<GameObject>();
     foreach (Transform child in GameObject.Find("CritterSlotContainer").transform)
