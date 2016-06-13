@@ -20,7 +20,7 @@ public class MarkerScript : MonoBehaviour {
 		transform.LookAt (cam.transform);
 	}
 
-	public void BattleEnd() {
+	public void BattleEnd(bool isWon) {
 		GetComponent<UnityEngine.UI.RawImage> ().enabled = false;
 	}
 

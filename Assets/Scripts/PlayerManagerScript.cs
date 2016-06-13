@@ -2,11 +2,12 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(Movement))]
+[RequireComponent(typeof(Animator))]
 public class PlayerManagerScript : MonoBehaviour {
-  enum State {Battle, Explore, Menu, Compose};
+  enum State {Battle, Explore, Menu};
   private GameObject tether;
-  private NewMovement moveScript;
-	private CompositionController composeScript;
+  private Animator anim;
+  private Movement moveScript;
   private PlayerCritterManager critterManager;
   private GameObject mainCamera;
   private GameObject battleCamera;
@@ -17,11 +18,11 @@ public class PlayerManagerScript : MonoBehaviour {
   public GameObject tetherPrefab;
 
   void Start(){
-    moveScript = gameObject.GetComponent<NewMovement>();
-		composeScript = gameObject.GetComponent<CompositionController>();
+    moveScript = gameObject.GetComponent<Movement>();
     critterManager = gameObject.GetComponent<PlayerCritterManager>();
     mainCamera = GameObject.Find("MainCamera");
     battleCamera = GameObject.Find("BattleCamera");
+	anim = GetComponent<Animator>();
   }
 
   void Update(){
@@ -32,16 +33,14 @@ public class PlayerManagerScript : MonoBehaviour {
       else if(currentState == State.Menu){
         closeSelectionMenu();
       }
+	  if (inBattle) {
+		  // see AIBattleScript for player character animation in battle
+	  }
     }
 
     //remove once we have an actual capture mechanic
-		if (Input.GetButtonDown ("Fire3")) {
-			if (currentState == State.Explore)	{
-				startCompose ();
-			}
-			 else if (currentState == State.Compose) {
-				endCompose ();
-			}
+    if(CrossPlatformInputManager.GetButtonDown("Fire3") && currentState == State.Battle){
+      endBattle(true);
     }
   }
 
@@ -98,19 +97,6 @@ public class PlayerManagerScript : MonoBehaviour {
     }
   }
 
-	void startCompose(){
-		currentState = State.Compose;
-		switchToBattleCamera();
-		moveScript.setMovementLock(true);
-		composeScript.setControllable (true);
-	}
-
-	void endCompose(){
-		currentState = State.Explore;
-		switchToExploreCamera();
-		moveScript.setMovementLock(false);
-		composeScript.setControllable (false);
-	}
 
 
   void switchToExploreCamera(){
