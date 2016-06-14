@@ -89,7 +89,7 @@ ModelImporter:
     4300026: L_eye
     4300028: R_eye
     4300030: mask2
-    7400000: Take 001
+    7400000: Boss Idle (new)
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -111,7 +111,71 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Boss Idle (new)
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 200
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: head
+        weight: 1
+      - path: head/inner_head
+        weight: 1
+      - path: head/L_eye
+        weight: 1
+      - path: head/mask2
+        weight: 1
+      - path: head/outer_head
+        weight: 1
+      - path: head/R_eye
+        weight: 1
+      - path: inner_body1
+        weight: 1
+      - path: L_backleg_bottom
+        weight: 1
+      - path: L_backleg_top
+        weight: 1
+      - path: L_frontleg_bottom
+        weight: 1
+      - path: L_frontleg_top
+        weight: 1
+      - path: outer_body1
+        weight: 1
+      - path: R_backleg_bottom
+        weight: 1
+      - path: R_backleg_top
+        weight: 1
+      - path: R_frontleg_bottom
+        weight: 1
+      - path: R_frontleg_top
+        weight: 1
+      - path: tail
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

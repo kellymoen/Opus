@@ -93,7 +93,7 @@ ModelImporter:
     4300026: feather_2
     4300028: feather_3
     4300030: feather_4
-    7400000: Take 001
+    7400000: Noot Idle (new)
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -115,7 +115,75 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Noot Idle (new)
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: body
+        weight: 1
+      - path: body/beak
+        weight: 1
+      - path: body/eyes
+        weight: 1
+      - path: body/eyes/L_eye
+        weight: 1
+      - path: body/eyes/R_eye
+        weight: 1
+      - path: body/inner_body
+        weight: 1
+      - path: body/outer_body
+        weight: 1
+      - path: body/tail_feathers
+        weight: 1
+      - path: body/tail_feathers/Feather_1
+        weight: 1
+      - path: body/tail_feathers/feather_2
+        weight: 1
+      - path: body/tail_feathers/feather_3
+        weight: 1
+      - path: body/tail_feathers/feather_4
+        weight: 1
+      - path: body/top_feather
+        weight: 1
+      - path: L_leg
+        weight: 1
+      - path: L_wing_1
+        weight: 1
+      - path: L_wing_2
+        weight: 1
+      - path: R_leg
+        weight: 1
+      - path: R_wing_1
+        weight: 1
+      - path: R_wing_2
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
