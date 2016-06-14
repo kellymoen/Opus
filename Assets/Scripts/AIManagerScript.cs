@@ -19,12 +19,13 @@ public class AIManagerScript : MonoBehaviour
 
   public float maxPlayerDetectDistance = 20f;
 
+
   void Start(){
     roamingScript = gameObject.GetComponent<AIRoamingScript>();
 	followScript = gameObject.GetComponent<AIFollowScript>();
     battleScript = gameObject.GetComponent<AIBattleScript>();
 	player = Static.GetPlayer ();
-  }
+  }  
 
   void Update(){
     //if roaming check for player
@@ -67,7 +68,7 @@ public class AIManagerScript : MonoBehaviour
 
   public void capture(){
     //TODO create playerCritterManager script
-
+	
   }
 
 	public void escape(){
