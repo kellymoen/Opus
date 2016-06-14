@@ -2,7 +2,10 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
+public delegate void CritterEvent(GameObject critter);
 public class PlayerCritterManager : MonoBehaviour {
+	public event CritterEvent AddCritterEvent;
+
   private Dictionary<Transform, GameObject> activeCritters;
   private Dictionary<Composition, GameObject> compositionsCritters;
   //all available critters
@@ -38,6 +41,8 @@ public class PlayerCritterManager : MonoBehaviour {
     if(added != null){
       compositionsCritters.Add(added, critter);
     }
+		if (AddCritterEvent != null)
+			AddCritterEvent (critter);
   }
 
   public bool addCritterToFirstSpaceAvailable(GameObject critter){
@@ -87,5 +92,15 @@ public class PlayerCritterManager : MonoBehaviour {
   }
 	public int CritterLength() {
 		return allCritters.Count;
+	}
+
+
+	public bool HasCritter(GameObject o) {
+		AIManagerScript m = o.GetComponentInChildren<AIManagerScript> ();
+		if (m == null) {
+			Debug.LogError ("Cannot check for the presence of a non-critter object.");
+			return false;
+		}
+		return allCritters.Contains (o);			
 	}
 }

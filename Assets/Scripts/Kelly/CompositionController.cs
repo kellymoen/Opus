@@ -160,7 +160,7 @@ public class CompositionController : MonoBehaviour {
 		nootComp.circle.composition = nootComp;
 		nootComp.bars = new int[16];
 		//noot.gameObject.SetActive (false);
-		noot.transform.SetParent (transform);
+		//noot.transform.SetParent (transform);
 		return noot.GetComponent<Composition> ();
 	}
 
@@ -172,5 +172,9 @@ public class CompositionController : MonoBehaviour {
 		}
 		Debug.LogError ("Composition is full!");
 		return null;
+	}
+
+	public bool IsControllable() {
+		return  controllable;
 	}
 }

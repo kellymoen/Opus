@@ -18,8 +18,7 @@ public class AIBattleScript : MonoBehaviour {
 	public static event BattleEvent BattleStart;
 	public static event BattleEvent OnMiss;
 
-	public Texture[] buttons;
-	public string[] buttonNames;
+
 	public Canvas battleCanvas; // what we draw them on
 	public int successesToWin = 8; // number of notes to get correct in a row
 	public int missesToFail = 12; // number of notes to fail in a row before it escapes
@@ -29,7 +28,6 @@ public class AIBattleScript : MonoBehaviour {
 	public int maxLoadedNotes = 4; // how many notes we can have LOADED (not necessarily active) at any time
 	// fields for managing our loaded notes
 	private GameObject[] loadedNotes;
-	private string[] activeButtons;
 	private int playerInputIndex = 0;
 	private int activeNoteIndex = 0;
 	private bool started = false;
@@ -52,7 +50,8 @@ public class AIBattleScript : MonoBehaviour {
 	private Track track;
 	private Transform noteDestination; // where the notes go
 	private Transform noteOrigin; // where they come from
-	private string filename;
+
+	private bool enabledCheats;
 
 	void Start() {
 		this.player = Static.GetPlayer ();
@@ -60,12 +59,19 @@ public class AIBattleScript : MonoBehaviour {
 		this.source = GetComponent<AudioSource> ();
 		this.track = GetComponent<Track> ();
 		AudioSourceMetro.OnBeat += OnBeat;
+		ProgressManager.EnableCheats += ProgressManager_EnableCheats;
 		source.volume = 0;
-		filename = track.filename;
+		source.Play ();
+		source.loop = true;
+	}
+
+	void ProgressManager_EnableCheats (bool enabled) {
+		enabledCheats = enabled;
 	}
 
 	/** Returns true if calling this method has started the battle; false otherwise. */
 	public bool Begin(Transform origin, Transform destination) {
+		Debug.Log (gameObject.name + " begins battle!");
 		if (!started) {
 			if (BattleStart != null)
 				BattleStart ();
@@ -85,7 +91,13 @@ public class AIBattleScript : MonoBehaviour {
 				loadedNotes [i] = CreateNote ();
 			}
 			started = true;
+
+			if (enabledCheats) {
+				Debug.Log ("Cheats enabled, autowinning.");
+				OnWin ();
+			}
 			return true;
+
 		}
 		return false;
 	}
@@ -107,13 +119,18 @@ public class AIBattleScript : MonoBehaviour {
 			return;
 		// emit a new note if it is time to do so
 		if (emitNextNoteAt <= Time.time) {
+			Debug.Log ("TIME IS: " + Time.time +
+				"\n" + emitNextNoteAt +
+				"\n");
+			
 			NoteMovement emitted = EmitNote ();
 			emitNextNoteAt = Time.time + track.GetFutureTime(1);
 		}
-	
+		// check player input
 		if (Input.GetButtonDown (Static.LB) || Input.GetButtonDown(Static.RB)) {
 			OnPress ();
 		}
+		// if the player missed the current note
 		if (note.TimeFromDestination () <= -PlayerHit.BAD) {
 			note.FadeOut (0.02f);
 			playerInputIndex = (playerInputIndex + 1) % loadedNotes.Length;	

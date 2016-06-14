@@ -21,7 +21,6 @@ public class AIRoamingScript : MonoBehaviour
   void Start(){
 	player = Static.GetPlayer ();
     agent = GetComponent<NavMeshAgent>();
-    //animator = GetComponent<Animator>();
     originLocation = transform.position;
     assignNewGoal();
 	animator = GetComponentInChildren<Animator> ();
@@ -37,7 +36,7 @@ public class AIRoamingScript : MonoBehaviour
     //If at the next patrol point
       if(Vector3.Distance(transform.position, currentGoal) < minDistance){
         //If just arrived, set timer
-        if(idleStartTime ==0){
+        if(idleStartTime == 0){
           idleStartTime = Time.time;
           idleTime = Random.Range(0, maxIdleTime);
 			animator.SetBool ("isWalking", false);
@@ -52,7 +51,15 @@ public class AIRoamingScript : MonoBehaviour
 			animator.SetBool ("isWalking", true);
          }
       }
-  }
+	}
+
+	public void Escape() {
+		int count = 0;
+		while (Vector3.Distance (currentGoal, player.transform.position) < 10 && count < 10) {
+			assignNewGoal ();
+			count++;
+		}
+	}
 
   void assignNewGoal(){
     currentGoal = randomPosition();

@@ -10,13 +10,26 @@ public class NewMovement : MonoBehaviour {
 	private CharacterController controller;
 	public float gravity;
 
+	private bool cheats;
 
 	private bool movementLocked = false;
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator>();
 		controller = GetComponent<CharacterController>();
+		ProgressManager.EnableCheats += ProgressManager_EnableCheats;
+	}
 
+
+	void ProgressManager_EnableCheats (bool enabled) {
+		cheats = enabled;
+		if (enabled) {
+			animator.speed *= 4;
+			speed *= 4;
+		} else {
+			animator.speed /= 4;
+			speed /= 4;
+		}
 	}
 	
 	// Update is called once per frame

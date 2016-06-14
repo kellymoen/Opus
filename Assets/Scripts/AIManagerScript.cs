@@ -6,13 +6,15 @@ using UnityEngine;
 public class AIManagerScript : MonoBehaviour
 {
 
-  enum State {Roam, Follow, Battle};
+	enum State {Roam, Follow, Battle};
+	public float escapeLength = 15f;
   private GameObject player;
   private GameObject critter;
   private AIRoamingScript roamingScript;
   private AIFollowScript followScript;
   private AIBattleScript battleScript;
   private State currentState;
+	private float delayRestart;
 
 
   public float maxPlayerDetectDistance = 20f;
@@ -26,8 +28,12 @@ public class AIManagerScript : MonoBehaviour
 
   void Update(){
     //if roaming check for player
-		if (currentState == State.Roam && Vector3.Distance (player.transform.position, transform.position) < maxPlayerDetectDistance) {
+		if (currentState == State.Roam && Vector3.Distance (player.transform.position, transform.position) < maxPlayerDetectDistance
+			&& delayRestart < Time.time) {
 			readyBattle ();
+		}
+		if (delayRestart >= Time.time) {
+			roamingScript.Escape ();
 		}
   }
 
@@ -54,7 +60,6 @@ public class AIManagerScript : MonoBehaviour
     if(player.GetComponent<PlayerManagerScript>().startBattle(gameObject)){
       roamingScript.setMovementLock(true);
       currentState = State.Battle;
-      //TODO enable NoteBattleScript on critter
 	  battleScript.enabled = true;
 	  battleScript.Begin (transform, Static.GetTarget().transform);
     }
@@ -62,10 +67,11 @@ public class AIManagerScript : MonoBehaviour
 
   public void capture(){
     //TODO create playerCritterManager script
+
   }
 
-  public void escape(){
-    //Destroy(gameObject);
-    //TODO respawn critter
+	public void escape(){
+		delayRestart += escapeLength;
+		startRoaming ();
   }
 }
